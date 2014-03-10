@@ -9,5 +9,8 @@ $db = new \PDO("mysql:host=localhost;dbname=munition", "root", "");
 
 \framework\base\DbModelQuery::$db = $db;
 
-$q = User::last();
+$q = User::where(["name" => "Hammas"])->first->instance();
+User::create(["name" => "Hammas", "created_at" => time());
+
+$u = User::take();
 print_r($q);

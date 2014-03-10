@@ -1,11 +1,6 @@
 <?php
 namespace framework\base;
 
-define('belongs_to', 1);
-define('has_one', 2);
-define('has_many', 3);
-define('has_and_belongs_to_many', 4);
-
 class DbModel {
   private static $__initialized = false;
   private static $__dbtable;
@@ -90,21 +85,13 @@ class DbModel {
   }
   
   
-  // Describe model
-  protected function describe() {
-    $assoc = func_get_args();
-    foreach($assoc as $a) {
-      switch($a[0]) {
-        case belongs_to:
-          break;
-        case has_one:
-          break;
-        case has_many:
-          break;
-        case has_and_belongs_to_many:
-          break;
-      }
-    }
+  public function has_many() {
+  }
+  
+  public function has_one() {
+  }
+  
+  public function belongs_to() {
   }
   
 }
