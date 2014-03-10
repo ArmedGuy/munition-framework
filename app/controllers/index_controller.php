@@ -1,7 +1,10 @@
 <?php
 class IndexController extends \framework\base\Controller {
   
-  public static function home() {
-    phpinfo();
+  static function home() {
+    self::render(["template" => "index"]);
+  }
+  public static function server_info() {
+    self::render(["template" => "serverinfo"]);
   }
 }

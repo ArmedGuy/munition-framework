@@ -12,7 +12,9 @@ class App {
     try {
       require $router;
       $this->router = new \config\AppRouter();
-      $this->router->controllers($appFolder . "/controllers");
+      $this->router->controllers($appFolder . "/controllers/");
+      
+      \framework\base\Controller::$template_base = $appFolder . "/templates/";
     }
     catch(Exception $e) {
     }
@@ -20,7 +22,7 @@ class App {
   }
   
   public function run() {
-    $method = $_SERVER['REQUEST_METHOD'];
+    $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER['REQUEST_URI'];
     $path = "";
     if(strpos($uri, "?") !== false) {

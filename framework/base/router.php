@@ -4,6 +4,8 @@ class Router {
   private $routes = null;
   private $patterns = null;
   
+  protected $base = "";
+  
   private $controllers = null;
   
   function __construct() {
@@ -54,7 +56,7 @@ class Router {
       return;
     }
     
-    $this->routes[] = $r;
+    $this->routes[$type.":".$path] = $r;
   }
   
   public function get($path, $controller) {
@@ -77,31 +79,45 @@ class Router {
     $this->request($path, "DELETE", $controller);
   }
   
-  public function route($path, $method) {
+  public function route($request, $method) {
     $p = [];
     $params = [];
-    foreach($this->routes as $route) {
+    $f = false;
+    $path = str_replace($this->base, "", $request);
+    foreach($this->routes as $n=>$route) {
       if($route["method"] == $method && preg_match($route["regex"], $path, $params) === 1) {
         if($route["params"] != 0) {
           unset($params[0]);
           $this->call_controller_function($route["controller"], $params);
+          $f = true;
+          break;
         } else {
           $this->call_controller_function($route["controller"], null);
+          $f = true;
+          break;
         }
+      } else {
+        print_r($method);
+      }
+    }
+    if($f === false) {
+      if(isset($this->routes["404"])) {
+      } else { 
+        throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->routes, true));
       }
     }
   }
   
   private function call_controller_function($ctrlfn, $params) {
     if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
-      throw new Exception("Invalid controller path");
+      throw new \Exception("Invalid controller path");
     }
     list($c, $function) = explode("#", $ctrlfn);
     if(isset($this->controllers[$c])) {
       require_once $this->controllers[$c]['file'];
       call_user_func($this->controllers[$c]['class'] . "::" . $function, $params);
     } else {
-      throw new Exception("Unknown controller path");
+      throw new \Exception("Unknown controller path");
     }
   }
 }
