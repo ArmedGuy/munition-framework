@@ -1,32 +1,35 @@
 <?php
 include 'header.php';
 ?>
-<div class="jumbotron">
-  <h1>Its running!</h1>
-  <p>Now, lets configure the server so that you can start writing and deploying your apps!</p>
-</div>
-<h1>Settings <small>Click on message to get more information</small></h1>
-<div class="row settings-list">
-  <div class="col-md-4">
-    <h2>Filesystem <small>1/2</small></h2>
-    <div id="fs-messages">
-      <div class="alert alert-success"><strong>Write Permission:</strong> /tmp/</div>
-      <div class="alert alert-danger"><strong>Write Permission:</strong> /tmp/</div>
-    </div>
+<div id="setup">
+  <div class="jumbotron">
+    <h1>Its running!</h1>
+    <p>Now, lets configure the server so that you can start writing and deploying your apps!</p>
   </div>
-  <div class="col-md-4">
-    <h2>Webserver <small>0/2</small></h2>
-    <div id="web-messages">
-      <div class="alert alert-warning"><strong>Installed in subdirectory:</strong> /munition-framework/</div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <h2>PHP</h2>
-    <div id="php-messages">
-    </div>
+  <h1>Issues <small>Refresh this page when you have fixed them.</small></h1>
+  <div id="issues-list">
   </div>
 </div>
-<h2>Messages</h2>
+<script type="text/javascript">
+function getIssues() {
+  $("#issues-list").html("");
+  $.getJSON("?get_issues", function(settings) {
+    if(settings.length == 0) {
+      $("#issues-list").html("<h2>No detected issues, your installation is ready for action!</h2>");
+      $("#setup").fadeOut(1000, function() {
+        
+      });
+    } else {
+      for(var s in settings) {
+        $("#issues-list").append("<div class='alert alert-" + settings[s].type + "'><strong>" + settings[s].issue + "</strong> " + settings[s].description + "</div>");
+      }
+    }
+  });
+}
+setTimeout(getIssues, 500);
+</script>
+<div id="done-install" style="display:none;">
+</div>
 <?php
 include 'footer.php';
 ?>

@@ -67,7 +67,7 @@ class Router {
     $this->request($path, "DELETE", $controller);
   }
   
-  public function route($request, $method) {
+  public function route($request, $method = "GET") {
     $p = [];
     $params = [];
     $f = false;
@@ -84,16 +84,19 @@ class Router {
           $f = true;
           break;
         }
-      } else {
-        print_r($method);
       }
     }
     if($f === false) {
       if(isset($this->routes["404"])) {
+        $this->call_controller_function($this->routes["404"]["controller"], ["request"=>$request, "path" => $path]);
       } else { 
         throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->routes, true));
       }
     }
+  }
+  
+  public function error($errCode, $controller) {
+    $this->routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/","controller" => $controller, "params" => 0];
   }
   
   private function call_controller_function($ctrlfn, $params) {

@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" href="/munition-framework/app/public/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/munition-framework/app/public/css/style.css" />
     
+    <script type="text/javascript" src="/munition-framework/app/public/js/jquery.min.js"></script>
+    
     <title>Munition Framework</title>
   </head>
   <body>
