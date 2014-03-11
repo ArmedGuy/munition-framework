@@ -8,25 +8,13 @@ class Router {
   
   private $controllers = null;
   
+  protected $initial_scope = [];
+  
   function __construct() {
     $this->routes = [];
     $this->patterns = [];
     
     $this->controllers = [];
-  }
-  
-  public function controllers($controllerFolder) {
-    $items = scandir($controllerFolder);
-    foreach($items as $item) {
-      if(strpos($item, "_controller.php") !== false) {
-        $name = str_replace("_controller.php", "", $item);
-        $class = ucfirst($name);
-        $this->controllers[$name] = [
-          "file" => $controllerFolder . "/". $item,
-          "class" => $class . "Controller"
-        ];
-      }
-    }
   }
   
   public function pattern($name, $pattern) {
@@ -109,15 +97,8 @@ class Router {
   }
   
   private function call_controller_function($ctrlfn, $params) {
-    if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
-      throw new \Exception("Invalid controller path");
-    }
-    list($c, $function) = explode("#", $ctrlfn);
-    if(isset($this->controllers[$c])) {
-      require_once $this->controllers[$c]['file'];
-      call_user_func($this->controllers[$c]['class'] . "::" . $function, $params);
-    } else {
-      throw new \Exception("Unknown controller path");
-    }
+    $call_params = [$ctrlfn, $this->initial_scope, $params, "html"]; // todo, dynamic format
+    call_user_func_array("\\framework\\base\\AppController::call_function", $call_params);
+
   }
 }

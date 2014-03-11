@@ -41,3 +41,4 @@ function classname_to_filename($class) {
 }
 
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
+define("MUNITION_WEBPATH", str_replace($_SERVER["DOCUMENT_ROOT"], "", $_SERVER["SCRIPT_FILENAME"]));

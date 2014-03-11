@@ -2,7 +2,7 @@
 namespace framework\base;
 class App {
   
-  public $router;
+  public $router = null;
   
   function __construct($appFolder, $router) {
     if(!file_exists($appFolder)) {
@@ -12,9 +12,9 @@ class App {
     try {
       require $router;
       $this->router = new \config\AppRouter();
-      $this->router->controllers($appFolder . "/controllers/");
       
-      \framework\base\Controller::$template_base = $appFolder . "/templates/";
+      \framework\base\AppController::$template_base = $appFolder . "/templates/";
+      \framework\base\AppController::$controller_base = $appFolder . "/controllers/";
     }
     catch(Exception $e) {
     }

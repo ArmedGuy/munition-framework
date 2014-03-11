@@ -5,8 +5,7 @@ class AppRouter extends \framework\base\Router {
     parent::__construct();
     $this->base = "/munition-framework";
     
-    $this->get("/", "index#home");
-    $this->get("/info", "index#server_info");
+    $this->get("/", "install#home");
   
   }
 }
