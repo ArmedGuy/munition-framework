@@ -18,7 +18,7 @@ _____________
 #### Step One - Retrieve Munition(s)!
 
 Simply fetch the latest version of the Munition Framework from GitHub.
-If you want stable version, use the latest-release tag, otherwise just use the master branch.
+If you want stable version, use the `latest-release` tag, otherwise just use the master branch.
 
 
 #### Step Two - Load!
@@ -29,4 +29,13 @@ Browse to where you installed Munition to with your webbrowser, and the default 
 #### Step Three - Fire!
 
 You now have a small, fast and easy to use PHP framework that can be used to develop webapps, RESTful API's, backend servers, you name it.
+
+To clean up from installation, simply remove the default install application by deleting:
+`app/controllers/install_controller.php`
+`app/templates/header.php`
+`app/templates/footer.php`
+`app/templates/index.php`
+
+Then clear out the constructor function in the AppRouter, located at:
+`config/routes.php`
 
