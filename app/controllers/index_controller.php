@@ -1,10 +1,10 @@
 <?php
 class IndexController extends \framework\base\Controller {
   
-  static function home() {
+  static function home($scope) {
     self::render(["template" => "index"]);
   }
-  public static function server_info() {
+  public static function server_info($scope) {
     self::render(["template" => "serverinfo"]);
   }
 }

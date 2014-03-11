@@ -2,12 +2,15 @@
  <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/munition-framework/app/public/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/munition-framework/app/public/css/style.css" />
   </head>
   <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
-        <a class="brand" href="/">Derp</a>
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><img id="munition-logo" src="/munition-framework/app/public/img/munition-logo.png" alt="Logo"/> Munition Framework</a>
+        </div>
       </div>
     </nav>
     <div class="container">
