@@ -34,12 +34,9 @@ class InstallController extends \framework\base\AppController {
       ];
     }
     
-    $url = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "" && $_SERVER['HTTPS'] != "off") ? "s" : "");
-    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". MUNITION_WEBPATH . "/verify_rewrite";
-    @file_get_contents($url);
-    list($http, $code, $status) = explode(" ", $http_response_header[0]);
-    if($code == "404") {
-    
+    $crouter = $this->try_own_url(MUNITION_WEBPATH . "/verify_rewrite");
+    $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/css/style.css");
+    if($crouter != "200" || $publicdir != "200") {
       $desc = "";
       switch(MUNITION_WEBSERVER) {
         case "nginx":
@@ -65,5 +62,13 @@ class InstallController extends \framework\base\AppController {
     
     self::render(["json" => json_encode($issues)]);
     exit;
+  }
+  
+  private function try_own_url($path) {
+    $url = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "" && $_SERVER['HTTPS'] != "off") ? "s" : "");
+    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". $path;
+    @file_get_contents($url);
+    list($http, $code, $status) = explode(" ", $http_response_header[0]);
+    return $code;
   }
 }
