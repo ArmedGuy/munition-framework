@@ -64,6 +64,7 @@ $("#continue-btn").click(function() {
       <p>The default App is located at <code><?=MUNITION_ROOT."/app"; ?></code></p>
       <p>Simply clear all files from <code>app/public</code> <code>app/templates</code> and <code>app/controllers</code>.</p>
       <p>Then, reset the default AppRouter at <code>config/routes.php</code> by removing all <code>$this->...</code> calls.</p>
+      <p><small>Note: By doing this you will delete this page</small></p>
     </div>
     <div class="col-md-4">
       <h3>Follow a guide</h3>

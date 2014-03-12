@@ -34,6 +34,14 @@ class InstallController extends \framework\base\AppController {
       ];
     }
     
+    if(!class_exists('PDO')) {
+      $issues[] = [
+        "type" => "danger",
+        "issue" => "Missing PDO Library",
+        "description" => "PDO is the latest Database library for PHP, and the most efficient one as well. Munition requires it for its <code>DbModel</code>.<br/>Please download and install it.<br/><br/>PS. You should NOT use anything but PDO for connecting to databases."
+      ];
+    }
+    
     $crouter = $this->try_own_url(MUNITION_WEBPATH . "/verify_rewrite");
     $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/css/style.css");
     $privfolder = $this->try_own_url(MUNITION_WEBPATH . "/framework/munition.php");
@@ -60,6 +68,8 @@ class InstallController extends \framework\base\AppController {
         "description" => "Rewrite Rules are not properly configured. Without these the App cannot handle incoming requests via the AppRouter.<br><br/>" . $desc
       ];
     }
+    
+    
     
     self::render(["json" => json_encode($issues)]);
     exit;
