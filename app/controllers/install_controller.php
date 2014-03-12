@@ -41,7 +41,7 @@ class InstallController extends \framework\base\AppController {
       $desc = "";
       switch(MUNITION_WEBSERVER) {
         case "nginx":
-          $desc = "<h4>Configuring Rewrite Rules on Nginx</h4><p>Place the following Nginx Rewrite Rules in your webserver(or virtualhost) configuration<br/><pre>rewrite ^".MUNITION_WEBPATH."app/public/(.*)$ - last;\nrewrite ^.*$ index.php last;</pre>";
+          $desc = "<h4>Configuring Rewrite Rules on Nginx</h4><p>Place the following Nginx Rewrite Rules in your webserver(or virtualhost) configuration<br/><pre>rewrite ^(".MUNITION_WEBPATH."app/public/.*)$ $1 last;\nrewrite ^.*$ index.php last;</pre>";
           break;
         case "apache":
           $desc = "<h4>Configuring Rewrite Rules on Apache</h4><p>Place the following Apache Rewrite Rules in your webserver(or virtualhost) or main .htaccess configuration<br/><pre>Options +FollowSymlinks\nRewriteEngine On\nRewriteBase ".MUNITION_WEBPATH."\nRewriteRule ^".substr(MUNITION_WEBPATH, 1)."index\\.php$ - [L] <br/>RewriteCond %{REQUEST_URI} !app/public/.*$\nRewriteRule . ".MUNITION_WEBPATH."index.php [L]</pre>";
