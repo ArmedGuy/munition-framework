@@ -40,24 +40,29 @@ class AppController {
     
   }
   
-  protected static function render($scope, $settings = null ) {
-    if($settings == null) {
-      $settings = $scope;
+  protected static function render($scope, $__render_settings = null ) {
+    if($__render_settings == null) {
+      $__render_settings = $scope;
+    } else {
+      foreach($scope as $k => $v) {
+        $$k = $v;
+      }
     }
+    unset($scope, $k, $v);
 	
-	
-    if(isset($settings[0]) && is_numeric($settings[0])) {
+    if(isset($__render_settings[0]) && is_numeric($__render_settings[0])) {
       http_response_code($settings[0]);
     }
-    if(isset($settings["nothing"]) && $settings["nothing"] === true) {
+    if(isset($__render_settings["nothing"]) && $__render_settings["nothing"] === true) {
       exit;
     }
-    if(isset($settings["json"])) {
+    if(isset($__render_settings["json"])) {
       header("Content-type: application/json");
-      echo $settings["json"];
+      echo $__render_settings["json"];
     }
-    if(isset($settings["template"])) {
-      require (self::$template_base . $settings["template"] . ".php");
+    if(isset($__render_settings["template"])) {
+    
+      require (self::$template_base . $__render_settings["template"] . ".php");
     }
   }
 }
