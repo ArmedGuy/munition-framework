@@ -16,7 +16,7 @@ include 'header.php';
 </div>
 <script type="text/javascript">
 function getIssues() {
-  $.getJSON("?get_issues", function(settings) {  
+  $.getJSON("?get_issues", function(settings) {
     $("#issues-list").html("");
     if(settings.length == 0) {
       $("#setup").fadeOut(1000, function() {

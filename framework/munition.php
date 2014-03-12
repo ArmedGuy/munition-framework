@@ -52,3 +52,8 @@ foreach(["nginx", "lighttpd", "apache"] as $server) {
 }
 if($webserver == "") $webserver = "default";
 define("MUNITION_WEBSERVER", $webserver);
+
+// Used for testing RewriteRules
+if(str_replace(array("/","\\"), "", __FILE__) === str_replace(array("/","\\"), "", $_SERVER["SCRIPT_FILENAME"])) {
+  http_response_code(422);
+}

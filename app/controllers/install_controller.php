@@ -36,7 +36,8 @@ class InstallController extends \framework\base\AppController {
     
     $crouter = $this->try_own_url(MUNITION_WEBPATH . "/verify_rewrite");
     $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/css/style.css");
-    if($crouter != "200" || $publicdir != "200") {
+    $privfolder = $this->try_own_url(MUNITION_WEBPATH . "/framework/munition.php");
+    if($crouter != "200" || $publicdir != "200" || $privfolder == "422") {
       $desc = "";
       switch(MUNITION_WEBSERVER) {
         case "nginx":
