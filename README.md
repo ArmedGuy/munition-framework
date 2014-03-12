@@ -3,6 +3,8 @@
 The Munition Framework is an MVC framework built in PHP.
 It is designed for rapid development, easy to understand and use features, and minimal configuration.
 
+Official Forum: http://forum.pie-studios.com/category/munition
+
 _____________
 
 ## Getting Started
