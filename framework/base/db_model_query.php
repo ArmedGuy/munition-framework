@@ -26,7 +26,7 @@ class DbModelQuery {
     $this->reset();
   }
   
-  private function reset() {
+  public function reset() {
     $this->result = null;
     $this->query = [
       "command" => "SELECT",

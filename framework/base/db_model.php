@@ -9,7 +9,7 @@ class DbModel {
   private static function init() {
     if(self::$__initialized) return;
     
-    $c = get_called_class();
+    $c = strtolower(get_called_class());
     if(strpos($c, "\\") !== false) {
       $a = array_reverse(explode("\\", $c));
       $c = $a[0];
@@ -23,13 +23,13 @@ class DbModel {
     return new DbModelQuery(self::$__dbtable, self::$__className);
   }
   
-  
   public static function make($data) {
     $c = get_called_class();
     $m = new $c();
     DbModel::crowd($m, $data);
     return $m;
   }
+  
   private static function crowd($m, $data) {
     foreach($data as $k => $v) {
       $m->$k = $v; // first, set value
@@ -82,6 +82,11 @@ class DbModel {
     } else {
       return self::getQuery()->take->instance();
     }
+  }
+  
+  public static function create($params) {
+    $id = self::getQuery()->create($params);
+    return self::getQuery()->where(["id" => $id])->take;
   }
   
   
