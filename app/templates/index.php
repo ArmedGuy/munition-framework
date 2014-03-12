@@ -7,15 +7,21 @@ include 'header.php';
     <p>Now, lets configure the server so that you can start writing and deploying your apps!</p>
   </div>
   
+  <h3>Easy configuration</h3>
+  <p>
+    Munition automatically checks your system to see if it is properly configured, and that it meets all the requirements.<br/>
+    It will show you a list of issues and notices below. You need to fix all the critical ones before you can continue.
+  </p>
+  <input type="button" class="btn btn-primary" value="Check System" id="start-setup" />
   <input type="button" class="btn btn-success" value="No critical issues, click to finish the installation" style="display: none;" id="continue-btn" />
   <br/><br/>
-  <h1 id="head-text">Issues <small>Refresh this page when you have fixed them.</small></h1>
+  <h1 id="head-text"></h1>
   <div id="issues-list">
-    <h3>Loading...</h3>
   </div>
 </div>
 <script type="text/javascript">
 function getIssues() {
+  $("#head-text").html("Loading");
   $.getJSON("?get_issues", function(settings) {
     $("#issues-list").html("");
     if(settings.length == 0) {
@@ -31,19 +37,25 @@ function getIssues() {
       if(cr == 0) {
         $("#head-text").html("Other information");
         $("#continue-btn").show();
+      } else {
+        $("#head-text").html("Issues <input type='button' class='btn btn-info' value='Click to re-check' onclick='getIssues();'/>");
       }
     }
   });
 }
+$("#start-setup").click(function() {
+  $(this).hide();
+  getIssues();
+});
 $("#continue-btn").click(function() {
   $("#setup").fadeOut(1000, function() {
     $("#done-install").fadeIn(1000);
   });
 });
-setTimeout(getIssues, 500);
 </script>
 <div id="done-install" style="display:none;">
-  <h1>Your installation is now ready for action!</h1>
+  <h1>Your installation is ready for action!</h1>
+  <p>Webserver is properly configured and all requirements have been met!</p>
   <hr/>
   <h2 class="text-center">What to do next?</h2>
   <div class="row">

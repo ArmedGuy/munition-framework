@@ -5,3 +5,11 @@
   position: relative;
   top: -2px;
 }
+footer {
+  margin-top: 100px;
+  height: 200px;
+}
+#munition-logo-footer {
+  position: relative;
+  top: -15px;
+}

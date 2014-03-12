@@ -10,11 +10,12 @@
     <title>Munition Framework</title>
   </head>
   <body>
+    <!--
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#"><img id="munition-logo" src="<?=MUNITION_WEBPATH;?>app/public/img/munition-logo.png" alt="Logo"/> Munition Framework</a>
+          <a class="navbar-brand" href="<?=MUNITION_WEBPATH;?>"><img id="munition-logo" src="<?=MUNITION_WEBPATH;?>app/public/img/munition-logo.png" alt="Logo"/> Munition Framework</a>
         </div>
       </div>
-    </nav>
+    </nav>-->
     <div class="container">
