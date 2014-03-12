@@ -114,6 +114,14 @@ class DbModelQuery {
     $this->execute("insert");
     return $db->result;
   }
+  
+  public function update($values) {
+    $this->query["command"] = "UPDATE";
+    $this->query["values"] = $params;
+    $this->execute("update");
+    return $db->result;
+  }
+  
   public function destroy() {
     $this->query["command"] = "DELETE FROM";
     $this->execute("delete");
@@ -312,7 +320,7 @@ class DbModelQuery {
         return $q;
       case "DELETE FROM":
         $query = ["DELETE FROM"];
-        $query[] = $this->query["table"];
+        $query[] = "`" . $this->query["table"] . "`";
         if(count($this->query["where"]) > 0) {
           $last = count($this->query["where"]) - 1;
           $query[] = "WHERE";
@@ -349,13 +357,51 @@ class DbModelQuery {
         return $q;
       case "INSERT INTO":
         $query = ["INSERT INTO"];
-        $query[] = $this->query["table"];
+        $query[] = "`" . $this->query["table"] . "`";
         $query[] = "(" . $this->query["columns"]. ")";
         $query[] = "VALUES";
         $query[] = $this->vlist($this->query["values"]);
         $q["query"] = implode(" ", $query);
         $q["parameters"] = $this->query["values"];
         return $q;
+      case "UPDATE":
+        $query = ["UPDATE"];
+        $query[] = "`" . $this->query["table"] . "`";
+        $query[] = "SET";
+        $set = [];
+        foreach($this->query["values"] as $key => $val) {
+          $set[] = $this->obj($key)." = ?";
+        }
+        $query[] = implode(",", $set);
+        if(count($this->query["where"]) > 0) {
+          $last = count($this->query["where"]) - 1;
+          $query[] = "WHERE";
+          foreach($this->query["where"] as $i=>$w) {
+            if($i == $last) {
+              $query[] = str_replace("_&&_", "", $w[0]);
+              foreach(array_diff($w, array($w[0])) as $p) {
+                $q["parameters"][] = $p;
+              }
+            } else {
+              $query[] = str_replace("_&&_", "AND", $w[0]);
+              foreach(array_diff($w, array($w[0])) as $p) {
+                $q["parameters"][] = $p;
+              }
+            }
+          }
+        }
+        if(count($this->query["order"]) > 0) {
+          $o = [];
+          foreach($this->query["order"] as $obj=>$ord) {
+            $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+          }
+          $query[] = implode(",", $o);
+        }
+        if($this->query["limit"] != "") {
+          $query[] = "LIMIT";
+          $query[] = $this->query["limit"];
+        }
+        break;
     }
   }
   
@@ -363,8 +409,6 @@ class DbModelQuery {
     switch($type) {
       case "select":        
         $q = $this->compileQuery();
-        print_r($q);
-        die();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
@@ -375,8 +419,6 @@ class DbModelQuery {
         break;
       case "insert":
         $q = $this->compileQuery();
-        print_r($q);
-        die();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
@@ -384,8 +426,13 @@ class DbModelQuery {
         break;
       case "delete":
         $q = $this->compileQuery();
-        print_r($q);
-        die();
+        $stmt = self::$db->prepare($q["query"]);
+        $stmt->execute($q["parameters"]);
+        
+        $this->result = $stmt->rowCount();
+        break;
+      case "update":
+        $q = $this->compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
