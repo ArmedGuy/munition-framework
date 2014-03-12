@@ -10,22 +10,14 @@ class InstallController extends \framework\base\AppController {
   function verify_rewrite() {
     self::render(["nothing" => true]);
   }
-  function server_info($scope) {
-    self::render(["template" => "serverinfo"]);
-  }
   
   private function get_issues() {
     $issues = [];
     
+    $this->check_write_perms($issues);
+    $this->check_pdo($issues);
+    $this->check_rewrite_rules($issues);
     
-    
-    if(!is_writable(MUNITION_ROOT . "/app/public/")) {
-      $issues[] = [
-        "type" => "danger",
-        "issue" => "Missing File Permissions",
-        "description" => "Munition was unable to access the directory <code>".MUNITION_ROOT."/app/public/</code><br/>Please check that the directory is writable."
-      ];
-    }
     if(MUNITION_WEBPATH != "/") {
       $issues[] = [
         "type" => "warning",
@@ -34,17 +26,23 @@ class InstallController extends \framework\base\AppController {
       ];
     }
     
-    if(!class_exists('PDO')) {
-      $issues[] = [
-        "type" => "danger",
-        "issue" => "Missing PDO Library",
-        "description" => "PDO is the latest Database library for PHP, and the most efficient one as well. Munition requires it for its <code>DbModel</code>.<br/>Please download and install it.<br/><br/>PS. You should NOT use anything but PDO for connecting to databases."
-      ];
-    }
-    
+    self::render(["json" => json_encode($issues)]);
+    exit;
+  }
+  
+  private function try_own_url($path) {
+    $url = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "" && $_SERVER['HTTPS'] != "off") ? "s" : "");
+    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". $path;
+    @file_get_contents($url);
+    list($http, $code, $status) = explode(" ", $http_response_header[0]);
+    return $code;
+  }
+  
+  private function check_rewrite_rules(&$issues) {
     $crouter = $this->try_own_url(MUNITION_WEBPATH . "/verify_rewrite");
     $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/css/style.css");
     $privfolder = $this->try_own_url(MUNITION_WEBPATH . "/framework/munition.php");
+    
     if($crouter != "200" || $publicdir != "200" || $privfolder == "422") {
       $desc = "";
       switch(MUNITION_WEBSERVER) {
@@ -68,18 +66,25 @@ class InstallController extends \framework\base\AppController {
         "description" => "Rewrite Rules are not properly configured. Without these the App cannot handle incoming requests via the AppRouter.<br><br/>" . $desc
       ];
     }
-    
-    
-    
-    self::render(["json" => json_encode($issues)]);
-    exit;
   }
   
-  private function try_own_url($path) {
-    $url = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "" && $_SERVER['HTTPS'] != "off") ? "s" : "");
-    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". $path;
-    @file_get_contents($url);
-    list($http, $code, $status) = explode(" ", $http_response_header[0]);
-    return $code;
+  private function check_pdo(&$issues) {
+    if(!class_exists('PDO')) {
+      $issues[] = [
+        "type" => "danger",
+        "issue" => "Missing PDO Library",
+        "description" => "PDO is the latest Database library for PHP, and the most efficient one as well. Munition requires it for its <code>DbModel</code>.<br/>Please download and install it.<br/><br/>PS. You should NOT use anything but PDO for connecting to databases."
+      ];
+    }
+  }
+  
+  private function check_write_perms(&$issues) {
+    if(!is_writable(MUNITION_ROOT . "/app/public/")) {
+      $issues[] = [
+        "type" => "danger",
+        "issue" => "Missing File Permissions",
+        "description" => "Munition was unable to access the directory <code>".MUNITION_ROOT."/app/public/</code><br/>Please check that the directory is writable."
+      ];
+    }
   }
 }
