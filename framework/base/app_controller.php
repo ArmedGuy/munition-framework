@@ -54,7 +54,7 @@ class AppController {
       http_response_code($settings[0]);
     }
     if(isset($__render_settings["nothing"]) && $__render_settings["nothing"] === true) {
-      exit;
+      return;
     }
     if(isset($__render_settings["json"])) {
       header("Content-type: application/json");

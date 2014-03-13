@@ -43,6 +43,9 @@ function classname_to_filename($class) {
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 define("MUNITION_WEBPATH", str_replace($_SERVER["DOCUMENT_ROOT"], "", dirname($_SERVER["SCRIPT_FILENAME"])) . "/");
 
+set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
+set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/app/lib");
+
 $sw = strtolower($_SERVER['SERVER_SOFTWARE']);
 $webserver = "";
 foreach(["nginx", "lighttpd", "apache"] as $server) {
