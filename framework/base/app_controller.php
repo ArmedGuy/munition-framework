@@ -29,6 +29,8 @@ class AppController {
         }
       }
     }
+    catch(Exception $e) {
+    }
   }
   
   
