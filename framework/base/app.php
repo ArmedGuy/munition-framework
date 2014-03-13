@@ -3,6 +3,7 @@ namespace framework\base;
 class App {
   
   public $router = null;
+  public $postprocess = null;
   
   function __construct($appFolder, $router) {
     if(!file_exists($appFolder)) {
@@ -12,9 +13,12 @@ class App {
     try {
       require $router;
       $this->router = new \config\AppRouter();
+      $this->router->app = $this;
       
       \framework\base\AppController::$template_base = $appFolder . "/templates/";
       \framework\base\AppController::$controller_base = $appFolder . "/controllers/";
+      
+      $this->postprocess = new \framework\base\PostProcessingEngine();
     }
     catch(Exception $e) {
     }
@@ -22,6 +26,8 @@ class App {
   }
   
   public function run() {
+    @ignore_user_abort(true);
+    
     $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER['REQUEST_URI'];
     $path = "";
@@ -31,6 +37,14 @@ class App {
     } else {
       $path = $uri;
     }
+    
     $this->router->route($path, $method);
+    
+    @ob_flush();
+    @flush();
+    @fastcgi_finish_request();
+    
+    $this->postprocess->process();
+    
   }
 }

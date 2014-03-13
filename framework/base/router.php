@@ -1,6 +1,7 @@
 <?php
 namespace framework\base;
 class Router {
+
   private $routes = null;
   private $patterns = null;
   
@@ -10,7 +11,10 @@ class Router {
   
   protected $initial_scope = [];
   
+  public $app = null;
+  
   function __construct() {
+    
     $this->routes = [];
     $this->patterns = [];
     
@@ -103,8 +107,8 @@ class Router {
   
   private function call_controller_function($ctrlfn, $params) {
     $format = isset($params["_request_format"]) ? substr($params["_request_format"], 1) : "html";
-    $call_params = [$ctrlfn, $this->initial_scope, $params, $format]; // todo, dynamic format
-    call_user_func_array("\\framework\\base\\AppController::call_function", $call_params);
+    $call_params = [$ctrlfn, $this->initial_scope, $params, $format, $this->app];
+    \framework\base\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
 
   }
 }

@@ -4,31 +4,51 @@ class AppController {
   public static $template_base;
   public static $controller_base;
   
+  protected $app = null;
+  
   protected $before_filters = [];
   
+  
   protected function before_filter($ctrlfn, $functions) {
-    
+    // TODO: add before filter system
+  }
+  
+  private function apply_filter($ctrlfn, &$scope, &$params, &$format) {
+    try {
+      if(strpos($ctrlfn, "#") === false) {
+        $ctrlfn($scope, $params, $format);
+      } else {
+        if(strpos($ctrlfn, "#") === 0) {
+          $ctrlfn = substr($ctrlfn, 1);
+          $this->$ctrlfn($scope, $params, $format);
+        } else {
+          // TODO: probably not do this
+          list($className, $fn) = self::load_controller($ctrlfn);
+          $class = new $className();
+          $class->$fn($scope, $params, $format);
+        }
+      }
+    }
   }
   
   
-  
-  public static function call_function($ctrlfn, $params = [], $scope = [], $format = "html") {
-    if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
-      throw new \Exception("Invalid controller path");
-    }
-    
+  public static function call_function($ctrlfn, $params = [], $scope = [], $format = "html", $app = null) {
     list($className, $fn) = self::load_controller($ctrlfn);
     
     $class = new $className();
+    $class->app = $app;
     foreach($class->before_filters as $f => $cb) {
       if(in_array($fn, $cb)) {
         //TODO: handle before filter
       }
     }
-    call_user_func_array(array($class, $fn), array($scope, $params, $format));
+    $class->$fn($scope, $params, $format);
   }
   
   private static function load_controller($ctrlfn) {
+    if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
+      throw new \Exception("Invalid controller path");
+    }
     list($c, $function) = explode("#", $ctrlfn);
     $c .= "_controller";
     if(file_exists(self::$controller_base . $c . ".php")) {
