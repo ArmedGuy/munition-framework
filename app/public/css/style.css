@@ -1,10 +1,3 @@
-#munition-logo {
-  width: 32px;
-  height: auto;
-  
-  position: relative;
-  top: -2px;
-}
 footer {
   margin-top: 100px;
   height: 200px;
@@ -12,4 +5,7 @@ footer {
 #munition-logo-footer {
   position: relative;
   top: -15px;
+  
+  width: 50%;
+  height: auto;
 }
