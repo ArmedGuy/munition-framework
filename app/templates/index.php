@@ -18,30 +18,34 @@ include 'header.php';
     <input type="button" class="btn btn-success" value="No critical issues, click to finish the installation" style="display: none;" id="continue-btn" />
     <br/><br/>
     <h1 id="head-text"></h1>
-    <div id="issues-list">
-    </div>
+    <table class="table" id="issues-list">
+    </table>
   </div>
 </div>
 <script type="text/javascript">
+function buildIssue(issue) {
+  var txt = '<tr><td class="' + issue.type +'">' + issue.issue + '</td><td>' + issue.description + '</td></tr>';
+  return txt;
+}
 function getIssues() {
   $("#head-text").html("Loading");
-  $.getJSON("?get_issues", function(settings) {
+  $.getJSON("?get_issues", function(issues) {
     $("#issues-list").html("");
-    if(settings.length == 0) {
+    if(issues.length == 0) {
       $("#setup").fadeOut(1000, function() {
         $("#done-install").fadeIn(1000);
       });
     } else {
       var cr = 0;
-      for(var s in settings) {
-        if(settings[s].type == "danger") cr++;
-        $("#issues-list").append("<div class='alert alert-" + settings[s].type + "'><strong>" + settings[s].issue + "</strong> " + settings[s].description + "</div>");
+      for(var i in issues) {
+        if(issues[i].type == "danger") cr++;
+        $("#issues-list").append(buildIssue(issues[i]));
       }
       if(cr == 0) {
         $("#head-text").html("Other information");
         $("#continue-btn").show();
       } else {
-        $("#head-text").html("Issues <input type='button' class='btn btn-info' value='Click to re-check' onclick='getIssues();'/>");
+        $("#head-text").html("Issues <input type='button' class='btn btn-primary' value='Click to re-check' onclick='getIssues();'/>");
       }
     }
   });
