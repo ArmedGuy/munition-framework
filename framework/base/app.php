@@ -26,7 +26,7 @@ class App {
   }
   
   public function run() {
-    @ignore_user_abort(true);
+    ignore_user_abort(true);
     
     $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER['REQUEST_URI'];
@@ -40,9 +40,14 @@ class App {
     
     $this->router->route($path, $method);
     
-    @ob_flush();
-    @flush();
-    @fastcgi_finish_request();
+    if(ob_get_level() !== 0) {
+      ob_end_flush();
+    }
+    flush();
+    
+    if(function_exists('fastcgi_finish_request')) {
+      fastcgi_finish_request();
+    }
     
     $this->postprocess->process();
     

@@ -11,8 +11,12 @@ class PostProcessingEngine {
   }
   
   public function process() {
-    foreach($this->queue as $item) {
-      $item();
+    try {
+      foreach($this->queue as $item) {
+        $item();
+      }
+    } catch(Exception $e) {
+      return;
     }
   }
 }
