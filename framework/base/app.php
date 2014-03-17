@@ -2,10 +2,13 @@
 namespace framework\base;
 class App {
   
+  public $config = null;
+  
   public $router = null;
   public $postprocess = null;
   
-  function __construct($appFolder, $router) {
+  function __construct($appFolder = "./app/", $router = "./config/routes.php") {
+    $this->config = [];
     if(!file_exists($appFolder)) {
       return;
     }
@@ -51,5 +54,12 @@ class App {
     
     $this->postprocess->process();
     
+  }
+  
+  public function __set( $name, $value) {
+    $this->config[$name] = $value;
+  }
+  public function __get( $name ) {
+    return $this->config[$name];
   }
 }
