@@ -1,10 +1,4 @@
 <?php
-spl_autoload_register(function($class){
-    $class = classname_to_filename(str_replace('\\', '/', $class));
-    if(file_exists('./' . $class . '.php')) {
-      require_once('./' . $class . '.php');
-    }
-});
 
 function filename_to_classname($file) {
   $file = strtolower($file);
@@ -40,6 +34,15 @@ function classname_to_filename($class) {
   return $filename;
 }
 
+spl_autoload_register(function($class){
+    $class = classname_to_filename(str_replace('\\', '/', $class));
+    if(file_exists('./' . $class . '.php')) {
+      require_once('./' . $class . '.php');
+    }
+});
+
+
+define("MUNITION_ENV", getenv("MUNITION_ENV") === "production" ? "production" : "development");
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 define("MUNITION_WEBPATH", str_replace($_SERVER["DOCUMENT_ROOT"], "", dirname($_SERVER["SCRIPT_FILENAME"])) . "/");
 
