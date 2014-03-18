@@ -2,7 +2,7 @@
 namespace framework\db;
 
 class AppDbManager {
-  public function connect($name, $args) {
+  public function use($name, $args) {
     $c = isset($args["engine"]) ? $args["engine"] : "mysql";
     
     if(isset($args["unix_socket"])) {

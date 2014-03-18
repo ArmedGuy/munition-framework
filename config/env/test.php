@@ -1,5 +1,5 @@
 <?php
-$config->db->connect("test", [
+$config->db->use("test", [
   "engine" => "mysql",
   "user" => "root",
   "password" => "",
