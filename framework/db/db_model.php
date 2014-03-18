@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace framework\db;
 
 class DbModel {
   private static $__initialized = false;

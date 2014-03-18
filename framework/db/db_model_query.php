@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace framework\db;
 
 class DbModelQuery {
 
@@ -72,7 +72,7 @@ class DbModelQuery {
           return $this->nullresult;
         }
       default:
-        throw new MunitionDbException("Unknown value :" . $name);
+        throw new DbException("Unknown value :" . $name);
         break;
     }
   }
@@ -268,140 +268,15 @@ class DbModelQuery {
     ];
     switch($this->query["command"]) {
       case "SELECT":
-        $query = ["SELECT"];
-        $query[] = $this->query["columns"];
-        $query[] = "FROM";
-        $query[] = "`" . $this->query["table"] . "`";
-        if(count($this->query["where"]) > 0) {
-          $last = count($this->query["where"]) - 1;
-          $query[] = "WHERE";
-          foreach($this->query["where"] as $i=>$w) {
-            if($i == $last) {
-              $query[] = str_replace("_&&_", "", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            } else {
-              $query[] = str_replace("_&&_", "AND", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            }
-          }
-        }
-        if($this->query["groupby"] != "") {
-          $query[] = "GROUP BY";
-          $query[] = $this->obj($this->query["groupby"]);
-        }
-        if(count($this->query["having"]) > 0) {
-          $query[] = "HAVING";
-          $h = $this->query["having"][0];
-          $query[] = $h[0];
-          foreach(array_diff($h, array($h[0])) as $p) {
-            $q["parameters"][] = $p;
-          }
-        }
-        if(count($this->query["order"]) > 0) {
-          $o = [];
-          foreach($this->query["order"] as $obj=>$ord) {
-            $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
-          }
-          $query[] = implode(",", $o);
-        }
-        if($this->query["limit"] != "") {
-          $query[] = "LIMIT";
-          $query[] = $this->query["limit"];
-        }
-        if($this->query["offset"] != "") {
-          $query[] = "OFFSET";
-          $query[] = $this->query["offset"];
-        }
-        $q["query"] = implode(" ", $query);
-        return $q;
+        return $this->compileSelectQuery($q);
       case "DELETE FROM":
-        $query = ["DELETE FROM"];
-        $query[] = "`" . $this->query["table"] . "`";
-        if(count($this->query["where"]) > 0) {
-          $last = count($this->query["where"]) - 1;
-          $query[] = "WHERE";
-          foreach($this->query["where"] as $i=>$w) {
-            if($i == $last) {
-              $query[] = str_replace("_&&_", "", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            } else {
-              $query[] = str_replace("_&&_", "AND", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            }
-          }
-        }
-        if(count($this->query["order"]) > 0) {
-          $o = [];
-          foreach($this->query["order"] as $obj=>$ord) {
-            $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
-          }
-          $query[] = implode(",", $o);
-        }
-        if($this->query["limit"] != "") {
-          $query[] = "LIMIT";
-          $query[] = $this->query["limit"];
-        }
-        if($this->query["offset"] != "") {
-          $query[] = "OFFSET";
-          $query[] = $this->query["offset"];
-        }
-        $q["query"] = implode(" ", $query);
-        return $q;
+        return $this->compileDeleteQuery($q);
       case "INSERT INTO":
-        $query = ["INSERT INTO"];
-        $query[] = "`" . $this->query["table"] . "`";
-        $query[] = "(" . $this->query["columns"]. ")";
-        $query[] = "VALUES";
-        $query[] = $this->vlist($this->query["values"]);
-        $q["query"] = implode(" ", $query);
-        $q["parameters"] = $this->query["values"];
-        return $q;
+        return $this->compileInsertQuery($q);
       case "UPDATE":
-        $query = ["UPDATE"];
-        $query[] = "`" . $this->query["table"] . "`";
-        $query[] = "SET";
-        $set = [];
-        foreach($this->query["values"] as $key => $val) {
-          $set[] = $this->obj($key)." = ?";
-        }
-        $query[] = implode(",", $set);
-        if(count($this->query["where"]) > 0) {
-          $last = count($this->query["where"]) - 1;
-          $query[] = "WHERE";
-          foreach($this->query["where"] as $i=>$w) {
-            if($i == $last) {
-              $query[] = str_replace("_&&_", "", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            } else {
-              $query[] = str_replace("_&&_", "AND", $w[0]);
-              foreach(array_diff($w, array($w[0])) as $p) {
-                $q["parameters"][] = $p;
-              }
-            }
-          }
-        }
-        if(count($this->query["order"]) > 0) {
-          $o = [];
-          foreach($this->query["order"] as $obj=>$ord) {
-            $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
-          }
-          $query[] = implode(",", $o);
-        }
-        if($this->query["limit"] != "") {
-          $query[] = "LIMIT";
-          $query[] = $this->query["limit"];
-        }
-        break;
+        return $this->compileUpdateQuery($q);
+      default:
+        throw new DbError("Unsupported SQL command!");
     }
   }
   
@@ -441,6 +316,153 @@ class DbModelQuery {
     }
   }
   
+  // Compile queries
+  private function compileSelectQuery($q) {
+    $query = ["SELECT"];
+    $query[] = $this->query["columns"];
+    $query[] = "FROM";
+    $query[] = "`" . $this->query["table"] . "`";
+    if(count($this->query["where"]) > 0) {
+      $last = count($this->query["where"]) - 1;
+      $query[] = "WHERE";
+      foreach($this->query["where"] as $i=>$w) {
+        if($i == $last) {
+          $query[] = str_replace("_&&_", "", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        } else {
+          $query[] = str_replace("_&&_", "AND", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        }
+      }
+    }
+    if($this->query["groupby"] != "") {
+      $query[] = "GROUP BY";
+      $query[] = $this->obj($this->query["groupby"]);
+    }
+    if(count($this->query["having"]) > 0) {
+      $query[] = "HAVING";
+      $h = $this->query["having"][0];
+      $query[] = $h[0];
+      foreach(array_diff($h, array($h[0])) as $p) {
+        $q["parameters"][] = $p;
+      }
+    }
+    if(count($this->query["order"]) > 0) {
+      $o = [];
+      foreach($this->query["order"] as $obj=>$ord) {
+        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+      }
+      $query[] = implode(",", $o);
+    }
+    if($this->query["limit"] != "") {
+      $query[] = "LIMIT";
+      $query[] = $this->query["limit"];
+    }
+    if($this->query["offset"] != "") {
+      $query[] = "OFFSET";
+      $query[] = $this->query["offset"];
+    }
+    $q["query"] = implode(" ", $query);
+    return $q;
+  }
+  
+  private function compileDeleteQuery($q) {
+    $query = ["DELETE FROM"];
+    $query[] = "`" . $this->query["table"] . "`";
+    if(count($this->query["where"]) > 0) {
+      $last = count($this->query["where"]) - 1;
+      $query[] = "WHERE";
+      foreach($this->query["where"] as $i=>$w) {
+        if($i == $last) {
+          $query[] = str_replace("_&&_", "", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        } else {
+          $query[] = str_replace("_&&_", "AND", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        }
+      }
+    }
+    if(count($this->query["order"]) > 0) {
+      $o = [];
+      foreach($this->query["order"] as $obj=>$ord) {
+        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+      }
+      $query[] = implode(",", $o);
+    }
+    if($this->query["limit"] != "") {
+      $query[] = "LIMIT";
+      $query[] = $this->query["limit"];
+    }
+    if($this->query["offset"] != "") {
+      $query[] = "OFFSET";
+      $query[] = $this->query["offset"];
+    }
+    $q["query"] = implode(" ", $query);
+    return $q;
+  }
+  
+  private function compileUpdateQuery($q) {
+    $query = ["UPDATE"];
+    $query[] = "`" . $this->query["table"] . "`";
+    $query[] = "SET";
+    $set = [];
+    foreach($this->query["values"] as $key => $val) {
+      $set[] = $this->obj($key)." = ?";
+    }
+    $query[] = implode(",", $set);
+    if(count($this->query["where"]) > 0) {
+      $last = count($this->query["where"]) - 1;
+      $query[] = "WHERE";
+      foreach($this->query["where"] as $i=>$w) {
+        if($i == $last) {
+          $query[] = str_replace("_&&_", "", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        } else {
+          $query[] = str_replace("_&&_", "AND", $w[0]);
+          foreach(array_diff($w, array($w[0])) as $p) {
+            $q["parameters"][] = $p;
+          }
+        }
+      }
+    }
+    if(count($this->query["order"]) > 0) {
+      $o = [];
+      foreach($this->query["order"] as $obj=>$ord) {
+        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+      }
+      $query[] = implode(",", $o);
+    }
+    if($this->query["limit"] != "") {
+      $query[] = "LIMIT";
+      $query[] = $this->query["limit"];
+    }
+    $q["query"] = implode(" ", $query);
+    return $q;
+  }
+  
+  private function compileInsertQuery($q) {
+    $query = ["INSERT INTO"];
+    $query[] = "`" . $this->query["table"] . "`";
+    $query[] = "(" . $this->query["columns"]. ")";
+    $query[] = "VALUES";
+    $query[] = $this->vlist($this->query["values"]);
+    $q["query"] = implode(" ", $query);
+    $q["parameters"] = $this->query["values"];
+    return $q;
+  }
+  
+  
+  // Escaping
   private function obj($value) {
     if(strpos($value, "(") !== false && strpos($value, ")") !== false) {
       return $value;

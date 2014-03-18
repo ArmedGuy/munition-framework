@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace framework\db;
 class DbModelResult {
   private $attrs = null;
   private $__className;
