@@ -41,8 +41,8 @@ spl_autoload_register(function($class){
     }
 });
 
-
-define("MUNITION_ENV", getenv("MUNITION_ENV") === "production" ? "production" : "development");
+$env = getenv("MUNITION_ENV");
+define("MUNITION_ENV", in_array($env, ["production", "development", "test"])? $env : "development");
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 define("MUNITION_WEBPATH", str_replace($_SERVER["DOCUMENT_ROOT"], "", dirname($_SERVER["SCRIPT_FILENAME"])) . "/");
 

@@ -1,10 +1,11 @@
 <?php
 namespace framework\base;
 class App {
-  
   public $config = null;
   
   public $router = null;
+  public $db = null;
+  
   public $postprocess = null;
   
   function __construct($appFolder = "./app/", $router = "./config/routes.php") {
