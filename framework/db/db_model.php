@@ -6,6 +6,10 @@ class DbModel {
   private static $__dbtable;
   private static $__className;
   
+  public static function bind($db) {
+    \framework\db\DbModelQuery::$db = $db;
+  }
+  
   private static function init() {
     if(self::$__initialized) return;
     

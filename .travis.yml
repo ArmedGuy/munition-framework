@@ -2,4 +2,11 @@ language: php
 php:
   - "5.5"
   - "5.4"
-  - "5.3"
+env:
+  - MUNITION_ENV=test
+script:
+  - phpunit --colors tests/*
+services:
+  - mysql
+before_install:
+  - mysql < tests/sql_fixture.sql

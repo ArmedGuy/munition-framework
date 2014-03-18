@@ -1,7 +1,7 @@
 <?php
-$config->db->use("test", [
+$config->db->using("test", [
   "engine" => "mysql",
   "user" => "root",
   "password" => "",
-  "db" => "test"
+  "db" => "munition_test"
 ]);

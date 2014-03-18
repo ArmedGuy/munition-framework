@@ -2,7 +2,7 @@
 namespace framework\db;
 
 class AppDbManager {
-  public function use($name, $args) {
+  public function using($name, $args) {
     $c = isset($args["engine"]) ? $args["engine"] : "mysql";
     
     if(isset($args["unix_socket"])) {
@@ -13,7 +13,7 @@ class AppDbManager {
     }
     $c .= "dbname=" . (isset($args["db"]) ? $args["db"] : "app") . ";";
     
-    $this->$name = new PDO($c, 
+    $this->$name = new \PDO($c, 
       (isset($args["user"]) ? $args["user"] : "app"),
       (isset($args["password"]) ? $args["password"] : "")
     );

@@ -107,8 +107,11 @@ class Router {
   
   private function call_controller_function($ctrlfn, $params) {
     $format = isset($params["_request_format"]) ? substr($params["_request_format"], 1) : "html";
-    $call_params = [$ctrlfn, $this->initial_scope, $params, $format, $this->app];
-    \framework\base\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
+    if(is_callable($ctrlfn)) {
+      $ctrlfn($this->initial_scope, $params, $format, $this->app);
+    } else {
+      \framework\base\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
+    }
 
   }
 }

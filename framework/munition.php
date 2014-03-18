@@ -44,20 +44,14 @@ spl_autoload_register(function($class){
 $env = getenv("MUNITION_ENV");
 define("MUNITION_ENV", in_array($env, ["production", "development", "test"])? $env : "development");
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
-define("MUNITION_WEBPATH", str_replace($_SERVER["DOCUMENT_ROOT"], "", dirname($_SERVER["SCRIPT_FILENAME"])) . "/");
 
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/app/lib");
 
-$sw = strtolower($_SERVER['SERVER_SOFTWARE']);
-$webserver = "";
-foreach(["nginx", "lighttpd", "apache"] as $server) {
-  if(strpos($sw, $server) !== false) {
-    $webserver = $server; break;
-  }
-}
-if($webserver == "") $webserver = "default";
-define("MUNITION_WEBSERVER", $webserver);
+if(MUNITION_ENV == "test") return;
+
+
+require 'web_constants.php';
 
 // Used for testing RewriteRules
 if(str_replace(array("/","\\"), "", __FILE__) === str_replace(array("/","\\"), "", $_SERVER["SCRIPT_FILENAME"])) {
