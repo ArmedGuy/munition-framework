@@ -48,8 +48,7 @@ define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/app/lib");
 
-if(MUNITION_ENV == "test") return;
-
+if(MUNITION_ENV == "test" && !defined('SIMULATES_WEBSERVER')) return;
 
 require 'web_constants.php';
 

@@ -5,3 +5,4 @@ $config->db->using("test", [
   "password" => "",
   "db" => "munition_test"
 ]);
+$config->in_test_environment = true;
