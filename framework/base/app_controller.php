@@ -6,7 +6,7 @@ class AppController {
   
   protected $app = null;
   
-  protected $before_filters = [];
+  protected $_before_filters = [];
   
   
   protected function before_filter($ctrlfn, $functions) {

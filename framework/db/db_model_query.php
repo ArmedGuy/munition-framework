@@ -5,33 +5,33 @@ class DbModelQuery {
 
   public static $db = null;
   
-  private $className = null;
-  private $table = "";
+  private $_className = null;
+  private $_table = "";
   
-  public $query = null;
+  private $_query = null;
   
-  private $result = null;
+  private $_result = null;
   
-  private $primary = "id";
+  private $_primary = "id";
   
-  private $nullresult;
+  private $_nullresult;
   
   
   public function __construct($table, $class) {
-    $this->nullresult = new DbModelResult(null, null);
+    $this->_nullresult = new DbModelResult(null, null);
     
-    $this->className = $class;
-    $this->table = $table;
+    $this->_className = $class;
+    $this->_table = $table;
     
     $this->reset();
   }
   
   public function reset() {
-    $this->result = null;
-    $this->query = [
+    $this->_result = null;
+    $this->_query = [
       "command" => "SELECT",
       "columns" => "*",
-      "table" => $this->table,
+      "table" => $this->_table,
       "where" => [
       ],
       "order" => [
@@ -47,29 +47,29 @@ class DbModelQuery {
   public function __get($name) {
     switch($name) {
       case "all": // execute query and return results
-        $this->query["limit"] = ""; // ensure limit is unset
+        $this->_query["limit"] = ""; // ensure limit is unset
         $this->execute();
-        return $this->result;
+        return $this->_result;
       case "first":
         $r = $this->first(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->nullresult;
+          return $this->_nullresult;
         }
       case "last":
         $r = $this->last(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->nullresult;
+          return $this->_nullresult;
         }
       case "take":
         $r = $this->take(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->nullresult;
+          return $this->_nullresult;
         }
       default:
         throw new DbException("Unknown value :" . $name);
@@ -77,53 +77,53 @@ class DbModelQuery {
     }
   }
   public function first($num) {
-    $this->query["command"] = "SELECT";
-    $this->query["limit"] = $num;
-    $this->query["offset"] = "";
-    $this->query["order"] = [ $this->primary => "ASC" ];
-    $this->query["groupby"] = "";
-    $this->query["having"] = [];
+    $this->_query["command"] = "SELECT";
+    $this->_query["limit"] = $num;
+    $this->_query["offset"] = "";
+    $this->_query["order"] = [ $this->_primary => "ASC" ];
+    $this->_query["groupby"] = "";
+    $this->_query["having"] = [];
     $this->execute();
-    return $this->result;
+    return $this->_result;
   }
   public function last($num) {
-    $this->query["command"] = "SELECT";
-    $this->query["limit"] = $num;
-    $this->query["offset"] = "";
-    $this->query["order"] = [ $this->primary => "DESC" ];
-    $this->query["groupby"] = "";
-    $this->query["having"] = [];
+    $this->_query["command"] = "SELECT";
+    $this->_query["limit"] = $num;
+    $this->_query["offset"] = "";
+    $this->_query["order"] = [ $this->_primary => "DESC" ];
+    $this->_query["groupby"] = "";
+    $this->_query["having"] = [];
     $this->execute();
-    return $this->result;
+    return $this->_result;
   }
   public function take($num) {
-    $this->query["command"] = "SELECT";
-    $this->query["limit"] = $num;
-    $this->query["offset"] = "";
-    $this->query["order"] = [];
-    $this->query["groupby"] = "";
-    $this->query["having"] = [];
+    $this->_query["command"] = "SELECT";
+    $this->_query["limit"] = $num;
+    $this->_query["offset"] = "";
+    $this->_query["order"] = [];
+    $this->_query["groupby"] = "";
+    $this->_query["having"] = [];
     $this->execute();
-    return $this->result;
+    return $this->_result;
   }
   public function create($params) {
     $this->reset();
-    $this->query["command"] = "INSERT INTO";
-    $this->query["columns"] = implode(",", array_keys($params));
-    $this->query["values"] = array_values($params);
+    $this->_query["command"] = "INSERT INTO";
+    $this->_query["columns"] = implode(",", array_keys($params));
+    $this->_query["values"] = array_values($params);
     $this->execute("insert");
     return $db->result;
   }
   
   public function update($values) {
-    $this->query["command"] = "UPDATE";
-    $this->query["values"] = $params;
+    $this->_query["command"] = "UPDATE";
+    $this->_query["values"] = $params;
     $this->execute("update");
     return $db->result;
   }
   
   public function destroy() {
-    $this->query["command"] = "DELETE FROM";
+    $this->_query["command"] = "DELETE FROM";
     $this->execute("delete");
     return $db->result;
   }
@@ -138,7 +138,7 @@ class DbModelQuery {
       foreach($params as $p) {
         $cust[] = $p;
       }
-      $this->query["where"][] = $cust;
+      $this->_query["where"][] = $cust;
       return;
     }
     if(is_array(func_get_arg(0))) {
@@ -149,9 +149,9 @@ class DbModelQuery {
           foreach($val as $v) {
             $in[] = $v;
           }
-          $this->query["where"][] = $in;
+          $this->_query["where"][] = $in;
         } else {
-          $this->query["where"][] = ["(" . $k . " = ?) _&&_", $val];
+          $this->_query["where"][] = ["(" . $k . " = ?) _&&_", $val];
         }
       }
     }
@@ -168,7 +168,7 @@ class DbModelQuery {
       foreach($params as $p) {
         $cust[] = $p;
       }
-      $this->query["where"][] = $cust;
+      $this->_query["where"][] = $cust;
       return;
     }
     if(is_array(func_get_arg(0))) {
@@ -179,9 +179,9 @@ class DbModelQuery {
           foreach($val as $v) {
             $in[] = $v;
           }
-          $this->query["where"][] = $in;
+          $this->_query["where"][] = $in;
         } else {
-          $this->query["where"][] = ["(" . $k . " != ?) _&&_", $val];
+          $this->_query["where"][] = ["(" . $k . " != ?) _&&_", $val];
         }
       }
     }
@@ -190,7 +190,7 @@ class DbModelQuery {
   
   public function select() {
     if(func_num_args() == 0) {
-      $this->query["columns"] = "*";
+      $this->_query["columns"] = "*";
     } else {
       $columns = [];
       foreach(func_get_args() as $a) {
@@ -211,23 +211,23 @@ class DbModelQuery {
           }
         }
       }
-      $this->query["columns"] = implode(",", $columns);
+      $this->_query["columns"] = implode(",", $columns);
     }
     return $this;
   }
   
   public function order() {
     if(func_num_args() == 0) {
-      $this->query["order"] = [ $this->primary => "ASC" ];
+      $this->_query["order"] = [ $this->_primary => "ASC" ];
     } else {
       foreach(func_get_args() as $a) {
         if(is_array($a)) {
           foreach($a as $obj => $order) {
-            $this->query["order"][$obj] = $order;
+            $this->_query["order"][$obj] = $order;
           }
         } else {
           list($obj, $order) = explode(" ", trim($a));
-          $this->query["order"][$obj] = $order;
+          $this->_query["order"][$obj] = $order;
         }
       }
     }
@@ -235,17 +235,17 @@ class DbModelQuery {
   }
   
   public function limit($l) {
-    $this->query["limit"] = $l;
+    $this->_query["limit"] = $l;
     return $this;
   }
   
   public function offset($o) {
-    $this->query["offset"] = $o;
+    $this->_query["offset"] = $o;
     return $this;
   }
   
   public function group($grp) {
-    $this->query["groupby"] = $grp;
+    $this->_query["groupby"] = $grp;
     return $this;
   }
   
@@ -257,7 +257,7 @@ class DbModelQuery {
     foreach($h as $v) {
       $hv[] = $v;
     }
-    $this->query["having"] = $hv;
+    $this->_query["having"] = $hv;
     
   }
   
@@ -266,7 +266,7 @@ class DbModelQuery {
       "query" => "",
       "parameters" => []
     ];
-    switch($this->query["command"]) {
+    switch($this->_query["command"]) {
       case "SELECT":
         return $this->compileSelectQuery($q);
       case "DELETE FROM":
@@ -287,9 +287,9 @@ class DbModelQuery {
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
-        $this->result = [];
+        $this->_result = [];
         while($res = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-          $this->result[] = new DbModelResult($res, $this->className);
+          $this->_result[] = new DbModelResult($res, $this->_className);
         }
         break;
       case "insert":
@@ -297,21 +297,21 @@ class DbModelQuery {
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
-        $this->result = $stmt->rowCount();
+        $this->_result = $stmt->rowCount();
         break;
       case "delete":
         $q = $this->compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
-        $this->result = $stmt->rowCount();
+        $this->_result = $stmt->rowCount();
         break;
       case "update":
         $q = $this->compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
-        $this->result = $stmt->rowCount();
+        $this->_result = $stmt->rowCount();
         break;
     }
   }
@@ -319,13 +319,13 @@ class DbModelQuery {
   // Compile queries
   private function compileSelectQuery($q) {
     $query = ["SELECT"];
-    $query[] = $this->query["columns"];
+    $query[] = $this->_query["columns"];
     $query[] = "FROM";
-    $query[] = "`" . $this->query["table"] . "`";
-    if(count($this->query["where"]) > 0) {
-      $last = count($this->query["where"]) - 1;
+    $query[] = "`" . $this->_query["table"] . "`";
+    if(count($this->_query["where"]) > 0) {
+      $last = count($this->_query["where"]) - 1;
       $query[] = "WHERE";
-      foreach($this->query["where"] as $i=>$w) {
+      foreach($this->_query["where"] as $i=>$w) {
         if($i == $last) {
           $query[] = str_replace("_&&_", "", $w[0]);
           foreach(array_diff($w, array($w[0])) as $p) {
@@ -339,32 +339,32 @@ class DbModelQuery {
         }
       }
     }
-    if($this->query["groupby"] != "") {
+    if($this->_query["groupby"] != "") {
       $query[] = "GROUP BY";
-      $query[] = $this->obj($this->query["groupby"]);
+      $query[] = $this->obj($this->_query["groupby"]);
     }
-    if(count($this->query["having"]) > 0) {
+    if(count($this->_query["having"]) > 0) {
       $query[] = "HAVING";
-      $h = $this->query["having"][0];
+      $h = $this->_query["having"][0];
       $query[] = $h[0];
       foreach(array_diff($h, array($h[0])) as $p) {
         $q["parameters"][] = $p;
       }
     }
-    if(count($this->query["order"]) > 0) {
+    if(count($this->_query["order"]) > 0) {
       $o = [];
-      foreach($this->query["order"] as $obj=>$ord) {
+      foreach($this->_query["order"] as $obj=>$ord) {
         $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
-    if($this->query["limit"] != "") {
+    if($this->_query["limit"] != "") {
       $query[] = "LIMIT";
-      $query[] = $this->query["limit"];
+      $query[] = $this->_query["limit"];
     }
-    if($this->query["offset"] != "") {
+    if($this->_query["offset"] != "") {
       $query[] = "OFFSET";
-      $query[] = $this->query["offset"];
+      $query[] = $this->_query["offset"];
     }
     $q["query"] = implode(" ", $query);
     return $q;
@@ -372,11 +372,11 @@ class DbModelQuery {
   
   private function compileDeleteQuery($q) {
     $query = ["DELETE FROM"];
-    $query[] = "`" . $this->query["table"] . "`";
-    if(count($this->query["where"]) > 0) {
-      $last = count($this->query["where"]) - 1;
+    $query[] = "`" . $this->_query["table"] . "`";
+    if(count($this->_query["where"]) > 0) {
+      $last = count($this->_query["where"]) - 1;
       $query[] = "WHERE";
-      foreach($this->query["where"] as $i=>$w) {
+      foreach($this->_query["where"] as $i=>$w) {
         if($i == $last) {
           $query[] = str_replace("_&&_", "", $w[0]);
           foreach(array_diff($w, array($w[0])) as $p) {
@@ -390,20 +390,20 @@ class DbModelQuery {
         }
       }
     }
-    if(count($this->query["order"]) > 0) {
+    if(count($this->_query["order"]) > 0) {
       $o = [];
-      foreach($this->query["order"] as $obj=>$ord) {
+      foreach($this->_query["order"] as $obj=>$ord) {
         $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
-    if($this->query["limit"] != "") {
+    if($this->_query["limit"] != "") {
       $query[] = "LIMIT";
-      $query[] = $this->query["limit"];
+      $query[] = $this->_query["limit"];
     }
-    if($this->query["offset"] != "") {
+    if($this->_query["offset"] != "") {
       $query[] = "OFFSET";
-      $query[] = $this->query["offset"];
+      $query[] = $this->_query["offset"];
     }
     $q["query"] = implode(" ", $query);
     return $q;
@@ -411,17 +411,17 @@ class DbModelQuery {
   
   private function compileUpdateQuery($q) {
     $query = ["UPDATE"];
-    $query[] = "`" . $this->query["table"] . "`";
+    $query[] = "`" . $this->_query["table"] . "`";
     $query[] = "SET";
     $set = [];
-    foreach($this->query["values"] as $key => $val) {
+    foreach($this->_query["values"] as $key => $val) {
       $set[] = $this->obj($key)." = ?";
     }
     $query[] = implode(",", $set);
-    if(count($this->query["where"]) > 0) {
-      $last = count($this->query["where"]) - 1;
+    if(count($this->_query["where"]) > 0) {
+      $last = count($this->_query["where"]) - 1;
       $query[] = "WHERE";
-      foreach($this->query["where"] as $i=>$w) {
+      foreach($this->_query["where"] as $i=>$w) {
         if($i == $last) {
           $query[] = str_replace("_&&_", "", $w[0]);
           foreach(array_diff($w, array($w[0])) as $p) {
@@ -435,16 +435,16 @@ class DbModelQuery {
         }
       }
     }
-    if(count($this->query["order"]) > 0) {
+    if(count($this->_query["order"]) > 0) {
       $o = [];
-      foreach($this->query["order"] as $obj=>$ord) {
+      foreach($this->_query["order"] as $obj=>$ord) {
         $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
-    if($this->query["limit"] != "") {
+    if($this->_query["limit"] != "") {
       $query[] = "LIMIT";
-      $query[] = $this->query["limit"];
+      $query[] = $this->_query["limit"];
     }
     $q["query"] = implode(" ", $query);
     return $q;
@@ -452,12 +452,12 @@ class DbModelQuery {
   
   private function compileInsertQuery($q) {
     $query = ["INSERT INTO"];
-    $query[] = "`" . $this->query["table"] . "`";
-    $query[] = "(" . $this->query["columns"]. ")";
+    $query[] = "`" . $this->_query["table"] . "`";
+    $query[] = "(" . $this->_query["columns"]. ")";
     $query[] = "VALUES";
-    $query[] = $this->vlist($this->query["values"]);
+    $query[] = $this->vlist($this->_query["values"]);
     $q["query"] = implode(" ", $query);
-    $q["parameters"] = $this->query["values"];
+    $q["parameters"] = $this->_query["values"];
     return $q;
   }
   
@@ -468,7 +468,7 @@ class DbModelQuery {
       return $value;
     } else {
       if(strpos($value, ".") === false) {
-        return "`".$this->query["table"]."`.`" . $value . "`";
+        return "`".$this->_query["table"]."`.`" . $value . "`";
       } else {
         return $value;
       }

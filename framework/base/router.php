@@ -2,12 +2,12 @@
 namespace framework\base;
 class Router {
 
-  private $routes = null;
-  private $patterns = null;
+  private $_routes = null;
+  private $_patterns = null;
   
   protected $base = "";
   
-  private $controllers = null;
+  private $_controllers = null;
   
   protected $initial_scope = [];
   
@@ -15,15 +15,15 @@ class Router {
   
   function __construct() {
     
-    $this->routes = [];
-    $this->patterns = [];
+    $this->_routes = [];
+    $this->_patterns = [];
     
-    $this->controllers = [];
+    $this->_controllers = [];
   }
   
   public function pattern($name, $pattern) {
     $name = str_replace(":", "", $name);
-    $this->patterns[":".$name] = "(?P<".$name.">".$pattern.")";
+    $this->_patterns[":".$name] = "(?P<".$name.">".$pattern.")";
   }
   
   public function request($path, $type, $controller, $params = []) {
@@ -37,7 +37,7 @@ class Router {
     foreach($params as $k=>$p) {
       $params[":".$k] = "(?P<".$k.">".$p.")";
     }
-    foreach(array_merge($this->patterns, $params) as $name => $pat) {
+    foreach(array_merge($this->_patterns, $params) as $name => $pat) {
       if(strpos($path, $name) !== false) {
         $regex = str_replace("\\".$name, $pat, $regex);
         $r["params"]++;
@@ -56,7 +56,7 @@ class Router {
       return;
     }
     
-    $this->routes[$type.":".$path] = $r;
+    $this->_routes[$type.":".$path] = $r;
   }
   
   public function get($path, $controller, $params = []) {
@@ -84,7 +84,7 @@ class Router {
     $params = [];
     $f = false;
     $path = str_replace($this->base, "", $request);
-    foreach($this->routes as $n=>$route) {
+    foreach($this->_routes as $n=>$route) {
       if($route["method"] == $method && preg_match($route["regex"], $path, $params) === 1) {
         unset($params[0]);
         $this->call_controller_function($route["controller"], $params);
@@ -93,16 +93,16 @@ class Router {
       }
     }
     if($f === false) {
-      if(isset($this->routes["404"])) {
-        $this->call_controller_function($this->routes["404"]["controller"], ["request"=>$request, "path" => $path]);
+      if(isset($this->_routes["404"])) {
+        $this->call_controller_function($this->_routes["404"]["controller"], ["request"=>$request, "path" => $path]);
       } else { 
-        throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->routes, true));
+        throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->_routes, true));
       }
     }
   }
   
   public function error($errCode, $controller) {
-    $this->routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/","controller" => $controller, "params" => 0];
+    $this->_routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/","controller" => $controller, "params" => 0];
   }
   
   private function call_controller_function($ctrlfn, $params) {
