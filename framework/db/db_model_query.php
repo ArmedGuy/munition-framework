@@ -48,7 +48,8 @@ class DbModelQuery {
     switch($name) {
       case "all": // execute query and return results
         $this->_query["limit"] = ""; // ensure limit is unset
-        $this->execute();
+        $this->_query["offset"] = ""; // offset too
+        $this->_execute();
         return $this->_result;
       case "first":
         $r = $this->first(1);
@@ -83,7 +84,7 @@ class DbModelQuery {
     $this->_query["order"] = [ $this->_primary => "ASC" ];
     $this->_query["groupby"] = "";
     $this->_query["having"] = [];
-    $this->execute();
+    $this->_execute();
     return $this->_result;
   }
   public function last($num) {
@@ -93,7 +94,7 @@ class DbModelQuery {
     $this->_query["order"] = [ $this->_primary => "DESC" ];
     $this->_query["groupby"] = "";
     $this->_query["having"] = [];
-    $this->execute();
+    $this->_execute();
     return $this->_result;
   }
   public function take($num) {
@@ -103,7 +104,7 @@ class DbModelQuery {
     $this->_query["order"] = [];
     $this->_query["groupby"] = "";
     $this->_query["having"] = [];
-    $this->execute();
+    $this->_execute();
     return $this->_result;
   }
   public function create($params) {
@@ -111,21 +112,21 @@ class DbModelQuery {
     $this->_query["command"] = "INSERT INTO";
     $this->_query["columns"] = implode(",", array_keys($params));
     $this->_query["values"] = array_values($params);
-    $this->execute("insert");
-    return $db->result;
+    $this->_execute("insert");
+    return $this->_result;
   }
   
   public function update($values) {
     $this->_query["command"] = "UPDATE";
     $this->_query["values"] = $params;
-    $this->execute("update");
-    return $db->result;
+    $this->_execute("update");
+    return $this->_result;
   }
   
   public function destroy() {
     $this->_query["command"] = "DELETE FROM";
-    $this->execute("delete");
-    return $db->result;
+    $this->_execute("delete");
+    return $this->_result;
   }
   
   public function where() {
@@ -143,9 +144,9 @@ class DbModelQuery {
     }
     if(is_array(func_get_arg(0))) {
       foreach(func_get_arg(0) as $key=>$val) {
-        $k = $this->obj($key);
+        $k = $this->_obj($key);
         if(is_array($val)) { // USE IN
-          $in = ["(" . $k . " IN ". $this->vlist($val) .") _&&_"];
+          $in = ["(" . $k . " IN ". $this->_vlist($val) .") _&&_"];
           foreach($val as $v) {
             $in[] = $v;
           }
@@ -173,9 +174,9 @@ class DbModelQuery {
     }
     if(is_array(func_get_arg(0))) {
       foreach(func_get_arg(0) as $key=>$val) {
-        $k = $this->obj($key);
+        $k = $this->_obj($key);
         if(is_array($val)) { 
-          $in = ["(" . $k . " NOT IN ". $this->vlist($val) .") _&&_"];
+          $in = ["(" . $k . " NOT IN ". $this->_vlist($val) .") _&&_"];
           foreach($val as $v) {
             $in[] = $v;
           }
@@ -197,9 +198,9 @@ class DbModelQuery {
         if(is_array($a)) {
           foreach($a as $c=>$as) {
             if(is_numeric($c)) {
-              $columns[] = $this->obj($as);
+              $columns[] = $this->_obj($as);
             } else {
-              $columns[] = $this->obj($c) . " AS " . $this->obj($as);
+              $columns[] = $this->_obj($c) . " AS " . $this->_obj($as);
             }
           }
         } else {
@@ -207,7 +208,7 @@ class DbModelQuery {
             $columns = ["*"];
             break;
           } else {
-            $columns[] = $this->obj($a);
+            $columns[] = $this->_obj($a);
           }
         }
       }
@@ -261,29 +262,29 @@ class DbModelQuery {
     
   }
   
-  private function compileQuery() {
+  private function _compileQuery() {
     $q = [
       "query" => "",
       "parameters" => []
     ];
     switch($this->_query["command"]) {
       case "SELECT":
-        return $this->compileSelectQuery($q);
+        return $this->_compileSelectQuery($q);
       case "DELETE FROM":
-        return $this->compileDeleteQuery($q);
+        return $this->_compileDeleteQuery($q);
       case "INSERT INTO":
-        return $this->compileInsertQuery($q);
+        return $this->_compileInsertQuery($q);
       case "UPDATE":
-        return $this->compileUpdateQuery($q);
+        return $this->_compileUpdateQuery($q);
       default:
         throw new DbError("Unsupported SQL command!");
     }
   }
   
-  private function execute($type="select") {
+  private function _execute($type="select") {
     switch($type) {
       case "select":        
-        $q = $this->compileQuery();
+        $q = $this->_compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
@@ -293,21 +294,21 @@ class DbModelQuery {
         }
         break;
       case "insert":
-        $q = $this->compileQuery();
+        $q = $this->_compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = $stmt->rowCount();
         break;
       case "delete":
-        $q = $this->compileQuery();
+        $q = $this->_compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = $stmt->rowCount();
         break;
       case "update":
-        $q = $this->compileQuery();
+        $q = $this->_compileQuery();
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
@@ -317,7 +318,7 @@ class DbModelQuery {
   }
   
   // Compile queries
-  private function compileSelectQuery($q) {
+  private function _compileSelectQuery($q) {
     $query = ["SELECT"];
     $query[] = $this->_query["columns"];
     $query[] = "FROM";
@@ -354,7 +355,7 @@ class DbModelQuery {
     if(count($this->_query["order"]) > 0) {
       $o = [];
       foreach($this->_query["order"] as $obj=>$ord) {
-        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+        $o[] = "ORDER BY ".$this->_obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
@@ -370,7 +371,7 @@ class DbModelQuery {
     return $q;
   }
   
-  private function compileDeleteQuery($q) {
+  private function _compileDeleteQuery($q) {
     $query = ["DELETE FROM"];
     $query[] = "`" . $this->_query["table"] . "`";
     if(count($this->_query["where"]) > 0) {
@@ -393,7 +394,7 @@ class DbModelQuery {
     if(count($this->_query["order"]) > 0) {
       $o = [];
       foreach($this->_query["order"] as $obj=>$ord) {
-        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+        $o[] = "ORDER BY ".$this->_obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
@@ -409,13 +410,13 @@ class DbModelQuery {
     return $q;
   }
   
-  private function compileUpdateQuery($q) {
+  private function _compileUpdateQuery($q) {
     $query = ["UPDATE"];
     $query[] = "`" . $this->_query["table"] . "`";
     $query[] = "SET";
     $set = [];
     foreach($this->_query["values"] as $key => $val) {
-      $set[] = $this->obj($key)." = ?";
+      $set[] = $this->_obj($key)." = ?";
     }
     $query[] = implode(",", $set);
     if(count($this->_query["where"]) > 0) {
@@ -438,7 +439,7 @@ class DbModelQuery {
     if(count($this->_query["order"]) > 0) {
       $o = [];
       foreach($this->_query["order"] as $obj=>$ord) {
-        $o[] = "ORDER BY ".$this->obj($obj) . " ".$ord;
+        $o[] = "ORDER BY ".$this->_obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
@@ -450,12 +451,12 @@ class DbModelQuery {
     return $q;
   }
   
-  private function compileInsertQuery($q) {
+  private function _compileInsertQuery($q) {
     $query = ["INSERT INTO"];
     $query[] = "`" . $this->_query["table"] . "`";
     $query[] = "(" . $this->_query["columns"]. ")";
     $query[] = "VALUES";
-    $query[] = $this->vlist($this->_query["values"]);
+    $query[] = $this->_vlist($this->_query["values"]);
     $q["query"] = implode(" ", $query);
     $q["parameters"] = $this->_query["values"];
     return $q;
@@ -463,7 +464,7 @@ class DbModelQuery {
   
   
   // Escaping
-  private function obj($value) {
+  private function _obj($value) {
     if(strpos($value, "(") !== false && strpos($value, ")") !== false) {
       return $value;
     } else {
@@ -475,7 +476,7 @@ class DbModelQuery {
     }
   }
   
-  private function vlist($value) {
+  private function _vlist($value) {
     return "(". implode(",", array_fill(0, count($value), "?")) .")";
   }
   
