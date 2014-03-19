@@ -3,7 +3,7 @@ namespace framework\base;
 class PostProcessingEngine {
   private $_queue = null;
   function __construct() {
-    $this->queue = [];
+    $this->_queue = [];
   }
   
   public function queue($fn) {

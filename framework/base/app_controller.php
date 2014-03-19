@@ -39,7 +39,7 @@ class AppController {
     
     $class = new $className();
     $class->app = $app;
-    foreach($class->before_filters as $f => $cb) {
+    foreach($class->_before_filters as $f => $cb) {
       if(in_array($fn, $cb)) {
         //TODO: handle before filter
       }

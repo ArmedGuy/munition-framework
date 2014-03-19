@@ -1,7 +1,8 @@
 <?php
-class Application extends \framework\base\App {
+if(!class_exists('InstallApplication')):
+class InstallApplication extends \framework\base\App {
   function __construct() {
-    parent::__construct();
+    parent::__construct("./framework/install_app/", "./framework/install_config/routes.php");
     
     $this->db = new \framework\db\AppDbManager();
     $config = $this;
@@ -11,4 +12,5 @@ class Application extends \framework\base\App {
     require_once 'env/' . MUNITION_ENV . '.php';
   }
 }
-return new Application();
+endif;
+return new InstallApplication();

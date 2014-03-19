@@ -4,9 +4,9 @@ class AppRouter extends \framework\base\Router {
   function __construct() {
     parent::__construct();
     
-    $this->get("/", "install#home");
+    $this->get(MUNITION_WEBPATH, "install#home");
     $this->error("404", "install#home");
-    $this->get("/verify_rewrite", "install#verify_rewrite");
+    $this->get(MUNITION_WEBPATH . "verify_rewrite", "install#verify_rewrite");
   
   }
 }

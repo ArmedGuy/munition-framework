@@ -1,6 +1,9 @@
 <?php
+if(file_exists("install.php")) {
+  require 'install.php';
+  exit;
+}
+
 require_once 'framework/munition.php';
 $app = require 'config/application.php';
-if(in_array(MUNITION_ENV, ["production", "development"])) {
-  $app->run();
-}
+$app->run();

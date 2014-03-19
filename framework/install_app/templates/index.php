@@ -71,11 +71,10 @@ $("#continue-btn").click(function() {
     <h2 class="text-center">What to do next?</h2>
     <div class="row">
       <div class="col-md-5">
-        <h3>Clear out the default App</h3>
-        <p>The default App is located at <code><?=MUNITION_ROOT."/app"; ?></code></p>
-        <p>Simply clear all files from <code>app/public</code> <code>app/templates</code> and <code>app/controllers</code>.</p>
-        <p>Then, reset the default AppRouter at <code>config/routes.php</code> by removing all <code>$this->...</code> calls.</p>
-        <p><small>Note: By doing this you will delete this page</small></p>
+        <h3>Remove Installation files</h3>
+        <p>You need to remove or rename install.php from your Munition directory.</p>
+        <p>If you want, you can also remove the installation application from <code>framework/install_app/</code> and <code>framework/install_config/</code>.</p>
+        <p>(You can also choose to ignore them in your version control system(git, svn etc) if you do not wish to track them.</p>
       </div>
       <div class="col-md-4">
         <h3>Follow a guide</h3>

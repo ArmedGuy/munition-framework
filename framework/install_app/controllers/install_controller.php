@@ -32,7 +32,7 @@ class InstallController extends \framework\base\AppController {
   
   private function try_own_url($path) {
     $url = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "" && $_SERVER['HTTPS'] != "off") ? "s" : "");
-    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". $path;
+    $url .="://" . $_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'] ."/". $path ."?verify_install=true";
     @file_get_contents($url);
     list($http, $code, $status) = explode(" ", $http_response_header[0]);
     return $code;
@@ -40,7 +40,7 @@ class InstallController extends \framework\base\AppController {
   
   private function check_rewrite_rules(&$issues) {
     $crouter = $this->try_own_url(MUNITION_WEBPATH . "/verify_rewrite");
-    $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/css/style.css");
+    $publicdir = $this->try_own_url(MUNITION_WEBPATH . "/app/public/index.html");
     $privfolder = $this->try_own_url(MUNITION_WEBPATH . "/framework/munition.php");
     
     if($crouter != "200" || $publicdir != "200" || $privfolder == "422") {

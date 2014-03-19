@@ -11,21 +11,20 @@ class App {
   function __construct($appFolder = "./app/", $router = "./config/routes.php") {
     $this->config = [];
     if(!file_exists($appFolder)) {
-      return;
+      throw new \InvalidArgumentException("Unable to access app directory");
     }
     
-    try {
-      require $router;
-      $this->router = new \config\AppRouter();
-      $this->router->app = $this;
-      
-      \framework\base\AppController::$template_base = $appFolder . "/templates/";
-      \framework\base\AppController::$controller_base = $appFolder . "/controllers/";
-      
-      $this->postprocess = new \framework\base\PostProcessingEngine();
+    if(!file_exists($router)) {
+      throw new \InvalidArgumentException("AppRouter file not found");
     }
-    catch(Exception $e) {
-    }
+    require $router;
+    $this->router = new \config\AppRouter();
+    $this->router->app = $this;
+    
+    \framework\base\AppController::$template_base = $appFolder . "/templates/";
+    \framework\base\AppController::$controller_base = $appFolder . "/controllers/";
+    
+    $this->postprocess = new \framework\base\PostProcessingEngine();
     
   }
   
@@ -44,13 +43,15 @@ class App {
     
     $this->router->route($path, $method);
     
-    if(ob_get_level() !== 0) {
-      ob_end_flush();
-    }
-    flush();
-    
-    if(function_exists('fastcgi_finish_request')) {
-      fastcgi_finish_request();
+    if(MUNITION_ENV != "test") {
+      if(ob_get_level() !== 0) {
+        ob_end_flush();
+      }
+      flush();
+      
+      if(function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+      }
     }
     
     $this->postprocess->process();
