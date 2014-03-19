@@ -1,7 +1,10 @@
 ![Logo](app/public/img/munition-text-logo.png)
 
+[![Build Status](https://travis-ci.org/Pie-Studios/munition-framework.png?branch=master)](https://travis-ci.org/Pie-Studios/munition-framework)
+[![Coverage Status](https://coveralls.io/repos/Pie-Studios/munition-framework/badge.png)](https://coveralls.io/r/Pie-Studios/munition-framework)
+
 The Munition Framework is an MVC framework built in PHP.
-It is designed for rapid development, easy to understand and use features, and minimal configuration.
+It is designed for rapid development and deployment, easy to understand and use features, and minimal configuration.
 
 Official Forum: http://forum.pie-studios.com/category/munition
 
