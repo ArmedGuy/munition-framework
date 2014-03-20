@@ -53,7 +53,7 @@ class Router {
     try {
       preg_match($r["regex"], ""); // This *should* cache the regex
     } catch(Exception $e) {
-      return;
+      throw new \InvalidArgumentException("Invalid Regex for path $path ({$r["regex"]}");
     }
     
     $this->_routes[$type.":".$path] = $r;

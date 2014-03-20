@@ -109,4 +109,25 @@ class RouterTest extends PHPUnit_Framework_TestCase {
     $router->route("/get_resource.json", "GET");
     $this->assertTrue($success);
   }
+  
+  
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testRouterInvalidRegex() {
+    $router = new \framework\base\Router();
+    $success = false;
+    
+    $router->get("/user/:username", function() {
+    }, ["username" => "[a-zA-Z0-9*");
+  }
+  
+  
+  /**
+   * @expectedException Exception
+   */
+  public function testRouterNoMatch() {
+    $router = new \framework\base\Router();
+    $router->route("/asdf", "GET");
+  }
 }
