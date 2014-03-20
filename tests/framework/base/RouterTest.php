@@ -119,7 +119,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
     $success = false;
     
     $router->get("/user/:username", function() {
-    }, ["username" => "[a-zA-Z0-9*");
+    }, ["username" => "[a-zA-Z0-9*"]);
   }
   
   
