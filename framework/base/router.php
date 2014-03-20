@@ -50,9 +50,7 @@ class Router {
     }
     $regex = "/^" . $regex . "(?P<_request_format>\.[a-zA-Z0-9]{1,4})?$/";
     $r["regex"] = $regex;
-    try {
-      preg_match($r["regex"], ""); // This *should* cache the regex
-    } catch(Exception $e) {
+    if(preg_match($r["regex"], "") === false) {
       throw new \InvalidArgumentException("Invalid Regex for path $path ({$r["regex"]}");
     }
     
