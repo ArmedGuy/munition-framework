@@ -19,6 +19,6 @@ function xhr_response() {
     throw new Exception("No request was made, unable to get request");
   } else {
     $_xhr_request_made = true;
-    return [http_response_code(), get_headers($), ob_get_clean()];
+    return [http_response_code(), headers_list(), ob_get_clean()];
   }
 }
