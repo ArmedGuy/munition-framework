@@ -11,15 +11,16 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @depends testLoadApp
    */
   public function testRunAppWithPostProcessing($app) {
-    xhr("/test", "GET");
+    XHR::request("/test", "GET");
     $success = false;
     $app->postprocess->queue(function() use(&$success) {
       $success = true;
     });
     $app->run();
-    $response = xhr_response();
     
-    $this->assertEqual(200, $response[0]);
+    list($code, $headers, $body) = XHR::response();
+    
+    $this->assertEqual(200, $code);
     $this->assertTrue($success);
   }
   
