@@ -6,9 +6,6 @@ class Router {
   private $_patterns = null;
   
   protected $base = "";
-  
-  private $_controllers = null;
-  
   protected $initial_scope = [];
   
   public $app = null;
@@ -17,8 +14,6 @@ class Router {
     
     $this->_routes = [];
     $this->_patterns = [];
-    
-    $this->_controllers = [];
   }
   
   public function pattern($name, $pattern) {

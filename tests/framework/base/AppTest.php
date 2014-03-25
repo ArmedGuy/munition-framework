@@ -17,6 +17,9 @@ class AppTest extends PHPUnit_Framework_TestCase {
       $success = true;
     });
     $app->run();
+    $response = xhr_response();
+    
+    $this->assertEqual(200, $response[0]);
     $this->assertTrue($success);
   }
   
