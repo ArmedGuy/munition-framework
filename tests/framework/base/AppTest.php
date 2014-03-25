@@ -20,7 +20,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
     
     list($code, $headers, $body) = XHR::response();
     
-    $this->assertEqual(200, $code);
+    $this->assertEquals(200, $code);
     $this->assertTrue($success);
   }
   
