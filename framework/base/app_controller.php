@@ -73,7 +73,11 @@ class AppController {
     unset($scope, $k, $v);
 	
     if(isset($__render_settings[0]) && is_numeric($__render_settings[0])) {
-      http_response_code($settings[0]);
+      if(MUNITION_ENV != "test") {
+        http_response_code($__render_settings[0]);
+      } else {
+        XHR::response_code($__render_settings[0]);
+      }
     }
     if(isset($__render_settings["nothing"]) && $__render_settings["nothing"] === true) {
       return;
