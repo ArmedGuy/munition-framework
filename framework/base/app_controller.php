@@ -6,45 +6,47 @@ class AppController {
   
   protected $app = null;
   
-  protected $_before_filters = [];
+  private $_before_filters = [];
   
   
-  protected function before_filter($ctrlfn, $functions) {
-    // TODO: add before filter system
+  protected function before_action($filter, $functions = []) {
+    $this->_before_filters[] = [$filter, $functions];
   }
   
-  private function apply_filter($ctrlfn, &$scope, &$params, &$format) {
-    try {
-      if(strpos($ctrlfn, "#") === false) {
-        $ctrlfn($scope, $params, $format);
-      } else {
-        if(strpos($ctrlfn, "#") === 0) {
-          $ctrlfn = substr($ctrlfn, 1);
-          $this->$ctrlfn($scope, $params, $format);
-        } else {
-          // TODO: probably not do this
-          list($className, $fn) = self::load_controller($ctrlfn);
-          $class = new $className();
-          $class->$fn($scope, $params, $format);
+  
+  protected function handle_action($fn, $params, $scope, $format) {
+    foreach($this->_before_filters as $filter) {
+      list($f, $cb) = $filter;
+      
+      if(is_array($cb)) {
+        if(isset($cb["only"]) && !in_array($fn, $cb["only"]))
+          continue;
+        if(isset($cb["not"]) && in_array($fn, $cb["not"]))
+          continue;
+        
+        $scope = call_user_func($f, $scope);
+        if($scope === null) {
+          return; // Assumes the filter has handled output etc
+        }
+      } elseif (is_string($cb) && $fn == $cb) {
+        $scope = call_user_func($f, $scope);
+        if($scope === null) {
+          return; // Assumes the filter has handled output etc
         }
       }
     }
-    catch(Exception $e) {
-    }
+    $this->$fn($scope, $params, $format);
   }
   
   
   public static function call_function($ctrlfn, $params = [], $scope = [], $format = "html", $app = null) {
     list($className, $fn) = self::load_controller($ctrlfn);
+    $params["controller"] = $className;
+    $params["action"] = $fn;
     
     $class = new $className();
     $class->app = $app;
-    foreach($class->_before_filters as $f => $cb) {
-      if(in_array($fn, $cb)) {
-        //TODO: handle before filter
-      }
-    }
-    $class->$fn($scope, $params, $format);
+    $class->handle_action($fn, $params, $scope, $format);
   }
   
   private static function load_controller($ctrlfn) {
