@@ -9,6 +9,20 @@ class App {
   public $postprocess = null;
   
   function __construct($appFolder = "./app/", $router = "./config/routes.php") {
+    
+    spl_autoload_register(function($class){
+        $class = classname_to_filename(str_replace('\\', '/', $class));
+        if(file_exists($appFolder . "/controllers/" . $class . '.php')) {
+          require_once($appFolder . "/controllers/" . $class . '.php');
+        }
+        if(file_exists($appFolder . "/models/" . $class . '.php')) {
+          require_once($appFolder . "/models/" . $class . '.php');
+        }
+        if(file_exists($appFolder . "/lib/" . $class . '.php')) {
+          require_once($appFolder . "/lib/" . $class . '.php');
+        }
+    });
+    
     $this->config = [];
     if(!file_exists($appFolder)) {
       throw new \InvalidArgumentException("Unable to access app directory");
