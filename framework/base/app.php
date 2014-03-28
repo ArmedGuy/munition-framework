@@ -14,12 +14,15 @@ class App {
         $class = classname_to_filename(str_replace('\\', '/', $class));
         if(file_exists($appFolder . "/controllers/" . $class . '.php')) {
           require_once($appFolder . "/controllers/" . $class . '.php');
+          return;
         }
         if(file_exists($appFolder . "/models/" . $class . '.php')) {
           require_once($appFolder . "/models/" . $class . '.php');
+          return;
         }
         if(file_exists($appFolder . "/lib/" . $class . '.php')) {
           require_once($appFolder . "/lib/" . $class . '.php');
+          return;
         }
     });
     
