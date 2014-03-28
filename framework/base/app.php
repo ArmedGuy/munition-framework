@@ -10,7 +10,7 @@ class App {
   
   function __construct($appFolder = "./app/", $router = "./config/routes.php") {
     
-    spl_autoload_register(function($class){
+    spl_autoload_register(function($class) use ($appFolder) {
         $class = classname_to_filename(str_replace('\\', '/', $class));
         if(file_exists($appFolder . "/controllers/" . $class . '.php')) {
           require_once($appFolder . "/controllers/" . $class . '.php');
