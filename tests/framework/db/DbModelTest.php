@@ -15,7 +15,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u->save();
     
     $u2 = User::where(["name" => $u->name])->take;
-    $this->assertEquals("hej", $u->password);
+    $this->assertEquals("hej", $u2->password);
   }
   
   public function testFirst() {
@@ -26,9 +26,5 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   public function testLast() {
     $u = User::last();
     $this->assertEquals("Hannzas", $u->name);
-  }
-  
-  public function testChain() {
-    $u = User::where(
   }
 }
