@@ -15,7 +15,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit tests
+  - phpunit
 after_script:
  - php vendor/bin/coveralls -v
 

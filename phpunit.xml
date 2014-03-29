@@ -1,4 +1,9 @@
 <phpunit colors="true" bootstrap="tests/bootstrap.php">
+  <testsuites>
+    <testsuite name="Munition_Core">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
   <logging>
     <log type="coverage-clover" target="build/logs/clover.xml" />
   </logging>
