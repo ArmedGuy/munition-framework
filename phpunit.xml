@@ -9,6 +9,7 @@
     <blacklist>
       <directory suffix=".php">./framework/install_app</directory>
       <directory suffix=".php">./framework/install_config</directory>
+      <file>./tests/xhr.php</file>
     </blacklist>
   </filter>
   
