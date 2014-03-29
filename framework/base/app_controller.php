@@ -78,7 +78,7 @@ class AppController {
       if(MUNITION_ENV != "test") {
         http_response_code($__render_settings[0]);
       } else {
-        XHR::response_code($__render_settings[0]);
+        \XHR::response_code($__render_settings[0]);
       }
     }
     if(isset($__render_settings["nothing"]) && $__render_settings["nothing"] === true) {
