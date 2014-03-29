@@ -59,7 +59,7 @@ class AppController {
       require_once self::$controller_base . $c . ".php";
       return [filename_to_classname($c), $function];
     } else {
-      throw new \InvalidArgumentException("Controller not found!");
+      throw new \InvalidArgumentException("Controller '$c' not found!");
     }
     
   }
