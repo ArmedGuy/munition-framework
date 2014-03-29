@@ -11,6 +11,8 @@
       <exclude>
         <directory suffix=".php">./framework/install_app</directory>
         <directory suffix=".php">./framework/install_config</directory>
+        <directory suffix=".php">./tests/test_app</directory>
+        <directory suffix=".php">./tests/test_config</directory>
         <file>./tests/xhr.php</file>
       </exclude>
     </whitelist>

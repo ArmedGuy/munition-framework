@@ -2,7 +2,7 @@
 class AppTest extends PHPUnit_Framework_TestCase {
   
   public function testLoadApp() {
-    $app = require './framework/install_config/application.php';
+    $app = require './tests/test_config/application.php';
     $this->assertTrue($app->in_test_environment);  
     return $app;
   }
@@ -11,7 +11,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @depends testLoadApp
    */
   public function testRunAppWithPostProcessing($app) {
-    XHR::request("/test?hi=hello", "GET");
+    XHR::request("/?hi=hello", "GET");
     $success = false;
     $app->postprocess->queue(function() use(&$success) {
       $success = true;
@@ -27,7 +27,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testControllerFilters() {
-    $app = require './framework/install_config/application.php';
+    $app = require './tests/test_config/application.php';
     
     XHR::request("/test_filters1", "GET");
     $app->run();

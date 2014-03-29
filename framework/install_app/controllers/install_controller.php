@@ -1,20 +1,6 @@
 <?php
 class InstallController extends \framework\base\AppController {
   
-  function __construct() {
-    $this->before_action([$this, "filter_all_actions"]);
-    
-    
-    $this->before_action([$this, "filter_some_actions"], "test_filters1");
-    
-    $this->before_action([$this, "filter_allbutsome_actions"],
-    ["not" => [
-      "test_filters2",
-      "home",
-      "verify_rewrite"
-    ]]);
-    
-  }
   function home($scope) {
     if(isset($_GET['get_issues'])) {
       $this->get_issues();
@@ -23,14 +9,6 @@ class InstallController extends \framework\base\AppController {
   }
   function verify_rewrite() {
     self::render(["nothing" => true]);
-  }
-  
-  // Test actions
-  function test_filters1($scope) {
-    self::render([403, "nothing" => true]);
-  }
-  function test_filters2($scope) {
-    self::render([403, "nothing" => true]);
   }
   
   private function get_issues() {
