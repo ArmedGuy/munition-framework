@@ -13,7 +13,7 @@ class DbModelResult {
   
   public function __get($attr) {
     if(isset($this->_attrs[$attr])) {
-      return $attr;
+      return $this->_attrs[$attr];
     } else {
       return null;
     }
