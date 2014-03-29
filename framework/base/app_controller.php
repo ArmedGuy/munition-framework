@@ -85,11 +85,12 @@ class AppController {
       return;
     }
     if(isset($__render_settings["json"])) {
-      header("Content-type: application/json");
+      if(MUNITION_ENV != "test"):
+        header("Content-type: application/json");
+      endif;
       echo $__render_settings["json"];
     }
     if(isset($__render_settings["template"])) {
-    
       require (self::$template_base . $__render_settings["template"] . ".php");
     }
   }

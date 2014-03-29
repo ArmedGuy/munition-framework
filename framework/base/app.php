@@ -54,9 +54,7 @@ class App {
       $path = $uri;
     }
     
-    if(ob_get_level() == 0) {
-      ob_start();
-    }
+    ob_start();
     
     $this->router->route($path, $method);
     
