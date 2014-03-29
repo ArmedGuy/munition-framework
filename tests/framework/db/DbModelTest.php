@@ -6,7 +6,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   public function testCreate() {
     User::create(["name" => "Spelfilip", "password" => "legolas"]);
     $u = User::where(["name" => "Spelfilip"])->take;
-    print_r($u);
     $this->assertEquals("Spelfilip", $u->name);
   }
   
@@ -16,7 +15,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u->save();
     
     $u2 = User::where(["name" => $u->name])->take;
-    print_r($u2);
     $this->assertEquals("hej", $u2->password);
   }
   
