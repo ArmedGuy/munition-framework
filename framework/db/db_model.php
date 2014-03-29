@@ -6,6 +6,8 @@ class DbModel {
   private static $__dbtable;
   private static $__className;
   
+  protected $_values;
+  
   public static function bind($db) {
     \framework\db\DbModelQuery::$db = $db;
   }
@@ -37,7 +39,7 @@ class DbModel {
   private static function crowd($m, $data) {
     foreach($data as $k => $v) {
       $m->$k = $v; // first, set value
-      
+      $m->_values[$k] = $v;
       // TODO: add has$k() etc
     }
   }
@@ -91,6 +93,16 @@ class DbModel {
   public static function create($params) {
     $id = self::getQuery()->create($params);
     return self::getQuery()->where(["id" => $id])->take;
+  }
+  
+  public function save() {
+    $diff = [];
+    foreach($this->_values as $k=>$v) {
+      if($this->$$k != $v) {
+        $diff[$k] = $this->$$k;
+      }
+    }
+    self::getQuery()->where(["id" => $this->id])->update($diff);
   }
   
   
