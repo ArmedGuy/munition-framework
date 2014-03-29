@@ -418,6 +418,7 @@ class DbModelQuery {
     $set = [];
     foreach($this->_query["values"] as $key => $val) {
       $set[] = $this->_obj($key)." = ?";
+      $q["parameters"][] = $val;
     }
     $query[] = implode(",", $set);
     if(count($this->_query["where"]) > 0) {
