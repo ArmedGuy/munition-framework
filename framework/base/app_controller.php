@@ -88,7 +88,7 @@ class AppController {
       if(MUNITION_ENV != "test"):
         header("Content-type: application/json");
       endif;
-      echo $__render_settings["json"];
+      echo json_encode($__render_settings["json"]);
     }
     if(isset($__render_settings["template"])) {
       require (self::$template_base . $__render_settings["template"] . ".php");
