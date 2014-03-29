@@ -15,7 +15,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit --bootstrap tests/bootstrap.php --colors --coverage-clover build/logs/clover.xml tests
+  - phpunit
 after_script:
  - php vendor/bin/coveralls -v
 

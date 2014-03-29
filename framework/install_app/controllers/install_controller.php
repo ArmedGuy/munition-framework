@@ -5,10 +5,7 @@ class InstallController extends \framework\base\AppController {
     $this->before_action([$this, "filter_all_actions"]);
     
     
-    $this->before_action([$this, "filter_some_actions"], 
-    ["only" => [
-      "test_filters1"
-    ]]);
+    $this->before_action([$this, "filter_some_actions"], "test_filters1");
     
     $this->before_action([$this, "filter_allbutsome_actions"],
     ["not" => [
