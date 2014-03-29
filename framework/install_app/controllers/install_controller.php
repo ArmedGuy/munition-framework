@@ -28,10 +28,10 @@ class InstallController extends \framework\base\AppController {
   
   // Test actions
   function test_filters1($scope) {
-    self::render(404, ["nothing" => true]);
+    self::render([403, "nothing" => true]);
   }
   function test_filters2($scope) {
-    self::render(403, ["nothing" => true]);
+    self::render([403, "nothing" => true]);
   }
   
   private function get_issues() {
@@ -116,9 +116,9 @@ class InstallController extends \framework\base\AppController {
     return $scope;
   }
   protected function filter_some_actions($scope) {
-    self::render(422, ["nothing" => true]);
+    self::render([422, "nothing" => true]);
   }
   protected function filter_allbutsome_actions($scope) {
-    self::render(422, ["nothing" => true]);
+    self::render([422, "nothing" => true]);
   }
 }
