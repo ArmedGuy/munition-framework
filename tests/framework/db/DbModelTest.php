@@ -30,4 +30,18 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u = User::last();
     $this->assertEquals("Spelfilip", $u->name);
   }
+  
+  
+  public function testLimitOffset() {
+    $users = User::limit(2)->offset(1)->all;
+    $this->assertEquals(2, count($users));
+  }
+  
+  
+  /**
+   * @expectedException \framework\db\DbException
+   */
+  public function testInvalidFetchFunction() {
+    $u = User::where(["name" => "asdf"])->bake;
+  }
 }
