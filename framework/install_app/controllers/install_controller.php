@@ -12,7 +12,9 @@ class InstallController extends \framework\base\AppController {
     
     $this->before_action([$this, "filter_allbutsome_actions"],
     ["not" => [
-      "test_filters2"
+      "test_filters2",
+      "home",
+      "verify_rewrite"
     ]]);
     
   }
