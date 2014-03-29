@@ -9,19 +9,29 @@ class TestController extends \framework\base\AppController {
     $this->before_action([$this, "filter_allbutsome_actions"],
     ["not" => [
       "test_filters2",
-      "home",
-      "verify_rewrite"
+      "index",
+      "not_found"
     ]]);
     
   }
   
-  // Test actions
+  function index($scope) {
+    self::render($scope, [200, "json" => ["oi_mate" => "hellow!"]]);
+  }
+  
+  
+  function not_found($scope) {
+    self::render($scope, [404, "json" => ["error" => "Not Found"]]);
+  }
+  
+  // Test filters
   function test_filters1($scope) {
     self::render([403, "nothing" => true]);
   }
   function test_filters2($scope) {
     self::render([403, "nothing" => true]);
   }
+  
   
   protected function filter_all_actions($scope) {
     return $scope;
