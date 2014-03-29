@@ -119,7 +119,7 @@ class DbModelQuery {
   
   public function update($values) {
     $this->_query["command"] = "UPDATE";
-    $this->_query["values"] = $params;
+    $this->_query["values"] = $values;
     $this->_execute("update");
     return $this->_result;
   }

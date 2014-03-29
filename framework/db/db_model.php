@@ -100,8 +100,6 @@ class DbModel {
   
   public function save() {
     $diff = [];
-    print_r($this->_values);
-    print_r($this);
     foreach($this->_values as $k=>$v) {
       if($this->$k != $v) {
         $diff[$k] = $this->$k;
