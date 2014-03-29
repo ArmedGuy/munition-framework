@@ -23,8 +23,11 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
+  /**
+   * @depends testCreate
+   */
   public function testLast() {
     $u = User::last();
-    $this->assertEquals("Hannzas", $u->name);
+    $this->assertEquals("Spelfilip", $u->name);
   }
 }

@@ -2,6 +2,9 @@
 namespace framework\db;
 
 class DbModel {
+  
+  public $id;
+  
   private static $__initialized = false;
   private static $__dbtable;
   private static $__className;

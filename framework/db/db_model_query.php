@@ -17,11 +17,12 @@ class DbModelQuery {
   private $_nullresult;
   
   
-  public function __construct($table, $class) {
+  public function __construct($table, $class, $primary = "id") {
     $this->_nullresult = new DbModelResult(null, null);
     
     $this->_className = $class;
     $this->_table = $table;
+    $this->_primary = $primary;
     
     $this->reset();
   }
