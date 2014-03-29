@@ -103,8 +103,8 @@ class DbModel {
     print_r($this->_values);
     print_r($this);
     foreach($this->_values as $k=>$v) {
-      if(isset($this->$$k)) {
-        if($this->$$k != $v) {
+      if(isset($this->$k)) {
+        if($this->$k != $v) {
           $diff[$k] = $this->$$k;
         }
       }
