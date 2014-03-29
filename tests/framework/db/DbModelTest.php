@@ -33,7 +33,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   
   public function testLimitOffset() {
-    $users = User::limit(2)->offset(1)->all;
+    $users = User::limit(2)->offset(1)->rows;
     $this->assertEquals(2, count($users));
   }
   

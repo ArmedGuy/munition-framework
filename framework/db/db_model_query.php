@@ -52,6 +52,9 @@ class DbModelQuery {
         $this->_query["offset"] = ""; // offset too
         $this->_execute();
         return $this->_result;
+      case "rows":
+        $this->_execute();
+        return $this->_result;
       case "first":
         $r = $this->first(1);
         if(count($r) == 1) {
