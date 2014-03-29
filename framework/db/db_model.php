@@ -101,8 +101,10 @@ class DbModel {
   public function save() {
     $diff = [];
     foreach($this->_values as $k=>$v) {
-      if($this->$$k != $v) {
-        $diff[$k] = $this->$$k;
+      if(isset($this->$$k)) {
+        if($this->$$k != $v) {
+          $diff[$k] = $this->$$k;
+        }
       }
     }
     self::getQuery()->where(["id" => $this->id])->update($diff);
