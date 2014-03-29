@@ -42,7 +42,7 @@ class DbModelQuery {
       "limit" => "",
       "offset" => "",
       "groupby" => "",
-      "having" => ""
+      "having" => []
     ];
   }
   public function __get($name) {
