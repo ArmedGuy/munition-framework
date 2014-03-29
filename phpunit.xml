@@ -6,13 +6,13 @@
   </testsuites>
   
   <filter>
-    <blacklist>
-      <directory suffix=".php">./framework/install_app</directory>
-      <directory suffix=".php">./framework/install_config</directory>
-      <file>./tests/xhr.php</file>
-    </blacklist>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">./framework</directory>
+      <exclude>
+        <directory suffix=".php">./framework/install_app</directory>
+        <directory suffix=".php">./framework/install_config</directory>
+        <file>./tests/xhr.php</file>
+      </exclude>
     </whitelist>
   </filter>
   
