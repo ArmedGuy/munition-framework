@@ -11,6 +11,9 @@
       <directory suffix=".php">./framework/install_config</directory>
       <file>./tests/xhr.php</file>
     </blacklist>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./framework</directory>
+    </whitelist>
   </filter>
   
   <logging>
