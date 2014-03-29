@@ -47,12 +47,7 @@ class DbModelQuery {
   }
   public function __get($name) {
     switch($name) {
-      case "all": // execute query and return results
-        $this->_query["limit"] = ""; // ensure limit is unset
-        $this->_query["offset"] = ""; // offset too
-        $this->_execute();
-        return $this->_result;
-      case "rows":
+      case "all":
         $this->_execute();
         return $this->_result;
       case "first":
