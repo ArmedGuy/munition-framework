@@ -1,7 +1,7 @@
 <phpunit colors="true" bootstrap="tests/bootstrap.php">
   <testsuites>
     <testsuite name="Munition Core">
-      <directory>tests/*Test.php</directory>
+      <directory>./tests/*Test.php</directory>
     </testsuite>
   </testsuites>
   <logging>
