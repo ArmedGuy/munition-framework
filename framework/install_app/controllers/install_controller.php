@@ -1,6 +1,21 @@
 <?php
 class InstallController extends \framework\base\AppController {
   
+  function __construct() {
+    $this->before_action([$this, "filter_all_actions"]);
+    
+    
+    $this->before_action([$this, "filter_some_actions"], 
+    ["only" => [
+      "test_filters1"
+    ]]);
+    
+    $this->before_action([$this, "filter_allbutsome_actions"],
+    ["not" => [
+      "test_filters2"
+    ]]);
+    
+  }
   function home($scope) {
     if(isset($_GET['get_issues'])) {
       $this->get_issues();
@@ -9,6 +24,14 @@ class InstallController extends \framework\base\AppController {
   }
   function verify_rewrite() {
     self::render(["nothing" => true]);
+  }
+  
+  // Test actions
+  function test_filters1($scope) {
+    self::render(404, ["nothing" => true]);
+  }
+  function test_filters2($scope) {
+    self::render(403, ["nothing" => true]);
   }
   
   private function get_issues() {
@@ -86,5 +109,16 @@ class InstallController extends \framework\base\AppController {
         "description" => "Munition was unable to access the directory <code>".MUNITION_ROOT."/app/public/</code><br/>Please check that the directory is writable."
       ];
     }
+  }
+  
+  
+  protected function filter_all_actions($scope) {
+    return $scope;
+  }
+  protected function filter_some_actions($scope) {
+    self::render(422, ["nothing" => true]);
+  }
+  protected function filter_allbutsome_actions($scope) {
+    self::render(422, ["nothing" => true]);
   }
 }

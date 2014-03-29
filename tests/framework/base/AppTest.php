@@ -11,7 +11,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @depends testLoadApp
    */
   public function testRunAppWithPostProcessing($app) {
-    XHR::request("/test", "GET");
+    XHR::request("/test?hi=hello", "GET");
     $success = false;
     $app->postprocess->queue(function() use(&$success) {
       $success = true;
@@ -22,7 +22,26 @@ class AppTest extends PHPUnit_Framework_TestCase {
     
     $this->assertEquals(200, $code);
     $this->assertTrue($success);
+    
+    return $app;
   }
+  
+  public function testControllerFilters() {
+    $app = require './framework/install_config/application.php';
+    
+    XHR::request("/test_filters1", "GET");
+    $app->run();
+    
+    list($code, $headers, $body) = XHR::response();
+    $this->assertEquals(422, $code);
+    
+    
+    XHR::request("/test_filters2", "GET");
+    $app->run();
+    list($code, $headers, $body) = XHR::response();
+    $this->assertEquals(403, $code);
+  }
+  
   
   /**
    * @expectedException InvalidArgumentException

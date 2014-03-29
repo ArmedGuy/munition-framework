@@ -51,7 +51,7 @@ class AppController {
   
   private static function load_controller($ctrlfn) {
     if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
-      throw new \Exception("Invalid controller path");
+      throw new \InvalidArgumentException("Invalid controller path");
     }
     list($c, $function) = explode("#", $ctrlfn);
     $c .= "_controller";
@@ -59,7 +59,7 @@ class AppController {
       require_once self::$controller_base . $c . ".php";
       return [filename_to_classname($c), $function];
     } else {
-      throw new \Exception("Controller not found!");
+      throw new \InvalidArgumentException("Controller not found!");
     }
     
   }
