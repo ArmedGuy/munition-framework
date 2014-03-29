@@ -74,7 +74,7 @@ class DbModelQuery {
           return $this->_nullresult;
         }
       default:
-        throw new DbException("Unknown value :" . $name);
+        throw new DbException("Unknown value:" . $name);
         break;
     }
   }
