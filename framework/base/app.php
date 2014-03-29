@@ -30,7 +30,7 @@ class App {
     if(!file_exists($router)) {
       throw new \InvalidArgumentException("AppRouter file not found");
     }
-    require $router;
+    require_once $router;
     $this->router = new \config\AppRouter();
     $this->router->app = $this;
     
