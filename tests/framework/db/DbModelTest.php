@@ -37,6 +37,15 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(2, count($users));
   }
   
+  /**
+   * @depends testLast
+   */
+  public function testDestroy() {
+    $u = User::where(["name" => "Spelfilip"])->take->instance();
+    $u->destroy();
+    
+    $this->assertEquals(3, count(User::all()));
+  }
   
   /**
    * @expectedException \framework\db\DbException

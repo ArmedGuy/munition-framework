@@ -69,6 +69,10 @@ class DbModel {
     return call_user_func_array(array($q, "offset"), func_get_args());
   }
   
+  public static function all() {
+    return self::getQuery()->all;
+  }
+  
   public static function first() {
     if(func_num_args() == 1) {
       return self::getQuery()->first(func_get_arg(0));
@@ -106,6 +110,11 @@ class DbModel {
       }
     }
     self::getQuery()->where(["id" => $this->id])->update($diff);
+  }
+  
+  public function destroy() {
+    // TODO: destroy childs
+    self::getQuery()->where(["id" => $this->id])->destroy();
   }
   
   
