@@ -30,7 +30,8 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @depends testRunAppWithPostProcessing
    */
   public function testIncludeModel($app) {
-    new User(); // should successfully include
+    $t = new Testmodel();
+    $this->assertTrue($t->testValue);
   }
   
   public function testControllerFilters() {
