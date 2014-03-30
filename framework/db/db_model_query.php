@@ -341,16 +341,17 @@ class DbModelQuery {
     }
     if(count($this->_query["having"]) > 0) {
       $query[] = "HAVING";
-      $h = $this->_query["having"][0];
+      $h = $this->_query["having"];
       $query[] = $h[0];
       foreach(array_diff($h, array($h[0])) as $p) {
         $q["parameters"][] = $p;
       }
     }
     if(count($this->_query["order"]) > 0) {
+      $query[] = "ORDER BY";
       $o = [];
       foreach($this->_query["order"] as $obj=>$ord) {
-        $o[] = "ORDER BY ".$this->_obj($obj) . " ".$ord;
+        $o[] = $this->_obj($obj) . " ".$ord;
       }
       $query[] = implode(",", $o);
     }
