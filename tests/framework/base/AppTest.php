@@ -26,6 +26,13 @@ class AppTest extends PHPUnit_Framework_TestCase {
     return $app;
   }
   
+  /**
+   * @depends testRunAppWithPostProcessing
+   */
+  public function testIncludeModel($app) {
+    new User(); // should successfully include
+  }
+  
   public function testControllerFilters() {
     $app = require './tests/test_config/application.php';
     
