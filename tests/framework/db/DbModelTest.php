@@ -77,7 +77,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testDestroy
    */
   public function testSelectCount() {
-    $r = User::select(["count(*)" => "num")->take;
+    $r = User::select(["count(*)" => "num"])->take;
     $this->assertEquals("3", $r->num);
   }
   
