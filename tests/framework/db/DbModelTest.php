@@ -31,12 +31,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals("Spelfilip", $u->name);
   }
   
-  
-  public function testLimitOffset() {
-    $users = User::limit(2)->offset(1)->all;
-    $this->assertEquals(2, count($users));
-  }
-  
   /**
    * @depends testLast
    */
@@ -45,6 +39,21 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u->destroy();
     
     $this->assertEquals(3, count(User::all()));
+  }
+  
+  public function testCustomWhere() {
+    $u = User::where("name = ?", "ArmedGuy")->take;
+    $this->assertEquals("ArmedGuy", $u->name);
+  }
+  
+  public function testWhereIn() {
+    $u = User::where(["name" => ["ArmedGuy", "Hannzas"]])->all;
+    $this->assertEquals(2, count($u));
+  }
+  
+  public function testLimitOffset() {
+    $users = User::limit(2)->offset(1)->all;
+    $this->assertEquals(2, count($users));
   }
   
   /**
