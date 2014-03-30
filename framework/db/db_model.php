@@ -52,6 +52,10 @@ class DbModel {
     $q = self::getQuery();
     return call_user_func_array(array($q, "where"), func_get_args());
   }
+  public static function where_not() {
+    $q = self::getQuery();
+    return call_user_func_array(array($q, "where_not"), func_get_args());
+  }
   public static function select() {
     $q = self::getQuery();
     return call_user_func_array(array($q, "select"), func_get_args());
@@ -68,6 +72,7 @@ class DbModel {
     $q = self::getQuery();
     return call_user_func_array(array($q, "offset"), func_get_args());
   }
+  
   
   public static function all() {
     return self::getQuery()->all;
