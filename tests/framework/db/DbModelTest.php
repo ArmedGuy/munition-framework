@@ -73,9 +73,9 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testGroupByOrder() {
-    $r = User::group("group_id")->select(["count(*)" => "users_in_group"])->order(["users_in_group" => "DESC"])->take;
-    print_r($r);
-    $this->assertEquals("2", $r->users_in_group);
+    $q = User::group("group_id")->select(["count(*)" => "users_in_group"])->order(["users_in_group" => "DESC"]);
+    print_r($q);
+    $this->assertEquals("2", $q->take->users_in_group);
   }
   
   public function testHaving() {
