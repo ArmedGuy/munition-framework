@@ -53,7 +53,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testWhereNot() {
     $u = User::where_not(["name" => "ArmedGuy"])->first;
-    $this->assertEquals("Hammas", $u->name);
+    $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testCustomWhereNot() {
@@ -62,8 +62,8 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testWhereNotIn() {
-    $u = User::where_not(["name" => ["Hammas", "Hannzas"]])->take;
-    $this->assertEquals("ArmedGuy", $u->name);
+    $u = User::where_not(["name" => ["ArmedGuy", "Hannzas"]])->take;
+    $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testLimitOffset() {
