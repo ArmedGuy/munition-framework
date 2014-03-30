@@ -364,7 +364,6 @@ class DbModelQuery {
       $query[] = $this->_query["offset"];
     }
     $q["query"] = implode(" ", $query);
-    print_r($q);
     return $q;
   }
   
