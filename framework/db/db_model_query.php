@@ -337,7 +337,7 @@ class DbModelQuery {
     }
     if($this->_query["groupby"] != "") {
       $query[] = "GROUP BY";
-      $query[] = $this->obj($this->_query["groupby"]);
+      $query[] = $this->_obj($this->_query["groupby"]);
     }
     if(count($this->_query["having"]) > 0) {
       $query[] = "HAVING";
