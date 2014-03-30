@@ -79,26 +79,20 @@ class DbModelQuery {
   public function first($num) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
-    $this->_query["offset"] = "";
     if(count($this->_query["order"]) == 0)
       $this->_query["order"] = [ $this->_primary => "ASC" ];
     else
       $this->_query["order"] = array_merge([ $this->_primary => "ASC" ], $this->_query["order"]);
-    $this->_query["groupby"] = "";
-    $this->_query["having"] = [];
     $this->_execute();
     return $this->_result;
   }
   public function last($num) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
-    $this->_query["offset"] = "";
     if(count($this->_query["order"]) == 0)
       $this->_query["order"] = [ $this->_primary => "DESC" ];
     else
       $this->_query["order"] = array_merge([ $this->_primary => "DESC" ], $this->_query["order"]);
-    $this->_query["groupby"] = "";
-    $this->_query["having"] = [];
     $this->_execute();
     return $this->_result;
   }
