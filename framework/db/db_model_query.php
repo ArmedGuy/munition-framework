@@ -82,7 +82,7 @@ class DbModelQuery {
     if(count($this->_query["order"]) == 0)
       $this->_query["order"] = [ $this->_primary => "ASC" ];
     else
-      $this->_query["order"] = array_merge([ $this->_primary => "ASC" ], $this->_query["order"]);
+      $this->_query["order"] = array_merge($this->_query["order"], [ $this->_primary => "ASC" ]);
     $this->_execute();
     return $this->_result;
   }
@@ -92,7 +92,7 @@ class DbModelQuery {
     if(count($this->_query["order"]) == 0)
       $this->_query["order"] = [ $this->_primary => "DESC" ];
     else
-      $this->_query["order"] = array_merge([ $this->_primary => "DESC" ], $this->_query["order"]);
+      $this->_query["order"] = array_merge($this->_query["order"], [ $this->_primary => "DESC" ]);
     $this->_execute();
     return $this->_result;
   }
