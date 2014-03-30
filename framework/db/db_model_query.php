@@ -258,7 +258,7 @@ class DbModelQuery {
       $hv[] = $v;
     }
     $this->_query["having"] = $hv;
-    
+    return $this;
   }
   
   private function _compileQuery() {
