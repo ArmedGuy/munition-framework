@@ -47,7 +47,7 @@ class DbModel {
     }
   }
   
-  // Query Functions
+  // Query Functions - proxy calls
   public static function where() {
     $q = self::getQuery();
     return call_user_func_array(array($q, "where"), func_get_args());
@@ -63,6 +63,14 @@ class DbModel {
   public static function order() {
     $q = self::getQuery();
     return call_user_func_array(array($q, "order"), func_get_args());
+  }
+  public static function group() {
+    $q = self::getQuery();
+    return call_user_func_array(array($q, "group"), func_get_args());
+  }
+  public static function having() {
+    $q = self::getQuery();
+    return call_user_func_array(array($q, "having"), func_get_args());
   }
   public static function limit() {
     $q = self::getQuery();

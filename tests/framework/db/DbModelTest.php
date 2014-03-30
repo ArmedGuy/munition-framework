@@ -66,6 +66,22 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals("EmiiilK", $u->name);
   }
   
+  public function testSelect() {
+    $u = User::select("name")->where(["name" => "ArmedGuy"])->take;
+    $this->assertEquals(null, $u->password);
+    $this->assertEquals("ArmedGuy", $u->name);
+  }
+  
+  public function testGroupByOrder() {
+    $r = User::group("group_id")->select(["count(*)" => "users_in_group"])->order(["users_in_group" => "DESC"])->take;
+    $this->assertEquals("2", $r->users_in_group);
+  }
+  
+  public function testHaving() {
+    $u = User::having("MAX (`num_posts`)")->take;
+    $this->assertEquals("Hannzas", $u->name);
+  }
+  
   public function testLimitOffset() {
     $users = User::limit(2)->offset(1)->all;
     $this->assertEquals(2, count($users));
