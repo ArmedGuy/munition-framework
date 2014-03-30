@@ -139,7 +139,7 @@ class DbModelQuery {
         $cust[] = $p;
       }
       $this->_query["where"][] = $cust;
-      return;
+      return $this;
     }
     if(is_array(func_get_arg(0))) {
       foreach(func_get_arg(0) as $key=>$val) {
