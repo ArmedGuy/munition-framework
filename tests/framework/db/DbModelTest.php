@@ -51,6 +51,21 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(2, count($u));
   }
   
+  public function testWhereNot() {
+    $u = User::where_not(["name" => "ArmedGuy"])->first;
+    $this->assertEquals("Hammas", $u->name);
+  }
+  
+  public function testCustomWhereNot() {
+    $u = User::where_not("id > 2")->first;
+    $this->assertEquals("ArmedGuy", $u->name);
+  }
+  
+  public function testWhereNotIn() {
+    $u = User::where_not(["name" => ["Hammas", "Hannzas"]])->take;
+    $this->assertEquals("ArmedGuy", $u->name);
+  }
+  
   public function testLimitOffset() {
     $users = User::limit(2)->offset(1)->all;
     $this->assertEquals(2, count($users));
