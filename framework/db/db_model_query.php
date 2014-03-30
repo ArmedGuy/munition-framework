@@ -80,7 +80,10 @@ class DbModelQuery {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
     $this->_query["offset"] = "";
-    $this->_query["order"] = [ $this->_primary => "ASC" ];
+    if(count($this->_query["order"]) == 0)
+      $this->_query["order"] = [ $this->_primary => "ASC" ];
+    else
+      $this->_query["order"] = array_merge([ $this->_primary => "ASC" ], $this->_query["order"]);
     $this->_query["groupby"] = "";
     $this->_query["having"] = [];
     $this->_execute();
@@ -90,7 +93,10 @@ class DbModelQuery {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
     $this->_query["offset"] = "";
-    $this->_query["order"] = [ $this->_primary => "DESC" ];
+    if(count($this->_query["order"]) == 0)
+      $this->_query["order"] = [ $this->_primary => "DESC" ];
+    else
+      $this->_query["order"] = array_merge([ $this->_primary => "DESC" ], $this->_query["order"]);
     $this->_query["groupby"] = "";
     $this->_query["having"] = [];
     $this->_execute();
@@ -99,10 +105,6 @@ class DbModelQuery {
   public function take($num) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
-    $this->_query["offset"] = "";
-    $this->_query["order"] = [];
-    $this->_query["groupby"] = "";
-    $this->_query["having"] = [];
     $this->_execute();
     return $this->_result;
   }
@@ -199,7 +201,7 @@ class DbModelQuery {
             if(is_numeric($c)) {
               $columns[] = $this->_obj($as);
             } else {
-              $columns[] = $this->_obj($c) . " AS " . $this->_obj($as);
+              $columns[] = $this->_obj($c) . " AS " . $as;
             }
           }
         } else {
