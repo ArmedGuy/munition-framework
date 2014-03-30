@@ -77,17 +77,17 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testDestroy
    */
   public function testSelectCount() {
-    $r = User::select(["count(*)" => "num"])->take;
+    $r = User::select("count(*) as num")->first;
     $this->assertEquals("3", $r->num);
   }
   
   public function testOrder() {
-    $u = User::order(["num_posts" => "DESC"])->take;
+    $u = User::order(["num_posts" => "DESC"])->first;
     $this->assertEquals("1337", $u->num_posts);
   }
   
   public function testHaving() {
-    $u = User::group("group_id")->having("SUM(`num_posts`) < 200")->take;
+    $u = User::group("group_id")->having("SUM(`num_posts`) < 200")->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
