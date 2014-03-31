@@ -131,13 +131,22 @@ class DbModel {
   }
   
   
-  public function has_many() {
+  public function has_many($name, $opt) {
+    self::init();
+    $className = "";
+    if(!isset($opt["class"])) {
+      $className = filename_to_classname(singularize($name));
+    } else {
+      $className = $opt["class"];
+    }
+    $c = strtolower(get_called_class());
+    $this->$name = $className::where([ $c . "_id" => $this->id ])->all;
   }
   
-  public function has_one() {
+  public function has_one($name, $opt) {
   }
   
-  public function belongs_to() {
+  public function belongs_to($name, $opt) {
   }
   
 }

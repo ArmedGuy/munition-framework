@@ -33,6 +33,18 @@ function classname_to_filename($class) {
   }
   return $filename;
 }
+function pluralize($name) {
+  if(substr($name, count($name)-1) == "s")
+    return $name;
+  else
+    return $name . "s";
+}
+function singularize($name) {
+  if(substr($name, count($name)-1) == "s")
+    return substr($name, 0, count($name)-1);
+  else
+    return $name;
+}
 
 spl_autoload_register(function($class){
     $class = classname_to_filename(str_replace('\\', '/', $class));
