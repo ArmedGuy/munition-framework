@@ -1,7 +1,7 @@
 <?php
 namespace DbModel;
 // see http://www.php.net/manual/en/class.arrayobject.php
-class QueryResult extends ArrayObject {
+class QueryResult extends \ArrayObject {
   function __construct($array) {
     parent::__construct($array);
   }
