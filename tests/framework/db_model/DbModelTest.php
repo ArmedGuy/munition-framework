@@ -99,7 +99,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testHaveMany() {
     $u = User::where(["name" => "ArmedGuy"])->first->instance();
-    print_r($u);
     $this->assertCount(3, $u->posts);
   }
   

@@ -3,7 +3,7 @@ namespace DbModel;
 
 class Base {
   
-  public $id;
+  public $id = null;
   
   private static $__initialized = false;
   private static $__dbtable;
@@ -35,7 +35,10 @@ class Base {
   public static function make($data) {
     $c = get_called_class();
     $m = new $c();
+    
     Base::crowd($m, $data);
+    $m->relations();
+    
     return $m;
   }
   
@@ -115,6 +118,11 @@ class Base {
     return self::getQuery()->where(["id" => $id])->take;
   }
   
+  
+  
+  public function relations() {
+  }
+  
   public function save() {
     $diff = [];
     foreach($this->_values as $k=>$v) {
@@ -133,6 +141,8 @@ class Base {
   
   public function has_many($name, $opt = []) {
     self::init();
+    if($this->id == null)
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relatons()");
     $className = "";
     if(!isset($opt["class"])) {
       $className = filename_to_classname(singularize($name));
@@ -140,7 +150,6 @@ class Base {
       $className = $opt["class"];
     }
     $c = strtolower(get_called_class());
-    echo "id: " . $this->id . " ". print_r($className::where([ $c . "_id" => $this->id ]), true);
     $this->$name = $className::where([ $c . "_id" => $this->id ])->all;
   }
   
