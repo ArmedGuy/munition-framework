@@ -1,5 +1,6 @@
 <?php
 require_once './tests/test_app/models/user.php';
+require_once './tests/test_app/models/post.php';
 
 class DbModelTest extends PHPUnit_Framework_TestCase {
 
