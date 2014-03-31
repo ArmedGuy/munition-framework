@@ -1,6 +1,8 @@
 <?php
 namespace DbModel;
-class Row {
+class QueryRow {
+
+  public static NullRow = new QueryRow(null, null);
 
   private $_attrs = null;
   private $__className;

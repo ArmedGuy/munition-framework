@@ -78,7 +78,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testDestroy
    */
   public function testSelectCount() {
-    $r = User::select("count(*) as num")->first;
+    $r = User::select("count(*) as num")->take;
     $this->assertEquals("3", $r->num);
   }
   
@@ -95,6 +95,17 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   public function testLimitOffset() {
     $users = User::limit(2)->offset(1)->all;
     $this->assertEquals(2, count($users));
+  }
+  
+  /**
+   * @depends testDestroy
+   */
+  public function testQueryResult() {
+    $i = 0;
+    $users = User::all()->each(function($v) use(&$i){
+      $i++;
+    });
+    $this->assertEquals(3, $i);
   }
   
   public function testHaveMany() {

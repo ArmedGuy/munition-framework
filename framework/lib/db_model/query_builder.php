@@ -14,15 +14,10 @@ class QueryBuilder {
   
   private $_primary = "id";
   
-  private $_nullrow;
-  
-  
   public function __construct($table, $class, $primary = "id") {
     if(self::$db == null) {
       throw new DbException("No database connection set! Call DbModel::bind() to set a database connection.");
     }
-  
-    $this->_nullrow = new Row(null, null);
     
     $this->_className = $class;
     $this->_table = $table;
@@ -59,21 +54,21 @@ class QueryBuilder {
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->_nullrow;
+          return QueryRow::NullRow;
         }
       case "last":
         $r = $this->last(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->_nullrow;
+          return QueryRow::NullRow;
         }
       case "take":
         $r = $this->take(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return $this->_nullrow;
+          return QueryRow::NullRow;
         }
       default:
         throw new DbException("Unknown value:" . $name);
@@ -289,8 +284,9 @@ class QueryBuilder {
         
         $this->_result = [];
         while($res = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-          $this->_result[] = new Row($res, $this->_className);
+          $this->_result[] = new QueryRow($res, $this->_className);
         }
+        $this->_result = new QueryResult($this->_result);
         break;
       case "insert":
         $q = $this->_compileQuery();
