@@ -34,14 +34,14 @@ function classname_to_filename($class) {
   return $filename;
 }
 function pluralize($name) {
-  if(substr($name, count($name)-1) == "s")
+  if(substr($name, strlen($name)-1) == "s")
     return $name;
   else
     return $name . "s";
 }
 function singularize($name) {
-  if(substr($name, count($name)-1) == "s")
-    return substr($name, 0, count($name)-1);
+  if(substr($name, strlen($name)-1) == "s")
+    return substr($name, 0, strlen($name)-1);
   else
     return $name;
 }
