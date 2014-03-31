@@ -84,7 +84,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testOrder() {
     $u = User::order(["login_count" => "DESC"])->first;
-    $this->assertEquals("1337", $u->num_posts);
+    $this->assertEquals("1337", $u->login_count);
   }
   
   public function testHaving() {
@@ -99,6 +99,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testHaveMany() {
     $u = User::where(["name" => "ArmedGuy"])->first->instance();
+    print_r($u);
     $this->assertCount(3, $u->posts);
   }
   
