@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace Munition;
 class AppController {
   public static $template_base;
   public static $controller_base;

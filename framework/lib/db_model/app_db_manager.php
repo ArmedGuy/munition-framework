@@ -1,5 +1,5 @@
 <?php
-namespace framework\db;
+namespace DbModel;
 
 class AppDbManager {
   public function using($name, $args) {

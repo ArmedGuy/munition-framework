@@ -48,8 +48,8 @@ function singularize($name) {
 
 spl_autoload_register(function($class){
     $class = classname_to_filename(str_replace('\\', '/', $class));
-    if(file_exists('./' . $class . '.php')) {
-      require_once('./' . $class . '.php');
+    if(file_exists('./framework/lib/' . $class . '.php')) {
+      require_once('./framework/lib/' . $class . '.php');
     }
 });
 
@@ -58,7 +58,6 @@ define("MUNITION_ENV", in_array($env, ["production", "development", "test"])? $e
 define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
-set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/app/lib");
 
 if(MUNITION_ENV == "test" && !defined('SIMULATES_WEBSERVER')) return;
 

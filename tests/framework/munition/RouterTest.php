@@ -2,7 +2,7 @@
 class RouterTest extends PHPUnit_Framework_TestCase {
   
   public function testRouterGet() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->get("/", function($scope, $params, $format) use (&$success) {
       $success = true;
@@ -15,7 +15,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterPost() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->post("/post", function($scope, $params, $format) use (&$success) {
       $success = true;
@@ -27,7 +27,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterError() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     
     $router->error("404", function($scope, $params, $format) use (&$success) {
@@ -39,7 +39,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterPut() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->put("/put", function($scope, $params, $format) use (&$success) {
       $success = true;
@@ -50,7 +50,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterDelete() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->delete("/delete", function($scope, $params, $format) use (&$success) {
       $success = true;
@@ -61,7 +61,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterHead() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->head("/head", function($scope, $params, $format) use (&$success) {
       $success = true;
@@ -72,7 +72,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterPattern() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $router->pattern(":username", "[a-zA-Z0-9]*");
     $success = false;
     $router->get("/user/:username/", function($scope, $params, $format) use (&$success) {
@@ -86,7 +86,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterInlineParam() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     $router->get("/user/:username/", function($scope, $params, $format) use (&$success) {
       $this->assertArrayHasKey("username", $params);
@@ -99,7 +99,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRouterFormats() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     
     $router->get("/get_resource", function($scope, $params, $format) use (&$success) {
@@ -115,7 +115,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
    * @expectedException InvalidArgumentException
    */
   public function testRouterInvalidRegex() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $success = false;
     
     $router->get("/user/:username", function() {
@@ -127,7 +127,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
    * @expectedException Exception
    */
   public function testRouterNoMatch() {
-    $router = new \framework\base\Router();
+    $router = new \Munition\Router();
     $router->route("/asdf", "GET");
   }
 }

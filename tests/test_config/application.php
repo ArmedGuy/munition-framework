@@ -1,10 +1,10 @@
 <?php
 if(!class_exists('TestApplication')):
-class TestApplication extends \framework\base\App {
+class TestApplication extends \Munition\App {
   function __construct() {
     parent::__construct("./tests/test_app/", "./tests/test_config/routes.php");
     
-    $this->db = new \framework\db\AppDbManager();
+    $this->db = new \DbModel\AppDbManager();
     $config = $this;
     
     // TODO: do your configuration, load all neccesary libraries etc

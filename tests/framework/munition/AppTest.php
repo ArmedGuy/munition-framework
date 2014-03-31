@@ -55,13 +55,13 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @expectedException InvalidArgumentException
    */
   public function testInvalidAppDirectory() {
-    $app = new \framework\base\App("./asdf_app/");
+    $app = new \Munition\App("./asdf_app/");
   }
   
   /**
    * @expectedException InvalidArgumentException
    */
   public function testInvalidRouterFile() {
-    $app = new \framework\base\App("./app/", "./config/asdf_routes.php");
+    $app = new \Munition\App("./app/", "./config/asdf_routes.php");
   }
 }

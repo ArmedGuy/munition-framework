@@ -1,4 +1,4 @@
 <?php
-class User extends \framework\db\DbModel {
+class User extends \DbModel\Base {
   
 }

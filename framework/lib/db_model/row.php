@@ -1,6 +1,6 @@
 <?php
-namespace framework\db;
-class DbModelResult {
+namespace DbModel;
+class Row {
 
   private $_attrs = null;
   private $__className;

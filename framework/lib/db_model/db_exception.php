@@ -1,5 +1,5 @@
 <?php
-namespace framework\db;
+namespace DbModel;
 class DbException extends \Exception
 {
   function __construct($str) {

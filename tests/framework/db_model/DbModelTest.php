@@ -97,7 +97,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   /**
-   * @expectedException \framework\db\DbException
+   * @expectedException \DbModel\DbException
    */
   public function testInvalidFetchFunction() {
     $u = User::where(["name" => "asdf"])->bake;

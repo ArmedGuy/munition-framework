@@ -1,5 +1,5 @@
 <?php
-class InstallController extends \framework\base\AppController {
+class InstallController extends \Munition\AppController {
   
   function home($scope) {
     if(isset($_GET['get_issues'])) {
@@ -26,7 +26,7 @@ class InstallController extends \framework\base\AppController {
       ];
     }
     
-    self::render(["json" => json_encode($issues)]);
+    self::render(["json" => $issues]);
     exit;
   }
   

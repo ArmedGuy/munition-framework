@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace Munition;
 class PostProcessingEngine {
   private $_queue = null;
   function __construct() {

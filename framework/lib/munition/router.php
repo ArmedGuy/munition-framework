@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace Munition;
 class Router {
 
   private $_routes = null;
@@ -103,7 +103,7 @@ class Router {
     if(is_callable($ctrlfn)) {
       $ctrlfn($this->initial_scope, $params, $format, $this->app);
     } else {
-      \framework\base\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
+      \Munition\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
     }
 
   }

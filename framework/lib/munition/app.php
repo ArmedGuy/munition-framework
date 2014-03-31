@@ -1,5 +1,5 @@
 <?php
-namespace framework\base;
+namespace Munition;
 class App {
   public $config = null;
   
@@ -34,10 +34,10 @@ class App {
     $this->router = new \config\AppRouter();
     $this->router->app = $this;
     
-    \framework\base\AppController::$template_base = $appFolder . "/templates/";
-    \framework\base\AppController::$controller_base = $appFolder . "/controllers/";
+    \Munition\AppController::$template_base = $appFolder . "/templates/";
+    \Munition\AppController::$controller_base = $appFolder . "/controllers/";
     
-    $this->postprocess = new \framework\base\PostProcessingEngine();
+    $this->postprocess = new \Munition\PostProcessingEngine();
     
   }
   

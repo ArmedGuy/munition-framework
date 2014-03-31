@@ -72,7 +72,7 @@ $("#continue-btn").click(function() {
     <div class="row">
       <div class="col-md-5">
         <h3>Remove Installation files</h3>
-        <p>You need to remove or rename install.php from your Munition directory.</p>
+        <p>You need to remove or rename <code>install.php</code> from your Munition directory.</p>
         <p>If you want, you can also remove the installation application from <code>framework/install_app/</code> and <code>framework/install_config/</code>.</p>
         <p>(You can also choose to ignore them in your version control system(git, svn etc) if you do not wish to track them.</p>
       </div>

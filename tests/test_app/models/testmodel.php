@@ -1,5 +1,5 @@
 <?php
-class Testmodel extends \framework\base\Model
+class Testmodel extends \Munition\Model
 {
   public $testValue = false;
   

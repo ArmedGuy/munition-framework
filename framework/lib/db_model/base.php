@@ -1,7 +1,7 @@
 <?php
-namespace framework\db;
+namespace DbModel;
 
-class DbModel {
+class Base {
   
   public $id;
   
@@ -12,7 +12,7 @@ class DbModel {
   protected $_values;
   
   public static function bind($db) {
-    \framework\db\DbModelQuery::$db = $db;
+    QueryBuilder::$db = $db;
   }
   
   private static function init() {
@@ -29,13 +29,13 @@ class DbModel {
   
   private static function getQuery() {
     self::init();
-    return new DbModelQuery(self::$__dbtable, self::$__className);
+    return new QueryBuilder(self::$__dbtable, self::$__className);
   }
   
   public static function make($data) {
     $c = get_called_class();
     $m = new $c();
-    DbModel::crowd($m, $data);
+    Base::crowd($m, $data);
     return $m;
   }
   

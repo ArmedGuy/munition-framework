@@ -5,6 +5,5 @@ $config->db->using("test", [
   "password" => "",
   "db" => "munition_test"
 ]);
-\framework\db\DbModel::bind($config->db->test);
 
 $config->in_test_environment = true;

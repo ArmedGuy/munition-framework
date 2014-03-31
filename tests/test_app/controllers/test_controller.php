@@ -1,5 +1,5 @@
 <?php
-class TestController extends \framework\base\AppController {
+class TestController extends \Munition\AppController {
   function __construct() {
     $this->before_action([$this, "filter_all_actions"]);
     
