@@ -2,7 +2,7 @@
 namespace DbModel;
 class QueryRow {
 
-  public static $nullRow = new QueryRow(null, null);
+  public static $nullRow;
 
   private $_attrs = null;
   private $__className;
@@ -32,3 +32,4 @@ class QueryRow {
     return print_r($this->_attrs, false);
   }
 }
+QueryRow::$nullRow = new QueryRow(null, null);
