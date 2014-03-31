@@ -10,7 +10,7 @@ CREATE TABLE users (
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
-INSERT INTO users (`name`, `password`, `type`,`num_posts`) VALUES ('ArmedGuy', 'datpass', 1, 300), ('EmiiilK', 'hammas', 2, 2), ('Hannzas', ':3', 1, 1337);
+INSERT INTO users (`name`, `password`, `type`,`login_count`) VALUES ('ArmedGuy', 'datpass', 1, 300), ('EmiiilK', 'hammas', 2, 2), ('Hannzas', ':3', 1, 1337);
 
 CREATE TABLE posts (
   `id` int(11) NOT NULL AUTO_INCREMENT,
