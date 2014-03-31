@@ -8,7 +8,9 @@ class Locale {
     $contents = scandir($folder);
     $contents = array_diff($contents, ["..", "."]);
     foreach($contents as $c) {
+      echo "$c";
       if(is_file($c) && strpos($c, ".php") !== false) {
+        echo "including " . $folder . "/" . $c;
         include_once $folder . "/" . $c;
       }
     }
