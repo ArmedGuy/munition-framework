@@ -140,6 +140,7 @@ class Base {
       $className = $opt["class"];
     }
     $c = strtolower(get_called_class());
+    print_r($c);
     $this->$name = $className::where([ $c . "_id" => $this->id ])->all;
   }
   
