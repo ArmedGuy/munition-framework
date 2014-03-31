@@ -131,7 +131,7 @@ class Base {
   }
   
   
-  public function has_many($name, $opt) {
+  public function has_many($name, $opt = []) {
     self::init();
     $className = "";
     if(!isset($opt["class"])) {

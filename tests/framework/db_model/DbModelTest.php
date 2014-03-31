@@ -82,18 +82,23 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testOrder() {
-    $u = User::order(["num_posts" => "DESC"])->first;
+    $u = User::order(["login_count" => "DESC"])->first;
     $this->assertEquals("1337", $u->num_posts);
   }
   
   public function testHaving() {
-    $u = User::group("group_id")->having("SUM(`num_posts`) < 200")->first;
+    $u = User::group("type")->having("SUM(`login_count`) < 200")->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testLimitOffset() {
     $users = User::limit(2)->offset(1)->all;
     $this->assertEquals(2, count($users));
+  }
+  
+  public function testHaveMany() {
+    $u = User::where(["name" => "ArmedGuy"])->first->instance();
+    $this->assertCount(3, $u->posts);
   }
   
   /**
