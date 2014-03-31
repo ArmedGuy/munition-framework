@@ -2,7 +2,7 @@
 namespace DbModel;
 class QueryRow {
 
-  public static NullRow = new QueryRow(null, null);
+  public static $nullRow = new QueryRow(null, null);
 
   private $_attrs = null;
   private $__className;

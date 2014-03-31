@@ -18,7 +18,7 @@ class QueryResult extends ArrayObject {
         if(count($v) == 1) {
           return $v[0];
         } else {
-          return QueryRow::NullRow;
+          return QueryRow::$nullRow;
         }
         break;
       case "last":
@@ -26,7 +26,7 @@ class QueryResult extends ArrayObject {
         if(count($v) == 1) {
           return $v[0];
         } else {
-          return QueryRow::NullRow;
+          return QueryRow::$nullRow;
         }
         break;
       default:

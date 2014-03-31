@@ -54,21 +54,21 @@ class QueryBuilder {
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return QueryRow::NullRow;
+          return QueryRow::$nullRow;
         }
       case "last":
         $r = $this->last(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return QueryRow::NullRow;
+          return QueryRow::$nullRow;
         }
       case "take":
         $r = $this->take(1);
         if(count($r) == 1) {
           return $r[0];
         } else {
-          return QueryRow::NullRow;
+          return QueryRow::$nullRow;
         }
       default:
         throw new DbException("Unknown value:" . $name);
