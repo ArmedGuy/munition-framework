@@ -12,6 +12,6 @@ class LocalizerTest extends PHPUnit_Framework_TestCase {
     L::loadFolder("./tests/test_config/locales/");
     L::$current = "en";
     $str = L::t("user.hi", "ArmedGuy");
-    $this->assertEquals("Hi ArmedGuy!", $str);
+    $this->assertEquals("Hello ArmedGuy!", $str);
   }
 }
