@@ -35,10 +35,10 @@ class QueryResult extends \ArrayObject {
     }
   }
   public function first($num) {
-    return array_slice($this, 0, $num);
+    return array_slice($this->getArrayCopy(), 0, $num);
   }
   
   public function last($num) {
-    return array_slice($this, -$num);
+    return array_slice($this->getArrayCopy(), -$num);
   }
 }
