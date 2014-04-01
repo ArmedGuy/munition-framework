@@ -106,6 +106,9 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
       $i++;
     });
     $this->assertEquals(3, $i);
+    
+    $this->assertEquals("ArmedGuy", $users->first->name);
+    $this->assertEquals("Hannzas", $users->last->name);
   }
   
   public function testHaveMany() {
