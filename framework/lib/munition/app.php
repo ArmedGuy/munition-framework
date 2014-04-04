@@ -24,14 +24,14 @@ class App {
     
     $this->config = [];
     if(!file_exists($appFolder)) {
-      throw new \InvalidArgumentException("Unable to access app directory");
+      throw new \InvalidArgumentException("Unable to access App directory");
     }
     
     if(!file_exists($router)) {
-      throw new \InvalidArgumentException("AppRouter file not found");
+      throw new \InvalidArgumentException("Router file not found");
     }
-    require_once $router;
-    $this->router = new \config\AppRouter();
+    
+    $this->router = require_once $router;
     $this->router->app = $this;
     
     \Munition\AppController::$template_base = $appFolder . "/templates/";

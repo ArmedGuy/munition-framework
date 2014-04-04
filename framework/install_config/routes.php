@@ -1,6 +1,6 @@
 <?php
 namespace config;
-class AppRouter extends \Munition\Router {
+class InstallRouter extends \Munition\Router {
   function __construct() {
     parent::__construct();
     
@@ -16,3 +16,4 @@ class AppRouter extends \Munition\Router {
     }
   }
 }
+return new InstallRouter();

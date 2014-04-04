@@ -1,6 +1,6 @@
 <?php
 namespace config;
-class AppRouter extends \Munition\Router {
+class TestRouter extends \Munition\Router {
   function __construct() {
     parent::__construct();
     
@@ -12,3 +12,4 @@ class AppRouter extends \Munition\Router {
     $this->get("/test_filters2", "test#test_filters2");
   }
 }
+return new TestRouter();
