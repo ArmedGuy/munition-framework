@@ -91,9 +91,9 @@ set_exception_handler(function($e) {
   
   foreach($lines as $i=>$line) {
     if($i == 2) {
-      $lines[$i] = "<span style='color:red;'>>>> ".$line."</span>";
+      $lines[$i] = "<span style='color:red;'>>>> ".htmlentities($line)."</span>";
     } else {
-      $lines[$i] = "    ".$line;
+      $lines[$i] = "    ".htmlentities($line);
     }
   }
   $errtrace .= implode("", $lines);
