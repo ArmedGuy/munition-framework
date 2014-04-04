@@ -1,5 +1,4 @@
 <?php
-namespace config;
 class InstallRouter extends \Munition\Router {
   function __construct() {
     parent::__construct();

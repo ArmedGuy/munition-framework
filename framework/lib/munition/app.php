@@ -31,7 +31,7 @@ class App {
       throw new \InvalidArgumentException("Router file not found");
     }
     
-    $this->router = require_once $router;
+    $this->router = require $router;
     $this->router->app = $this;
     
     \Munition\AppController::$template_base = $appFolder . "/templates/";
