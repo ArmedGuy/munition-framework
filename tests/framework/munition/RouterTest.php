@@ -112,7 +112,7 @@ class RouterTest extends PHPUnit_Framework_TestCase {
   
   
   /**
-   * @expectedException InvalidArgumentException
+   * @expectedException MunitionException
    */
   public function testRouterInvalidRegex() {
     $router = new \Munition\Router();

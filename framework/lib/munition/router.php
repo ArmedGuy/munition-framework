@@ -45,9 +45,7 @@ class Router {
     }
     $regex = "/^" . $regex . "(?P<_request_format>\.[a-zA-Z0-9]{1,4})?$/";
     $r["regex"] = $regex;
-    if(@preg_match($r["regex"], "") === false) { // We don't want to use @, but lets do it here
-      throw new \InvalidArgumentException("Invalid Regex for path $path ({$r["regex"]}");
-    }
+    preg_match($r["regex"], "");
     
     $this->_routes[$type.":".$path] = $r;
   }
