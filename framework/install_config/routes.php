@@ -1,4 +1,5 @@
 <?php
+if(!class_exists('InstallRouter')):
 class InstallRouter extends \Munition\Router {
   function __construct() {
     parent::__construct();
@@ -15,4 +16,5 @@ class InstallRouter extends \Munition\Router {
     }
   }
 }
+endif;
 return new InstallRouter();

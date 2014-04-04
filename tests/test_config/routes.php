@@ -1,4 +1,5 @@
 <?php
+if(!class_exists('TestRouter')):
 class TestRouter extends \Munition\Router {
   function __construct() {
     parent::__construct();
@@ -11,4 +12,5 @@ class TestRouter extends \Munition\Router {
     $this->get("/test_filters2", "test#test_filters2");
   }
 }
+endif;
 return new TestRouter();
