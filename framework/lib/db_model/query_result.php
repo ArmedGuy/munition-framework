@@ -22,7 +22,7 @@ class QueryResult extends \ArrayObject {
         }
         break;
       case "last":
-        $v = $this->first(1);
+        $v = $this->last(1);
         if(count($v) == 1) {
           return $v[0];
         } else {

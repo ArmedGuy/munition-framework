@@ -102,7 +102,8 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    */
   public function testQueryResult() {
     $i = 0;
-    $users = User::all()->each(function($v) use(&$i){
+    $users = User::all();
+    $users->each(function($v) use(&$i){
       $i++;
     });
     $this->assertEquals(3, $i);
