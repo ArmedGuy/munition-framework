@@ -1,7 +1,7 @@
-![Logo](app/public/img/munition-text-logo.png)
+![Logo](framework/install_app/public/imgmunition-text-logo.png)
 
-[![Build Status](https://travis-ci.org/Pie-Studios/munition-framework.png?branch=master)](https://travis-ci.org/Pie-Studios/munition-framework)
-[![Coverage Status](https://coveralls.io/repos/Pie-Studios/munition-framework/badge.png)](https://coveralls.io/r/Pie-Studios/munition-framework)
+[![Build Status](https://travis-ci.org/Re3io/munition-framework.png?branch=master)](https://travis-ci.org/Pie-Studios/munition-framework)
+[![Coverage Status](https://coveralls.io/repos/Re3io/munition-framework/badge.png)](https://coveralls.io/r/Pie-Studios/munition-framework)
 
 The Munition Framework is an MVC framework built in PHP.
 It is designed for rapid development and deployment, easy to understand and use features, and minimal configuration.
@@ -34,13 +34,4 @@ Browse to where you installed Munition to with your webbrowser, and the default 
 #### Step Three - Fire!
 
 You now have a small, fast and easy to use PHP framework that can be used to develop webapps, RESTful API's, backend servers, you name it.
-
-To clean up from installation, simply remove the default install application by deleting:
-`app/controllers/install_controller.php`
-`app/templates/header.php`
-`app/templates/footer.php`
-`app/templates/index.php`
-
-Then clear out the constructor function in the AppRouter, located at:
-`config/routes.php`
 
