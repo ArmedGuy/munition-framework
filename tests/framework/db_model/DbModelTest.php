@@ -6,21 +6,21 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
 
   public function testCreate() {
     User::create(["name" => "Spelfilip", "password" => "legolas"]);
-    $u = User::where(["name" => "Spelfilip"])->take;
+    $u = User::q()->where(["name" => "Spelfilip"])->take;
     $this->assertEquals("Spelfilip", $u->name);
   }
   
   public function testUpdate() {
-    $u = User::first();
+    $u = User::q()->first();
     $u->password = "hej";
     $u->save();
     
-    $u2 = User::where(["name" => $u->name])->take;
+    $u2 = User::q()->where(["name" => $u->name])->take;
     $this->assertEquals("hej", $u2->password);
   }
   
   public function testFirst() {
-    $u = User::first();
+    $u = User::q()->first();
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
@@ -28,7 +28,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testCreate
    */
   public function testLast() {
-    $u = User::last();
+    $u = User::q()->last();
     $this->assertEquals("Spelfilip", $u->name);
   }
   
@@ -36,39 +36,39 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testLast
    */
   public function testDestroy() {
-    $u = User::where(["name" => "Spelfilip"])->take->instance();
+    $u = User::q()->where(["name" => "Spelfilip"])->take->instance();
     $u->destroy();
     
     $this->assertEquals(3, count(User::all()));
   }
   
   public function testCustomWhere() {
-    $u = User::where("name = ?", "ArmedGuy")->take;
+    $u = User::q()->where("name = ?", "ArmedGuy")->take;
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
   public function testWhereIn() {
-    $u = User::where(["name" => ["ArmedGuy", "Hannzas"]])->all;
+    $u = User::q()->where(["name" => ["ArmedGuy", "Hannzas"]])->all;
     $this->assertEquals(2, count($u));
   }
   
   public function testWhereNot() {
-    $u = User::where_not(["name" => "ArmedGuy"])->first;
+    $u = User::q()->where_not(["name" => "ArmedGuy"])->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testCustomWhereNot() {
-    $u = User::where_not("id > 2")->first;
+    $u = User::q()->where_not("id > 2")->first;
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
   public function testWhereNotIn() {
-    $u = User::where_not(["name" => ["ArmedGuy", "Hannzas"]])->take;
+    $u = User::q()->where_not(["name" => ["ArmedGuy", "Hannzas"]])->take;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testSelect() {
-    $u = User::select("name")->where(["name" => "ArmedGuy"])->take;
+    $u = User::q()->select("name")->where(["name" => "ArmedGuy"])->take;
     $this->assertEquals(null, $u->password);
     $this->assertEquals("ArmedGuy", $u->name);
   }
@@ -78,22 +78,22 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testDestroy
    */
   public function testSelectCount() {
-    $r = User::select("count(*) as num")->take;
+    $r = User::q()->select("count(*) as num")->take;
     $this->assertEquals("3", $r->num);
   }
   
   public function testOrder() {
-    $u = User::order(["login_count" => "DESC"])->first;
+    $u = User::q()->order(["login_count" => "DESC"])->first;
     $this->assertEquals("1337", $u->login_count);
   }
   
   public function testHaving() {
-    $u = User::group("type")->having("SUM(`login_count`) < 200")->first;
+    $u = User::q()->group("type")->having("SUM(`login_count`) < 200")->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testLimitOffset() {
-    $users = User::limit(2)->offset(1)->all;
+    $users = User::q()->limit(2)->offset(1)->all;
     $this->assertEquals(2, count($users));
   }
   
@@ -102,7 +102,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    */
   public function testQueryResult() {
     $i = 0;
-    $users = User::all();
+    $users = User::q()->all();
     $users->each(function($v) use(&$i){
       $i++;
     });
@@ -113,7 +113,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testHaveMany() {
-    $u = User::where(["name" => "ArmedGuy"])->first->instance();
+    $u = User::q()->where(["name" => "ArmedGuy"])->first->instance();
     $this->assertCount(3, $u->posts);
   }
   
@@ -121,6 +121,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @expectedException \DbModel\DbException
    */
   public function testInvalidFetchFunction() {
-    $u = User::where(["name" => "asdf"])->bake;
+    $u = User::q()->where(["name" => "asdf"])->bake;
   }
 }

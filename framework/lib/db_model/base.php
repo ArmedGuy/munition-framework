@@ -8,6 +8,23 @@ class Base {
   private static $__initialized = false;
   private static $__dbtable;
   private static $__className;
+  private static $__keys;
+  public static __foreign($key, $class) {
+    self::init();
+    self::$__keys["foreign"][] = [
+      "key" => $key,
+      "class" => $class
+    ];
+  }
+  public static __primary($key) {
+    self::$__keys["primary"] = $key;
+  }
+  
+  private $_dependants = [
+    "has_one" => [],
+    "has_many" => [],
+    "has_and_belongs_to_many" => []
+  ];
   
   protected $_values;
   
@@ -25,11 +42,16 @@ class Base {
     }
     self::$__dbtable = $c . "s";
     self::$__className = ucfirst($c);
+    self::$__keys = [];
   }
   
   private static function getQuery() {
     self::init();
     return new QueryBuilder(self::$__dbtable, self::$__className);
+  }
+  
+  public static function q() {
+    return self::getQuery();
   }
   
   public static function make($data) {
@@ -50,77 +72,12 @@ class Base {
     }
   }
   
-  // Query Functions - proxy calls
-  public static function where() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "where"), func_get_args());
-  }
-  public static function where_not() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "where_not"), func_get_args());
-  }
-  public static function select() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "select"), func_get_args());
-  }
-  public static function order() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "order"), func_get_args());
-  }
-  public static function group() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "group"), func_get_args());
-  }
-  public static function having() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "having"), func_get_args());
-  }
-  public static function limit() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "limit"), func_get_args());
-  }
-  public static function offset() {
-    $q = self::getQuery();
-    return call_user_func_array(array($q, "offset"), func_get_args());
-  }
-  
-  
-  public static function all() {
-    return self::getQuery()->all;
-  }
-  
-  public static function first() {
-    if(func_num_args() == 1) {
-      return self::getQuery()->first(func_get_arg(0));
-    } else {
-      return self::getQuery()->first->instance();
-    }
-  }
-  
-  public static function last() {
-    if(func_num_args() == 1) {
-      return self::getQuery()->last(func_get_arg(0));
-    } else {
-      return self::getQuery()->last->instance();
-    }
-  }
-  
-  public static function take() {
-    if(func_num_args() == 1) {
-      return self::getQuery()->take(func_get_arg(0));
-    } else {
-      return self::getQuery()->take->instance();
-    }
+  public function relations() {
   }
   
   public static function create($params) {
     $id = self::getQuery()->create($params);
     return self::getQuery()->where(["id" => $id])->take;
-  }
-  
-  
-  
-  public function relations() {
   }
   
   public function save() {
@@ -139,24 +96,75 @@ class Base {
   }
   
   
-  public function has_many($name, $opt = []) {
+  public function has_many($name, $options = []) {
     self::init();
     if($this->id == null)
-      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relatons()");
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
+      
     $className = "";
-    if(!isset($opt["class"])) {
+    if(!isset($options["class"])) {
       $className = filename_to_classname(singularize($name));
     } else {
-      $className = $opt["class"];
+      $className = $options["class"];
+    }
+    if(isset($options["dependent"]) && $options["dependent"] == true) {
+      $this->_dependants[] = $name;
     }
     $c = strtolower(get_called_class());
     $this->$name = $className::where([ $c . "_id" => $this->id ])->all;
   }
   
-  public function has_one($name, $opt) {
+  public function has_one($name, $options) {
+    self::init();
+    if($this->id == null)
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
+      
+    $className = "";
+    if(!isset($options["class"])) {
+      $className = filename_to_classname(singularize($name));
+    } else {
+      $className = $options["class"];
+    }
+    if(isset($options["dependent"]) && $options["dependent"] == true) {
+      $this->_dependants[] = $name;
+    }
+    $c = strtolower(get_called_class());
+    $this->$name = $className::q()->where([ $c . "_id" => $this->id ])->first;
   }
   
+  /*
+  public function has_and_belongs_to_many($name, $options) {
+    self::init();
+    if($this->id == null)
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
+      
+    $className = "";
+    if(!isset($options["class"])) {
+      $className = filename_to_classname(singularize($name));
+    } else {
+      $className = $options["class"];
+    }
+    if(isset($options["dependent"]) && $options["dependent"] == true) {
+      $this->_dependants[] = $name;
+    }
+    $c = strtolower(get_called_class());
+    $this->$name = $className::where([ $c . "_id" => $this->id ])->first;
+  }
+  */
+  
   public function belongs_to($name, $opt) {
+    self::init();
+    if($this->id == null)
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
+      
+    $className = "";
+    if(!isset($options["class"])) {
+      $className = filename_to_classname(singularize($name));
+    } else {
+      $className = $options["class"];
+    }
+    $accessor = $name."_id";
+    $this->$name = $className::q()->where([ "id" => $this->$accessor])->first;
   }
   
 }
