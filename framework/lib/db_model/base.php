@@ -114,7 +114,7 @@ class Base {
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
   }
   
-  public function has_one($name, $options) {
+  public function has_one($name, $options = []) {
     self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -152,7 +152,7 @@ class Base {
   }
   */
   
-  public function belongs_to($name, $opt) {
+  public function belongs_to($name, $options = []) {
     self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
