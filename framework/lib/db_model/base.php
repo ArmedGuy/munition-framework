@@ -111,7 +111,7 @@ class Base {
       $this->_dependants[] = $name;
     }
     $c = strtolower(get_called_class());
-    $this->$name = $className::where([ $c . "_id" => $this->id ])->all;
+    $this->$name = $className::q()->where([ $c . "_id" => $this->id ])->all;
   }
   
   public function has_one($name, $options) {
