@@ -9,14 +9,14 @@ class Base {
   private static $__dbtable;
   private static $__className;
   private static $__keys;
-  public static __foreign($key, $class) {
+  public static function __foreign($key, $class) {
     self::init();
     self::$__keys["foreign"][] = [
       "key" => $key,
       "class" => $class
     ];
   }
-  public static __primary($key) {
+  public static function __primary($key) {
     self::$__keys["primary"] = $key;
   }
   
