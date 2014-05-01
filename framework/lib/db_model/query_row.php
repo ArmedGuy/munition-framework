@@ -21,7 +21,7 @@ class QueryRow {
     }
   }
   
-  public function instance() {
+  public function obj() {
     if($this->_attrs == null) {
       return null;
     } else {

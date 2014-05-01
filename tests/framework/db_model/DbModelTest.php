@@ -11,7 +11,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testUpdate() {
-    $u = User::q()->first;
+    $u = User::q()->first->obj();
     $u->password = "hej";
     $u->save();
     
@@ -36,7 +36,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testLast
    */
   public function testDestroy() {
-    $u = User::q()->where(["name" => "Spelfilip"])->take->instance();
+    $u = User::q()->where(["name" => "Spelfilip"])->take->obj();
     $u->destroy();
     
     $this->assertEquals(3, count(User::all()));
@@ -113,7 +113,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testHaveMany() {
-    $u = User::q()->where(["name" => "ArmedGuy"])->first->instance();
+    $u = User::q()->where(["name" => "ArmedGuy"])->first->obj();
     $this->assertCount(3, $u->posts);
   }
   
