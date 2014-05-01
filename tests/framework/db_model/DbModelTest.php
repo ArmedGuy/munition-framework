@@ -39,7 +39,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u = User::q()->where(["name" => "Spelfilip"])->take->obj();
     $u->destroy();
     
-    $this->assertEquals(3, count(User::q()->all()) );
+    $this->assertEquals(3, count(User::q()->all) );
   }
   
   public function testCustomWhere() {
@@ -102,7 +102,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    */
   public function testQueryResult() {
     $i = 0;
-    $users = User::q()->all();
+    $users = User::q()->all;
     $users->each(function($v) use(&$i){
       $i++;
     });
