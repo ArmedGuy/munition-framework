@@ -111,7 +111,7 @@ class Base {
       $this->_dependants[] = $name;
     }
     $c = strtolower(get_called_class());
-    $this->$name = $className::q()->where([ $c . "_id" => $this->id ])->all;
+    $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
   }
   
   public function has_one($name, $options) {
@@ -129,7 +129,7 @@ class Base {
       $this->_dependants[] = $name;
     }
     $c = strtolower(get_called_class());
-    $this->$name = $className::q()->where([ $c . "_id" => $this->id ])->first;
+    $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
   }
   
   /*
@@ -164,7 +164,7 @@ class Base {
       $className = $options["class"];
     }
     $accessor = $name."_id";
-    $this->$name = $className::q()->where([ "id" => $this->$accessor])->first;
+    $this->$name = $className::get()->where([ "id" => $this->$accessor])->first;
   }
   
 }
