@@ -15,9 +15,8 @@ _____________
 ### System Requirements
 
  * PHP v5.4 or higher
- * Access to RewriteRules on webserver
- * Or access to php path-info
- * 
+ * Access to RewriteRules on webserver...
+ * Or access to PHP path_info
 
 ### Installing
 

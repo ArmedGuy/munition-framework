@@ -50,7 +50,7 @@ class Base {
     return new QueryBuilder(self::$__dbtable, self::$__className);
   }
   
-  public static function q() {
+  public static function get() {
     return self::getQuery();
   }
   

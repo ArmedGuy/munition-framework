@@ -28,6 +28,7 @@ class QueryRow {
       return call_user_func(array($this->__className, "make"), $this->_attrs);
     }
   }
+  
   public function toString() {
     return print_r($this->_attrs, false);
   }
