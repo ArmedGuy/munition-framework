@@ -11,7 +11,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testUpdate() {
-    $u = User::q()->first();
+    $u = User::q()->first;
     $u->password = "hej";
     $u->save();
     
@@ -20,7 +20,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testFirst() {
-    $u = User::q()->first();
+    $u = User::q()->first;
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
@@ -28,7 +28,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @depends testCreate
    */
   public function testLast() {
-    $u = User::q()->last();
+    $u = User::q()->last;
     $this->assertEquals("Spelfilip", $u->name);
   }
   
