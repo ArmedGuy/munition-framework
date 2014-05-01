@@ -119,7 +119,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testBelongsTo() {
     $p = Post::get()->take->obj();
-    $this->assertEquals("ArmedGuy", $p->user->username);
+    $this->assertEquals("ArmedGuy", $p->user->name);
   }
   
   /**
