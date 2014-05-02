@@ -7,6 +7,7 @@ class App {
   public $db = null;
   
   public $postprocess = null;
+  public $type = "REQUEST_URI";
   
   function __construct($appFolder = "./app/", $router = "./config/routes.php") {
     
@@ -45,7 +46,7 @@ class App {
     ignore_user_abort(true);
     
     $method = $_SERVER["REQUEST_METHOD"];
-    $uri = $_SERVER['REQUEST_URI'];
+    $uri = $_SERVER[$this->type];
     $path = "";
     if(strpos($uri, "?") !== false) {
       list($path, $query) = explode("?", $uri, 2);

@@ -70,10 +70,6 @@ class Router {
     $this->request($path, "DELETE", $controller, $params);
   }
   
-  public function resource($path, $options = [])
-  {
-  }
-  
   public function route($request, $method = "GET") {
     $p = [];
     $params = [];
