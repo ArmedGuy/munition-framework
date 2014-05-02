@@ -4,21 +4,9 @@ namespace DbModel;
 class Base {
   
   public $id = null;
-  
-  private static $__initialized = false;
-  private static $__dbtable;
-  private static $__className;
-  private static $__keys;
-  public static function __foreign($key, $class) {
-    self::init();
-    self::$__keys["foreign"][] = [
-      "key" => $key,
-      "class" => $class
-    ];
-  }
-  public static function __primary($key) {
-    self::$__keys["primary"] = $key;
-  }
+
+  protected static $primary_key = "id";
+  protected static $table_name = null;
   
   private $_dependants = [
     "has_one" => [],
@@ -32,22 +20,17 @@ class Base {
     QueryBuilder::$db = $db;
   }
   
-  private static function init() {
-    if(self::$__initialized) return;
-    
-    $c = strtolower(get_called_class());
-    if(strpos($c, "\\") !== false) {
-      $a = array_reverse(explode("\\", $c));
-      $c = $a[0];
-    }
-    self::$__dbtable = $c . "s";
-    self::$__className = ucfirst($c);
-    self::$__keys = [];
-  }
-  
   private static function getQuery() {
-    self::init();
-    return new QueryBuilder(self::$__dbtable, self::$__className);
+    $t = strtolower(__CLASS__);
+    if(strpos($t, "\\") !== false) {
+      $a = array_reverse(explode("\\", $t));
+      $t = $a[0] . "s";
+    }
+    return new QueryBuilder(
+      static::$table_name == null ? $t : static::$table_name,
+      __CLASS__,
+      static::$primary_key
+    );
   }
   
   public static function get() {
@@ -55,7 +38,7 @@ class Base {
   }
   
   public static function make($data) {
-    $c = get_called_class();
+    $c = __CLASS__;
     $m = new $c();
     
     Base::crowd($m, $data);
@@ -115,7 +98,6 @@ class Base {
   }
   
   public function has_one($name, $options = []) {
-    self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
@@ -132,9 +114,7 @@ class Base {
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
   }
   
-  /*
   public function has_and_belongs_to_many($name, $options) {
-    self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
@@ -147,13 +127,10 @@ class Base {
     if(isset($options["dependent"]) && $options["dependent"] == true) {
       $this->_dependants[] = $name;
     }
-    $c = strtolower(get_called_class());
-    $this->$name = $className::where([ $c . "_id" => $this->id ])->first;
+    $this->$name = $className::get()->select($name . ".*")->joins("derp");
   }
-  */
   
   public function belongs_to($name, $options = []) {
-    self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       

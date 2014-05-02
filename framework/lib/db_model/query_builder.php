@@ -32,6 +32,8 @@ class QueryBuilder {
       "command" => "SELECT",
       "columns" => "*",
       "table" => $this->_table,
+      "joins" => [
+      ],
       "where" => [
       ],
       "order" => [
@@ -211,6 +213,17 @@ class QueryBuilder {
     return $this;
   }
   
+  public function joins() {
+    if(func_num_args() == 0) {
+      return $this;
+    }
+    elseif(func_num_args() == 1) {
+      $this->_query["joins"][] = func_get_arg(0);
+    } else {
+      $this->_query["joins"][] = func_get_args();
+    }
+  }
+  
   public function order() {
     if(func_num_args() == 0) {
       $this->_query["order"] = [ $this->_primary => "ASC" ];
@@ -318,6 +331,35 @@ class QueryBuilder {
     $query[] = $this->_query["columns"];
     $query[] = "FROM";
     $query[] = "`" . $this->_query["table"] . "`";
+    
+    // joins
+    if(count($this->_query["joins"]) > 0) {
+      foreach($this->_query["joins"] as $j) {
+        if(is_string($j)) {
+          if(strpos(strtolower($j), "join") !== false) {
+            $query[] = $j;
+          } else {
+            $query[] = "JOIN";
+            $query[] = $j;
+            $query[] = "ON";
+            $query[] = $this->_obj("id");
+            $query[] = "=";
+            $query[] = classname_to_filename($this->_className) . "_id";
+          }
+        } elseif(is_array($j)) {
+          foreach($j as $t) {
+            $query[] = "JOIN";
+            $query[] = $t;
+            $query[] = "ON";
+            $query[] = $this->_obj("id");
+            $query[] = "=";
+            $query[] = classname_to_filename($this->_className) . "_id";
+          }
+        }
+      }
+    }
+    
+    // where
     if(count($this->_query["where"]) > 0) {
       $last = count($this->_query["where"]) - 1;
       $query[] = "WHERE";
@@ -335,6 +377,8 @@ class QueryBuilder {
         }
       }
     }
+    
+    // group by
     if($this->_query["groupby"] != "") {
       $query[] = "GROUP BY";
       $query[] = $this->_obj($this->_query["groupby"]);
@@ -347,6 +391,8 @@ class QueryBuilder {
         $q["parameters"][] = $p;
       }
     }
+    
+    // order
     if(count($this->_query["order"]) > 0) {
       $query[] = "ORDER BY";
       $o = [];
@@ -355,10 +401,12 @@ class QueryBuilder {
       }
       $query[] = implode(",", $o);
     }
+    //limit
     if($this->_query["limit"] != "") {
       $query[] = "LIMIT";
       $query[] = $this->_query["limit"];
     }
+    // offset
     if($this->_query["offset"] != "") {
       $query[] = "OFFSET";
       $query[] = $this->_query["offset"];
