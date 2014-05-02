@@ -12,6 +12,9 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   
   public function testUpdate() {
     $u = User::get()->first->obj();
+    print_r(User::get());
+    print_r($u);
+    print_r(User::get()->first);
     $u->password = "hej";
     $u->save();
     
