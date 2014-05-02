@@ -93,7 +93,7 @@ class Base {
     if(isset($options["dependent"]) && $options["dependent"] == true) {
       $this->_dependants[] = $name;
     }
-    $c = strtolower(__CLASS__);
+    $c = strtolower(get_called_class());
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
   }
   
@@ -110,7 +110,7 @@ class Base {
     if(isset($options["dependent"]) && $options["dependent"] == true) {
       $this->_dependants[] = $name;
     }
-    $c = strtolower(__CLASS__);
+    $c = strtolower(get_called_class());
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
   }
   
