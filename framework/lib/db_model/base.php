@@ -21,14 +21,14 @@ class Base {
   }
   
   protected static function getQuery() {
-    $t = strtolower(__CLASS__);
+    $t = strtolower(get_called_class());
     if(strpos($t, "\\") !== false) {
       $a = array_reverse(explode("\\", $t));
       $t = $a[0] . "s";
     }
     return new QueryBuilder(
       static::$table_name == null ? $t : static::$table_name,
-      __CLASS__,
+      get_called_class(),
       static::$primary_key
     );
   }
@@ -38,7 +38,7 @@ class Base {
   }
   
   public static function make($data) {
-    $c = __CLASS__;
+    $c = get_called_class();
     $m = new $c();
     
     Base::crowd($m, $data);
