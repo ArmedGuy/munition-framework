@@ -17,7 +17,7 @@ class AppDbManager {
       (isset($args["user"]) ? $args["user"] : "app"),
       (isset($args["password"]) ? $args["password"] : "")
     );
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     $this->$name = $db;
   }
 }
