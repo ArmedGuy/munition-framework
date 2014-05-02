@@ -20,7 +20,7 @@ class Base {
     QueryBuilder::$db = $db;
   }
   
-  private static function getQuery() {
+  protected static function getQuery() {
     $t = strtolower(__CLASS__);
     if(strpos($t, "\\") !== false) {
       $a = array_reverse(explode("\\", $t));
@@ -34,7 +34,7 @@ class Base {
   }
   
   public static function get() {
-    return self::getQuery();
+    return static::getQuery();
   }
   
   public static function make($data) {
@@ -59,8 +59,8 @@ class Base {
   }
   
   public static function create($params) {
-    $id = self::getQuery()->create($params);
-    return self::getQuery()->where(["id" => $id])->take;
+    $id = static::getQuery()->create($params);
+    return static::getQuery()->where([$this->primary_key => $id])->take;
   }
   
   public function save() {
@@ -70,12 +70,12 @@ class Base {
         $diff[$k] = $this->$k;
       }
     }
-    self::getQuery()->where(["id" => $this->id])->update($diff);
+    static::getQuery()->where([$this->primary_key => $this->id])->update($diff);
   }
   
   public function destroy() {
     // TODO: destroy childs
-    self::getQuery()->where(["id" => $this->id])->destroy();
+    static::getQuery()->where([$this->primary_key => $this->id])->destroy();
   }
   
   
@@ -93,7 +93,7 @@ class Base {
     if(isset($options["dependent"]) && $options["dependent"] == true) {
       $this->_dependants[] = $name;
     }
-    $c = strtolower(get_called_class());
+    $c = strtolower(__CLASS__);
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
   }
   
@@ -110,10 +110,11 @@ class Base {
     if(isset($options["dependent"]) && $options["dependent"] == true) {
       $this->_dependants[] = $name;
     }
-    $c = strtolower(get_called_class());
+    $c = strtolower(__CLASS__);
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
   }
   
+  /*
   public function has_and_belongs_to_many($name, $options) {
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -129,6 +130,7 @@ class Base {
     }
     $this->$name = $className::get()->select($name . ".*")->joins("derp");
   }
+  */
   
   public function belongs_to($name, $options = []) {
     if($this->id == null)
@@ -141,7 +143,7 @@ class Base {
       $className = $options["class"];
     }
     $accessor = $name."_id";
-    $this->$name = $className::get()->where([ "id" => $this->$accessor])->first;
+    $this->$name = $className::get()->where([ $this->primary_key => $this->$accessor])->first;
   }
   
 }
