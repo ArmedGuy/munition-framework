@@ -60,7 +60,7 @@ class Base {
   
   public static function create($params) {
     $id = static::getQuery()->create($params);
-    return static::getQuery()->where([$this->primary_key => $id])->take;
+    return static::getQuery()->where([ static::$primary_key => $id])->take;
   }
   
   public function save() {
@@ -70,12 +70,12 @@ class Base {
         $diff[$k] = $this->$k;
       }
     }
-    static::getQuery()->where([$this->primary_key => $this->id])->update($diff);
+    static::getQuery()->where([static::$primary_key => $this->id])->update($diff);
   }
   
   public function destroy() {
     // TODO: destroy childs
-    static::getQuery()->where([$this->primary_key => $this->id])->destroy();
+    static::getQuery()->where([static::$primary_key => $this->id])->destroy();
   }
   
   
@@ -143,7 +143,7 @@ class Base {
       $className = $options["class"];
     }
     $accessor = $name."_id";
-    $this->$name = $className::get()->where([ $this->primary_key => $this->$accessor])->first;
+    $this->$name = $className::get()->where([ static::$primary_key => $this->$accessor])->first;
   }
   
 }
