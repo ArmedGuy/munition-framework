@@ -80,7 +80,6 @@ class Base {
   
   
   public function has_many($name, $options = []) {
-    self::init();
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
