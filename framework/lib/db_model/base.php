@@ -24,10 +24,10 @@ class Base {
     $t = strtolower(get_called_class());
     if(strpos($t, "\\") !== false) {
       $a = array_reverse(explode("\\", $t));
-      $t = $a[0] . "s";
+      $t = $a[0];
     }
     return new QueryBuilder(
-      static::$table_name == null ? $t : static::$table_name,
+      static::$table_name == null ? $t . "s" : static::$table_name,
       get_called_class(),
       static::$primary_key
     );
