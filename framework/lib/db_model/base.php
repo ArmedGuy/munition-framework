@@ -138,10 +138,10 @@ class Base {
       $className = $options["class"];
     }
     if(!isset($options["through"])) {
-      $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->all;
+      $this->$name = $className::get()->where([ static::foreign() => $this->{static::primary()} ])->all;
     } else {
       $throughClassName = $this->_bindings[$options["through"]]["class"];
-      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([ $throughClassName::table() . "." . static::foreign() => $this->$primary ])->all;
+      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([ $throughClassName::table() . "." . static::foreign() => $this->{static::primary()} ])->all;
     }
     $this->_bindings[$name] = [
       "type" => isset($options["through"]) ? "has_many_through" : "has_many",
@@ -170,7 +170,7 @@ class Base {
       $table = $options["table"];
     }
     
-    $this->$name = $className::get()->joins($table)->select($className::table() . ".*")->where([ $table . "." . static::foreign() => $this->$primary ])->all;
+    $this->$name = $className::get()->joins($table)->select($className::table() . ".*")->where([ $table . "." . static::foreign() => $this->{static::primary()} ])->all;
     
     $this->_bindings[$name] = [
       "type" => "has_and_belongs_to_many",
@@ -192,7 +192,7 @@ class Base {
       $className = $options["class"];
     }
     
-    $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->first;
+    $this->$name = $className::get()->where([ static::foreign() => $this->{static::primary()} ])->first;
     
     $this->_bindings[$name] = [
       "type" => "has_one",
