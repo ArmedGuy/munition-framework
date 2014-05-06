@@ -92,7 +92,8 @@ class Base {
         $diff[$k] = $this->$k;
       }
     }
-    static::getQuery()->where([ static::primary() => $this->${static::primary()} ])->update($diff);
+    $primary = static::primary();
+    static::getQuery()->where([ static::primary() => $this->$primary ])->update($diff);
   }
   
   public function destroy() {
@@ -113,7 +114,8 @@ class Base {
         }
       }
     }
-    static::getQuery()->where([ static::primary() => $this->${static::primary()} ])->destroy();
+    $primary = static::primary();
+    static::getQuery()->where([ static::primary() => $this->$primary ])->destroy();
   }
   
   
@@ -127,12 +129,12 @@ class Base {
     } else {
       $className = $options["class"];
     }
+    $primary = static::primary();
     if(!isset($options["through"])) {
-      $this->$name = $className::get()->where([ static::foreign() => $this->${static::primary()} ])->all;
+      $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->all;
     } else {
-      $throughClassName = $this->_bindings[$through]["class"];
-      
-      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([static::foreign() => $this->${static::$primary_key}])->all;
+      $throughClassName = $this->_bindings[$options["through"]]["class"];
+      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([static::foreign() => $this->$primary ])->all;
     }
     $this->_bindings[$name] = [
       "type" => isset($options["through"]) ? "has_many_through" : "has_many",
@@ -142,6 +144,7 @@ class Base {
   }
   
   public function has_one($name, $options = []) {
+    
     if($this->id == null)
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
@@ -151,7 +154,9 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    $this->$name = $className::get()->where([ static::foreign() => $this->${static::primary()} ])->first;
+    
+    $primary = static::primary();
+    $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->first;
     
     $this->_bindings[$name] = [
       "type" => "has_one",
