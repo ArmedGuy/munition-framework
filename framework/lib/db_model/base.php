@@ -54,7 +54,7 @@ class Base {
     if(static::$foreign_key == null) {
       return classname_to_filename(get_called_class()) . "_id";
     } else {
-      return static::$foregin_key;
+      return static::$foreign_key;
     }
   }
   
