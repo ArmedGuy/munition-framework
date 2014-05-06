@@ -293,7 +293,6 @@ class QueryBuilder {
     switch($type) {
       case "select":        
         $q = $this->_compileQuery();
-        print_r($q);
         $stmt = self::$db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         

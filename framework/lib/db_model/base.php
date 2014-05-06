@@ -72,7 +72,11 @@ class Base {
     foreach($data as $k => $v) {
       $m->$k = $v; // first, set value
       $m->_values[$k] = $v;
-      // TODO: add has$k() etc
+      
+      $has = "has" . ucfirst($k);
+      $m->$has = function() use($m, $k) {
+        return isset($m->$k) && $m->$k != null && $m->$k !== "";
+      };
     }
   }
   
@@ -119,7 +123,8 @@ class Base {
   
   
   public function has_many($name, $options = []) {
-    if($this->id == null)
+    $hasPrimary = "has".ucfirst(static::primary());
+    if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
@@ -128,7 +133,6 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    $primary = static::primary();
     if(!isset($options["through"])) {
       $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->all;
     } else {
@@ -142,9 +146,9 @@ class Base {
     ];
   }
   
-  public function has_one($name, $options = []) {
-    
-    if($this->id == null)
+  public function has_and_belongs_to_many($name, $options = []) {
+    $hasPrimary = "has".ucfirst(static::primary());
+    if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
@@ -154,7 +158,36 @@ class Base {
       $className = $options["class"];
     }
     
-    $primary = static::primary();
+    $table = "";
+    if(!isset($options["table"])) {
+      $t = sort([ static::table(), $name ]);
+      $table = singularize($t[0]) . "_" . pluralize($t[1]);
+    } else {
+      $table = $options["table"];
+    }
+    
+    $this->$name = $className::get()->joins($table)->select($className::table() . ".*")->where([ $table . "." . static::foreign() => $this->$primary ])->all;
+    
+    $this->_bindings[$name] = [
+      "type" => "has_and_belongs_to_many",
+      "class" => $className,
+      "meta" => $table,
+      "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
+    ];
+  }
+  
+  public function has_one($name, $options = []) {
+    $hasPrimary = "has".ucfirst(static::primary());
+    if(!$this->$hasPrimary())
+      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
+
+    $className = "";
+    if(!isset($options["class"])) {
+      $className = filename_to_classname(singularize($name));
+    } else {
+      $className = $options["class"];
+    }
+    
     $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->first;
     
     $this->_bindings[$name] = [
@@ -165,7 +198,8 @@ class Base {
   }
   
   public function belongs_to($name, $options = []) {
-    if($this->id == null)
+    $hasPrimary = "has" . ucfirst(static::primary());
+    if($this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
