@@ -97,7 +97,6 @@ class Base {
   }
   
   public function destroy() {
-    // TODO: destroy childs
     foreach($this->_bindings as $name=>$bind) {
       if($bind["dependant"] == true) {
         switch($bind["type"]) {
@@ -175,7 +174,8 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    $this->$name = $className::get()->where([ static::primary() => $className::foreign() ])->first;
+    $foreign = $className::foreign();
+    $this->$name = $className::get()->where([ static::primary() => $this->$foreign ])->first;
     
     $this->_bindings[$name] = [
       "type" => "belongs_to",
