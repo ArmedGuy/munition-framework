@@ -2,17 +2,12 @@
 namespace DbModel;
 
 class Base {
-  
-  public $id = null;
 
   protected static $primary_key = "id";
+  protected static $foreign_key = null;
   protected static $table_name = null;
   
-  private $_dependants = [
-    "has_one" => [],
-    "has_many" => [],
-    "has_many_through" => []
-  ];
+  private $_bindings = [];
   
   protected $_values;
   
@@ -32,13 +27,35 @@ class Base {
     return static::getQuery();
   }
   
-  public static function s() {
+  public static function table() {
     $t = strtolower(get_called_class());
     if(strpos($t, "\\") !== false) {
       $a = array_reverse(explode("\\", $t));
       $t = $a[0];
     }
     return static::$table_name == null ? $t . "s" : static::$table_name;
+  }
+  
+  // Just prettifiers
+  public static function s() {
+    return static::table();
+  }
+  
+  public static function ies() {
+    return static::table();
+  }
+  
+  // keys
+  public static function primary() {
+    return static::$primary_key;
+  }
+  
+  public static function foreign() {
+    if(static::$foreign_key == null) {
+      return classname_to_filename(get_called_class()) . "_id";
+    } else {
+      return static::$foregin_key;
+    }
   }
   
   public static function make($data) {
@@ -62,9 +79,10 @@ class Base {
   public function relations() {
   }
   
+  // TODO: don't do like this
   public static function create($params) {
     $id = static::getQuery()->create($params);
-    return static::getQuery()->where([ static::$primary_key => $id])->take;
+    return static::getQuery()->where([ static::primary() => $id])->take;
   }
   
   public function save() {
@@ -74,20 +92,28 @@ class Base {
         $diff[$k] = $this->$k;
       }
     }
-    static::getQuery()->where([static::$primary_key => $this->id])->update($diff);
+    static::getQuery()->where([ static::primary() => $this->${static::primary()} ])->update($diff);
   }
   
   public function destroy() {
     // TODO: destroy childs
-    foreach($this->_dependants["has_one"] as $name) {
-      $this->$name->destroy();
-    }
-    foreach($this->_dependants["has_many"] as $names) {
-      foreach($this->$names as $obj) {
-        $obj->destroy();
+    foreach($this->_bindings as $name=>$bind) {
+      if($bind["dependant"] == true) {
+        switch($bind["type"]) {
+          case "has_one":
+            $this->$name->destroy();
+            break;
+          case "has_many":
+            foreach($this->$name as $item) {
+              $item->destroy();
+            }
+            break;
+          case "has_many_through":
+            break;
+        }
       }
     }
-    static::getQuery()->where([static::$primary_key => $this->id])->destroy();
+    static::getQuery()->where([ static::primary() => $this->${static::primary()} ])->destroy();
   }
   
   
@@ -102,17 +128,17 @@ class Base {
       $className = $options["class"];
     }
     if(!isset($options["through"])) {
-      if(isset($options["dependent"]) && $options["dependent"] == true) {
-        $this->_dependants["has_many"][] = $name;
-      }
-      $c = strtolower(get_called_class());
-      $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
+      $this->$name = $className::get()->where([ static::foreign() => $this->${static::primary()} ])->all;
     } else {
-      /*
-      $throughClassName = file_to_classname($options["through"]);
-      $this->$name = $className::get()->joins($throughClassName::s())->select($name . ".*")->where("");
-      */
+      $throughClassName = $this->_bindings[$through]["class"];
+      
+      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([static::foreign() => $this->${static::$primary_key}])->all;
     }
+    $this->_bindings[$name] = [
+      "type" => isset($options["through"]) ? "has_many_through" ? "has_many",
+      "class" => $className,
+      "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
+    ];
   }
   
   public function has_one($name, $options = []) {
@@ -125,11 +151,13 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    if(isset($options["dependent"]) && $options["dependent"] == true) {
-      $this->_dependants["has_one"][] = $name;
-    }
-    $c = strtolower(get_called_class());
-    $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
+    $this->$name = $className::get()->where([ static::foreign() => $this->${static::primary()} ])->first;
+    
+    $this->_bindings[$name] = [
+      "type" => "has_one",
+      "class" => $className,
+      "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
+    ];
   }
   
   public function belongs_to($name, $options = []) {
@@ -142,8 +170,13 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    $accessor = $name . "_id";
-    $this->$name = $className::get()->where([ static::$primary_key => $this->$accessor ])->first;
+    $this->$name = $className::get()->where([ static::primary() => $className::foreign() ])->first;
+    
+    $this->_bindings[$name] = [
+      "type" => "belongs_to",
+      "class" => $className,
+      "dependant" => false
+    ];
   }
   
 }
