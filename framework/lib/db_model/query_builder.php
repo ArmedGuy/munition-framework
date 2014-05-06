@@ -222,6 +222,7 @@ class QueryBuilder {
     } else {
       $this->_query["joins"][] = func_get_args();
     }
+    return $this;
   }
   
   public function order() {
