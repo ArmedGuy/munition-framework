@@ -133,7 +133,7 @@ class Base {
       $this->$name = $className::get()->where([ static::foreign() => $this->$primary ])->all;
     } else {
       $throughClassName = $this->_bindings[$options["through"]]["class"];
-      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([static::foreign() => $this->$primary ])->all;
+      $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([ $throughClassName::table() . "." . static::foreign() => $this->$primary ])->all;
     }
     $this->_bindings[$name] = [
       "type" => isset($options["through"]) ? "has_many_through" : "has_many",
