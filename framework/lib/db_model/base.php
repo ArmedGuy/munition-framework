@@ -72,12 +72,16 @@ class Base {
     foreach($data as $k => $v) {
       $m->$k = $v; // first, set value
       $m->_values[$k] = $v;
-      
-      $has = "has" . ucfirst($k);
-      $m->$has = function() use($m, $k) {
-        return isset($m->$k) && $m->$k != null && $m->$k !== "";
-      };
     }
+  }
+  
+  public function __call($method, $arguments) {
+    if(0 === strpos($method, "has")) {
+      $key = strtolower(substr($method, 3));
+      return isset($this->$key) && $this->$key != null && $this->$key !== "";
+    }
+    
+    // TODO: raise exception when no match was found
   }
   
   public function relations() {
