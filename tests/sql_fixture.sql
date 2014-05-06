@@ -21,3 +21,22 @@ CREATE TABLE posts (
 ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
 INSERT INTO posts (`user_id`, `title`, `text` ) VALUES (1, 'hi', 'hello'), (1, 'hiya', 'hellow'), (2, 'hibla', 'helluw'), (1, 'hiyadadadada', 'hellowowowow');
+
+
+CREATE TABLE groups (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1;
+
+INSERT INTO groups (`name`) VALUES ('Awesome Group'), ('Less Awesome Group');
+
+CREATE TABLE user_groups (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `is_admin` boolean NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1;
+
+INSERT INTO user_groups (`user_id`, `group_id`, `is_admin`) VALUES (1, 1, true), (2, 2, true), (3, 1, false);

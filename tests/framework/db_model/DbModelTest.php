@@ -115,6 +115,8 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   public function testHasMany() {
     $u = User::get()->where(["name" => "ArmedGuy"])->first->obj();
     $this->assertCount(3, $u->posts);
+    
+    $this->assertEquals("Awesome Group", $u->groups[0]->name);
   }
   
   public function testBelongsTo() {
