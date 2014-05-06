@@ -21,11 +21,6 @@ class Base {
   }
   
   protected static function getQuery() {
-    $t = strtolower(get_called_class());
-    if(strpos($t, "\\") !== false) {
-      $a = array_reverse(explode("\\", $t));
-      $t = $a[0];
-    }
     return new QueryBuilder(
       static::s(),
       get_called_class(),
@@ -38,6 +33,11 @@ class Base {
   }
   
   public static function s() {
+    $t = strtolower(get_called_class());
+    if(strpos($t, "\\") !== false) {
+      $a = array_reverse(explode("\\", $t));
+      $t = $a[0];
+    }
     return static::$table_name == null ? $t . "s" : static::$table_name;
   }
   
