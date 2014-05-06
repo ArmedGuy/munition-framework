@@ -135,7 +135,7 @@ class Base {
       $this->$name = $className::get()->joins($throughClassName::table())->select($className::table() . ".*")->where([static::foreign() => $this->${static::$primary_key}])->all;
     }
     $this->_bindings[$name] = [
-      "type" => isset($options["through"]) ? "has_many_through" ? "has_many",
+      "type" => isset($options["through"]) ? "has_many_through" : "has_many",
       "class" => $className,
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
