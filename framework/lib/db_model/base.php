@@ -11,7 +11,7 @@ class Base {
   private $_dependants = [
     "has_one" => [],
     "has_many" => [],
-    "has_and_belongs_to_many" => []
+    "has_many_through" => []
   ];
   
   protected $_values;
@@ -27,7 +27,7 @@ class Base {
       $t = $a[0];
     }
     return new QueryBuilder(
-      static::$table_name == null ? $t . "s" : static::$table_name,
+      static::s(),
       get_called_class(),
       static::$primary_key
     );
@@ -35,6 +35,10 @@ class Base {
   
   public static function get() {
     return static::getQuery();
+  }
+  
+  public static function s() {
+    return static::$table_name == null ? $t . "s" : static::$table_name;
   }
   
   public static function make($data) {
@@ -75,6 +79,14 @@ class Base {
   
   public function destroy() {
     // TODO: destroy childs
+    foreach($this->_dependants["has_one"] as $name) {
+      $this->$name->destroy();
+    }
+    foreach($this->_dependants["has_many"] as $names) {
+      foreach($this->$names as $obj) {
+        $obj->destroy();
+      }
+    }
     static::getQuery()->where([static::$primary_key => $this->id])->destroy();
   }
   
@@ -89,11 +101,18 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    if(isset($options["dependent"]) && $options["dependent"] == true) {
-      $this->_dependants[] = $name;
+    if(!isset($options["through"])) {
+      if(isset($options["dependent"]) && $options["dependent"] == true) {
+        $this->_dependants["has_many"][] = $name;
+      }
+      $c = strtolower(get_called_class());
+      $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
+    } else {
+      /*
+      $throughClassName = file_to_classname($options["through"]);
+      $this->$name = $className::get()->joins($throughClassName::s())->select($name . ".*")->where("");
+      */
     }
-    $c = strtolower(get_called_class());
-    $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->all;
   }
   
   public function has_one($name, $options = []) {
@@ -107,29 +126,11 @@ class Base {
       $className = $options["class"];
     }
     if(isset($options["dependent"]) && $options["dependent"] == true) {
-      $this->_dependants[] = $name;
+      $this->_dependants["has_one"][] = $name;
     }
     $c = strtolower(get_called_class());
     $this->$name = $className::get()->where([ $c . "_id" => $this->id ])->first;
   }
-  
-  /*
-  public function has_and_belongs_to_many($name, $options) {
-    if($this->id == null)
-      throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
-      
-    $className = "";
-    if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
-    } else {
-      $className = $options["class"];
-    }
-    if(isset($options["dependent"]) && $options["dependent"] == true) {
-      $this->_dependants[] = $name;
-    }
-    $this->$name = $className::get()->select($name . ".*")->joins("derp");
-  }
-  */
   
   public function belongs_to($name, $options = []) {
     if($this->id == null)
@@ -141,8 +142,8 @@ class Base {
     } else {
       $className = $options["class"];
     }
-    $accessor = $name."_id";
-    $this->$name = $className::get()->where([ static::$primary_key => $this->$accessor])->first;
+    $accessor = $name . "_id";
+    $this->$name = $className::get()->where([ static::$primary_key => $this->$accessor ])->first;
   }
   
 }
