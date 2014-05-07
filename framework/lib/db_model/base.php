@@ -63,6 +63,7 @@ class Base {
     $m = new $c();
     
     Base::crowd($m, $data);
+    print_r($m);
     $m->relations();
     
     return $m;
