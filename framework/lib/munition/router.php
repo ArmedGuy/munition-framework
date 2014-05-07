@@ -155,13 +155,13 @@ class Router {
         $r->post("/", $path . "#create");
         
       !in_array("edit", $options["except"]) &&
-        $r->get("/edit", $path . "#edit", $params);
+        $r->get("/edit", $path . "#edit");
         
       !in_array("update", $options["except"]) &&
-        $r->put("/", $path . "#update", $params);
+        $r->put("/", $path . "#update");
         
       !in_array("delete", $options["except"]) &&
-        $r->delete("/", $path . "#delete", $params);
+        $r->delete("/", $path . "#delete");
     
     });
   }
