@@ -4,8 +4,10 @@ class Router {
 
   private $_routes = null;
   private $_patterns = null;
-  private $_prepend = false;
   
+  
+  private $_prepend = false;
+  private $_namespace = "";
   
   protected $base = "";
   protected $initial_scope = [];
@@ -37,8 +39,16 @@ class Router {
     $this->_prepend = false;
     $cb($this);
   }
+  public function namespace($namespace, $cb) {
+    $this->_namespace = $namespace;
+    $cb($this);
+    $this->_namespace = "";
+  }
   
   public function request($path, $type, $controller, $params = []) {
+    if($this->_namespace != "") {
+      $path = "/" . $this->_namespace . $path;
+    }
     $r = [
       "path" => $path,
       "method" => $type,
@@ -90,8 +100,70 @@ class Router {
     $this->request($path, "DELETE", $controller, $params);
   }
   
-  public function resource($path, $model, $params = [ "constraint" => ResourceConstraint::$default ]) {
+  
+  
+  public function resources($path, $options = []) {
+    $this->namespace($path, function($r) use ($path, $options){
+      
+      $regex = "[0-9]+";
+      if(isset($options["id"])) {
+        $regex = $options["id"];
+      }
+      $id = singularize($path) . "_id";
+      $params = [ $id => $regex ];
+      
+      if(!isset($options["except"]))
+        $options["except"] = [];
+      
+      !in_array("index", $options["except"]) &&
+        $r->get("/", $path . "#index");
+        
+      !in_array("new", $options["except"]) &&
+        $r->get("/new", $path . "#new");
+        
+      !in_array("create", $options["except"]) &&
+        $r->post("/", $path . "#create");
+        
+      !in_array("show", $options["except"]) &&
+        $r->get("/:{$id}", $path . "#show", $params);
+        
+      !in_array("edit", $options["except"]) &&
+        $r->get("/:{$id}/edit", $path . "#edit", $params);
+        
+      !in_array("update", $options["except"]) &&
+        $r->put("/:{$id}", $path . "#update", $params);
+        
+      !in_array("delete", $options["except"]) &&
+        $r->delete("/:{$id}", $path . "#delete", $params);
     
+    });
+  }
+  
+  public function resource($path, $options = []) {
+    $this->namespace($path, function($r) use ($path, $options){
+      
+      if(!isset($options["except"]))
+        $options["except"] = [];
+      
+      !in_array("index", $options["except"]) &&
+        $r->get("/", $path . "#index");
+        
+      !in_array("new", $options["except"]) &&
+        $r->get("/new", $path . "#new");
+        
+      !in_array("create", $options["except"]) &&
+        $r->post("/", $path . "#create");
+        
+      !in_array("edit", $options["except"]) &&
+        $r->get("/edit", $path . "#edit", $params);
+        
+      !in_array("update", $options["except"]) &&
+        $r->put("/", $path . "#update", $params);
+        
+      !in_array("delete", $options["except"]) &&
+        $r->delete("/", $path . "#delete", $params);
+    
+    });
   }
   
   public function route($request, $method = "GET") {

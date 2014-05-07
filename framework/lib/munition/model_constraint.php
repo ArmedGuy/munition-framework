@@ -1,6 +1,6 @@
 <?php
 namespace Munition;
-class ResourceConstraint {
+class ModelConstraint {
   
   public static $default;
   
@@ -21,4 +21,4 @@ class ResourceConstraint {
   }
   
 }
-ResourceConstraint::$default = new ResourceConstraint();
+ModelConstraint::$default = new ModelConstraint();

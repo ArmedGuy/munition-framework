@@ -9,7 +9,7 @@ class App {
   public $postprocess = null;
   public $type = "REQUEST_URI";
   
-  function __construct($appFolder = "./app/", $router = "./config/routes.php") {
+  function __construct($appFolder = "./app/", $router = null) {
     
     spl_autoload_register(function($class) use ($appFolder) {
         $class = classname_to_filename(str_replace('\\', '/', $class));
@@ -32,7 +32,11 @@ class App {
       throw new \InvalidArgumentException("Router file not found");
     }
     
-    $this->router = require $router;
+    if($router != null) {
+      $this->router = require $router;
+    } else {
+      $this->router = new Router();
+    }
     $this->router->app = $this;
     
     \Munition\AppController::$template_base = $appFolder . "/templates/";
