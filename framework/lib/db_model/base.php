@@ -63,7 +63,6 @@ class Base {
     $m = new $c();
     
     Base::crowd($m, $data);
-    print_r($m);
     $m->relations();
     
     return $m;
@@ -204,7 +203,7 @@ class Base {
   
   public function belongs_to($name, $options = []) {
     $hasPrimary = "has" . ucfirst(static::primary());
-    if($this->$hasPrimary())
+    if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
