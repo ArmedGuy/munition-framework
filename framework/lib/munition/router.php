@@ -4,6 +4,8 @@ class Router {
 
   private $_routes = null;
   private $_patterns = null;
+  private $_prepend = false;
+  
   
   protected $base = "";
   protected $initial_scope = [];
@@ -19,6 +21,21 @@ class Router {
   public function pattern($name, $pattern) {
     $name = str_replace(":", "", $name);
     $this->_patterns[":".$name] = "(?P<".$name.">".$pattern.")";
+  }
+  
+  public function prepend($cb) {
+    $this->_prepend = true;
+    $cb($this);
+    $this->_prepend = false;
+  }
+  public function append($cb) {
+    $this->_prepend = false;
+    $cb($this);
+  }
+  public function map($cb) {
+    $this->_routes = [];
+    $this->_prepend = false;
+    $cb($this);
   }
   
   public function request($path, $type, $controller, $params = []) {
@@ -47,7 +64,10 @@ class Router {
     $r["regex"] = $regex;
     preg_match($r["regex"], "");
     
-    $this->_routes[$type.":".$path] = $r;
+    if($this->_prepend == true)
+      array_unshift($this->_routes, $r);
+    else
+      $this->_routes[] = $r;
   }
   
   public function get($path, $controller, $params = []) {
@@ -70,12 +90,13 @@ class Router {
     $this->request($path, "DELETE", $controller, $params);
   }
   
+  
   public function route($request, $method = "GET") {
     $p = [];
     $params = [];
     $f = false;
     $path = str_replace($this->base, "", $request);
-    foreach($this->_routes as $n=>$route) {
+    foreach($this->_routes as $route) {
       if($route["method"] == $method && preg_match($route["regex"], $path, $params) === 1) {
         unset($params[0]);
         $this->call_controller_function($route["controller"], $params);
