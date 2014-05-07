@@ -39,7 +39,7 @@ class Router {
     $this->_prepend = false;
     $cb($this);
   }
-  public function namespace($namespace, $cb) {
+  public function scope($namespace, $cb) {
     $this->_namespace = $namespace;
     $cb($this);
     $this->_namespace = "";
@@ -103,7 +103,7 @@ class Router {
   
   
   public function resources($path, $options = []) {
-    $this->namespace($path, function($r) use ($path, $options){
+    $this->scope($path, function($r) use ($path, $options){
       
       $regex = "[0-9]+";
       if(isset($options["id"])) {
@@ -140,7 +140,7 @@ class Router {
   }
   
   public function resource($path, $options = []) {
-    $this->namespace($path, function($r) use ($path, $options){
+    $this->scope($path, function($r) use ($path, $options){
       
       if(!isset($options["except"]))
         $options["except"] = [];
