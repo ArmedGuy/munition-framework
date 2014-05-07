@@ -90,6 +90,9 @@ class Router {
     $this->request($path, "DELETE", $controller, $params);
   }
   
+  public function resource($path, $model, $params = [ "constraint" => ResourceConstraint::$default ]) {
+    
+  }
   
   public function route($request, $method = "GET") {
     $p = [];
@@ -122,7 +125,7 @@ class Router {
     if(is_callable($ctrlfn)) {
       $ctrlfn($this->initial_scope, $params, $format, $this->app);
     } else {
-      \Munition\AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
+      AppController::call_function($ctrlfn, $this->initial_scope, $params, $format, $this->app);
     }
 
   }
