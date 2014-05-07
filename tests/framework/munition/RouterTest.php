@@ -110,6 +110,13 @@ class RouterTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($success);
   }
   
+  public function testResources() {
+    $router = new \Munition\Router();
+    
+    $router->resource("profile");
+    $router->resources("users");
+  }
+  
   
   /**
    * @expectedException MunitionException
