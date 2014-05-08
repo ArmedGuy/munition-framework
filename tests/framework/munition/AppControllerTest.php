@@ -4,13 +4,13 @@ class AppControllerTest extends PHPUnit_Framework_TestCase {
    * @expectedException InvalidArgumentException
    */
   public function testCallFunctionInvalidController() {
-    \Munition\AppController::call_function("invalidcontrollerpath");
+    \Munition\AppController::call_action("invalidcontrollerpath");
   }
   
   /**
    * @expectedException InvalidArgumentException
    */
   public function testCallFunctionNonExistantController() {
-    \Munition\AppController::call_function("controller#action");
+    \Munition\AppController::call_action("controller#action");
   }
 }
