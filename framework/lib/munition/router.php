@@ -233,8 +233,8 @@ class Router {
     }
   }
   
-  public function error($errCode, $controller) {
-    $this->_routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/","controller" => $controller, "params" => 0];
+  public function error($errCode, $action) {
+    $this->_routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/", "action" => $action, "params" => 0];
   }
   
   private function call_action($ctrlfn, $params) {

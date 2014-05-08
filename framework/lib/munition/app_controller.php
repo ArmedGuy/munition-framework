@@ -46,7 +46,7 @@ class AppController {
     
     $class = new $className();
     $class->app = $app;
-    $class->handle_action($fn, $params, $scope, $format);
+    $class->handle_action($fn, $params, $context, $format);
   }
   
   private static function load_controller($ctrlfn) {
