@@ -47,9 +47,7 @@ class Router {
   }
   
   public function request($path, $type, $action, $params = []) {
-    if($this->_namespace != "") {
-      $path = "/" . $this->_namespace . $path;
-    }
+    $path = $this->_scope . $path;
     $r = [
       "path" => $path,
       "method" => $type,
