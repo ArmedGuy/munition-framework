@@ -14,7 +14,7 @@ class AppController {
   }
   
   
-  protected function handle_action($fn, $params, $scope, $format) {
+  protected function handle_action($fn, $context, $params, $format) {
     foreach($this->_before_filters as $filter) {
       list($f, $cb) = $filter;
       
@@ -24,22 +24,22 @@ class AppController {
         if(isset($cb["not"]) && in_array($fn, $cb["not"]))
           continue;
         
-        $scope = call_user_func($f, $scope);
+        $scope = call_user_func($f, $context);
         if($scope === null) {
           return; // Assumes the filter has handled output etc
         }
       } elseif (is_string($cb) && $fn == $cb) {
-        $scope = call_user_func($f, $scope);
+        $scope = call_user_func($f, $context);
         if($scope === null) {
           return; // Assumes the filter has handled output etc
         }
       }
     }
-    $this->$fn($scope, $params, $format);
+    $this->$fn($context, $params, $format);
   }
   
   
-  public static function call_function($ctrlfn, $params = [], $scope = [], $format = "html", $app = null) {
+  public static function call_controller_action($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
     list($className, $fn) = self::load_controller($ctrlfn);
     $params["controller"] = $className;
     $params["action"] = $fn;
@@ -64,15 +64,15 @@ class AppController {
     
   }
   
-  protected static function render($scope, $__render_settings = null ) {
+  protected static function render($context, $__render_settings = null ) {
     if($__render_settings == null) {
-      $__render_settings = $scope;
+      $__render_settings = $context;
     } else {
-      foreach($scope as $k => $v) {
+      foreach($context as $k => $v) {
         $$k = $v;
       }
     }
-    unset($scope, $k, $v);
+    unset($context, $k, $v);
 	
     if(isset($__render_settings[0]) && is_numeric($__render_settings[0])) {
       if(MUNITION_ENV != "test") {
