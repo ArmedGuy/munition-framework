@@ -28,10 +28,6 @@ class App {
       throw new \InvalidArgumentException("Unable to access App directory");
     }
     
-    if(!file_exists($router)) {
-      throw new \InvalidArgumentException("Router file not found");
-    }
-    
     if($router != null) {
       $this->router = require $router;
     } else {
