@@ -91,6 +91,7 @@ class AppController {
       echo json_encode($__render_settings["json"]);
     }
     if(isset($__render_settings["template"])) {
+      $templateFolder = self::$template_base;
       require (self::$template_base . $__render_settings["template"] . ".php");
     }
   }
