@@ -64,7 +64,7 @@ class AppController {
     
   }
   
-  protected static function render($context, $__render_settings = null ) {
+  public static function render($context, $__render_settings = null ) {
     if($__render_settings == null) {
       $__render_settings = $context;
     } else {
@@ -93,5 +93,9 @@ class AppController {
     if(isset($__render_settings["template"])) {
       require (self::$template_base . $__render_settings["template"] . ".php");
     }
+  }
+  
+  public static function redirect_to($to) {
+    header("Location: $to");
   }
 }
