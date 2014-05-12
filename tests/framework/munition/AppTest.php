@@ -2,7 +2,7 @@
 class AppTest extends PHPUnit_Framework_TestCase {
   
   public function testLoadApp() {
-    $app = require './tests/test_config/application.php';
+    $app = require './tests/test_app/application.php';
     $this->assertTrue($app->in_test_environment);  
     return $app;
   }
@@ -35,7 +35,7 @@ class AppTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testControllerFilters() {
-    $app = require './tests/test_config/application.php';
+    $app = require './tests/test_app/application.php';
     
     XHR::request("/test_filters1", "GET");
     $app->run();
