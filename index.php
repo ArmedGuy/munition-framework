@@ -4,5 +4,5 @@ if(file_exists("install.php") && MUNITION_ENV != "production") {
   require 'install.php';
   exit;
 }
-$app = require 'config/application.php';
+$app = require 'app/application.php';
 $app->run();
