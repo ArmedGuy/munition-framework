@@ -2,7 +2,7 @@
 if(!class_exists('TestApplication')):
 class TestApplication extends \Munition\App {
   function __construct() {
-    parent::__construct("./tests/test_app/", "./tests/test_config/routes.php");
+    parent::__construct("./tests/test_app/");
     
     $this->db = new \DbModel\AppDbManager();
     
