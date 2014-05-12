@@ -7,10 +7,10 @@ class TestApplication extends \Munition\App {
     $this->db = new \DbModel\AppDbManager();
     
     $r = $this->router;
-    require_once 'routes.php';
+    require 'routes.php';
     
     $config = $this;
-    require_once 'env/' . MUNITION_ENV . '.php';
+    require 'env/' . MUNITION_ENV . '.php';
   }
 }
 endif;
