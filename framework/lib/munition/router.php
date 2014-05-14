@@ -69,7 +69,7 @@ class Router {
     } else {
       $regex .= "\\/?";
     }
-    $regex = "/^" . $regex . "(?P<_request_format>\.[a-zA-Z0-9]{1,4})?$/";
+    $regex = "/^" . $regex . "(?P<_request_format>\\.[a-zA-Z0-9]{1,4})?$/";
     $r["regex"] = $regex;
     preg_match($r["regex"], "");
     
@@ -118,7 +118,7 @@ class Router {
         $r->get("/", $path . "#index");
         
       !in_array("new", $options["except"]) &&
-        $r->get("/new", $path . "#new");
+        $r->get("/new", $path . "#make_new");
         
       !in_array("create", $options["except"]) &&
         $r->post("/", $path . "#create");

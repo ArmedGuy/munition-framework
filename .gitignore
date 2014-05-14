@@ -1,2 +1,4 @@
 Thumbs.db
 *.log
+.DS_store
+.idea/
