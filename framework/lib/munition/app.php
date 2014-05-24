@@ -37,10 +37,10 @@ class App {
     }
     $this->router->app = $this;
     
-    \AppController::$template_base = $appFolder . "/templates/";
-    \AppController::$controller_base = $appFolder . "/controllers/";
+    \Munition\AppController::$template_base = $appFolder . "/templates/";
+    \Munition\AppController::$controller_base = $appFolder . "/controllers/";
     
-    $this->postprocess = new \PostProcessingEngine();
+    $this->postprocess = new \Munition\PostProcessingEngine();
 
     static::$application = $this;
     
