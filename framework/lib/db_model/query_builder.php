@@ -15,8 +15,8 @@ class QueryBuilder {
   private $_primary = "id";
   
   public function __construct($db, $table, $class, $primary = "id") {
-    if($this->_db == null) {
-      throw new DbException("No database connection set! Call DbModel::bind() to set a database connection.");
+    if($db == null) {
+      throw new DbException('No database connection set! Set \\DbModel\\Base::$default_db before using DbModel');
     }
 
     $this->_db = $db;
