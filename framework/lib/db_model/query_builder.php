@@ -3,7 +3,7 @@ namespace DbModel;
 
 class QueryBuilder {
 
-  public static $db = null;
+  private $_db = null;
   
   private $_className = null;
   private $_table = "";
@@ -14,11 +14,12 @@ class QueryBuilder {
   
   private $_primary = "id";
   
-  public function __construct($table, $class, $primary = "id") {
+  public function __construct($db, $table, $class, $primary = "id") {
     if(self::$db == null) {
       throw new DbException("No database connection set! Call DbModel::bind() to set a database connection.");
     }
-    
+
+    $this->_db = $db;
     $this->_className = $class;
     $this->_table = $table;
     $this->_primary = $primary;
@@ -293,7 +294,7 @@ class QueryBuilder {
     switch($type) {
       case "select":        
         $q = $this->_compileQuery();
-        $stmt = self::$db->prepare($q["query"]);
+        $stmt = $this->_db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = [];
@@ -304,21 +305,21 @@ class QueryBuilder {
         break;
       case "insert":
         $q = $this->_compileQuery();
-        $stmt = self::$db->prepare($q["query"]);
+        $stmt = $this->_db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = $stmt->rowCount();
         break;
       case "delete":
         $q = $this->_compileQuery();
-        $stmt = self::$db->prepare($q["query"]);
+        $stmt = $this->_db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = $stmt->rowCount();
         break;
       case "update":
         $q = $this->_compileQuery();
-        $stmt = self::$db->prepare($q["query"]);
+        $stmt = $this->_db->prepare($q["query"]);
         $stmt->execute($q["parameters"]);
         
         $this->_result = $stmt->rowCount();

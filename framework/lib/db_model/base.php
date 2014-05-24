@@ -6,27 +6,30 @@ class Base {
   protected static $primary_key = "id";
   protected static $foreign_key = null;
   protected static $table_name = null;
+
+  public static $default_db = null;
   
   private $_bindings = [];
   
   protected $_values;
-  
-  public static function bind($db) {
-    QueryBuilder::$db = $db;
+
+  protected static function _getDb() {
+    return static::$default_db;
   }
-  
-  protected static function getQuery() {
+
+  protected static function _getQuery() {
     return new QueryBuilder(
+      static::_getDb(),
       static::s(),
       get_called_class(),
       static::$primary_key
     );
   }
-  
+
   public static function get() {
-    return static::getQuery();
+    return static::_getQuery();
   }
-  
+
   public static function table() {
     $t = strtolower(get_called_class());
     if(strpos($t, "\\") !== false) {

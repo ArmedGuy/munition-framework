@@ -14,7 +14,7 @@ class AppController {
   }
   
   
-  protected function handle_action($fn, $context, $params, $format) {
+  protected function _handle_action($fn, $context, $params, $format) {
     foreach($this->_before_filters as $filter) {
       list($f, $cb) = $filter;
       
@@ -40,16 +40,16 @@ class AppController {
   
   
   public static function call_controller_action($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
-    list($className, $fn) = self::load_controller($ctrlfn);
+    list($className, $fn) = self::_load_controller($ctrlfn);
     $params["controller"] = $className;
     $params["action"] = $fn;
     
     $class = new $className();
     $class->app = $app;
-    $class->handle_action($fn, $context, $params, $format);
+    $class->_handle_action($fn, $context, $params, $format);
   }
   
-  private static function load_controller($ctrlfn) {
+  private static function _load_controller($ctrlfn) {
     if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
       throw new \InvalidArgumentException("Invalid controller path");
     }

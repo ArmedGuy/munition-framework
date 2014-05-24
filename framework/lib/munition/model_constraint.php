@@ -4,19 +4,19 @@ class ModelConstraint {
   
   public static $default;
   
-  public function canGet() {
+  public function can_get() {
     return true;
   }
   
-  public function canCreate() {
+  public function can_create() {
     return false;
   }
   
-  public function canUpdate() {
+  public function can_update() {
     return false;
   }
   
-  public function canDelete() {
+  public function can_delete() {
     return false;
   }
   
