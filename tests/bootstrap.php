@@ -2,4 +2,4 @@
 require 'xhr.php';
 require './framework/munition.php';
 
-\DbModel\Base::bind(new PDO("mysql:dbname=munition_test;", "root", ""));
+\DbModel\Base::$default_db = new PDO("mysql:dbname=munition_test;", "root", "");
