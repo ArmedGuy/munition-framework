@@ -92,8 +92,8 @@ class Base {
   
   // TODO: don't do like this
   public static function create($params) {
-    $id = static::getQuery()->create($params);
-    return static::getQuery()->where([ static::primary() => $id])->take;
+    $id = static::_getQuery()->create($params);
+    return static::_getQuery()->where([ static::primary() => $id])->take;
   }
   
   public function save() {
@@ -104,7 +104,7 @@ class Base {
       }
     }
     $primary = static::primary();
-    static::getQuery()->where([ static::primary() => $this->$primary ])->update($diff);
+    static::_getQuery()->where([ static::primary() => $this->$primary ])->update($diff);
   }
   
   public function destroy() {
@@ -125,7 +125,7 @@ class Base {
       }
     }
     $primary = static::primary();
-    static::getQuery()->where([ static::primary() => $this->$primary ])->destroy();
+    static::_getQuery()->where([ static::primary() => $this->$primary ])->destroy();
   }
   
   
