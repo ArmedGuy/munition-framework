@@ -37,16 +37,27 @@ function classname_to_filename($class) {
 
 function pluralize($name) {
   if(substr($name, strlen($name)-1) == "s")
-    return $name;
-  else
+    return $name . "es";
+  else {
+    if(substr($name, strlen($name)-1) == "y") {
+      return substr($name, 0, strlen($name)-1) . "ies";
+    }
     return $name . "s";
+  }
 }
 
 function singularize($name) {
-  if(substr($name, strlen($name)-1) == "s")
+  if(substr($name, strlen($name)-1) == "s") {
+    if(substr($name, strlen($name)-2) == "es") {
+      if(substr($name, strlen($name)-3) == "ies") {
+        return substr($name, 0, strlen($name)-3) . "y";
+      }
+      return substr($name, 0, strlen($name)-2);
+    }
     return substr($name, 0, strlen($name)-1);
-  else
+  } else {
     return $name;
+  }
 }
 
 
