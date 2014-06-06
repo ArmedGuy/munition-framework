@@ -55,7 +55,7 @@ class Base {
   
   public static function foreign() {
     if(static::$foreign_key == null) {
-      return NamingConventions::convert_case(get_called_class(), "pascal", "lower");
+      return \NamingConventions::convert_case(get_called_class(), "pascal", "lower") . "_id";
     } else {
       return static::$foreign_key;
     }
