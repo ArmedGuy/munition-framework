@@ -1,5 +1,5 @@
 <?php
-require_once 'framework/munition.php';
+require_once 'framework/autoload.php';
 if(file_exists("install.php") && MUNITION_ENV != "production") {
   require 'install.php';
   exit;

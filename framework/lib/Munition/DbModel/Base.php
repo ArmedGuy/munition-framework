@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 
 class Base {
 
@@ -55,7 +55,7 @@ class Base {
   
   public static function foreign() {
     if(static::$foreign_key == null) {
-      return classname_to_filename(get_called_class()) . "_id";
+      return NamingConventions::convert_case(get_called_class(), "pascal", "lower");
     } else {
       return static::$foreign_key;
     }

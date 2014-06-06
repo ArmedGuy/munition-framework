@@ -35,6 +35,7 @@ function classname_to_filename($class) {
   return $filename;
 }
 
+
 function pluralize($name) {
   if(substr($name, strlen($name)-1) == "s")
     return $name . "es";
@@ -63,12 +64,15 @@ function singularize($name) {
 
 // ------------- Autoload Munition Libraries ---------------------
 spl_autoload_register(function($class){
-    $class = classname_to_filename(str_replace('\\', '/', $class));
+    $class = str_replace('\\', '/', $class);
     if(file_exists('./framework/lib/' . $class . '.php')) {
       require_once('./framework/lib/' . $class . '.php');
     }
 });
 
+
+// ------------- Converter between naming conventions ----------
+require 'load/conventions.php';
 
 
 // ------------- Define Environment ---------------------
@@ -79,11 +83,11 @@ define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
 
 if(MUNITION_ENV == "test" && !defined('SIMULATES_WEBSERVER')) return; // web_constants and error handling only in non-testing env
-require 'web_constants.php';
+require 'load/web_constants.php';
 
 
 // ------------- Error Handling ---------------------
-require 'munition_exception.php';
+require 'load/munition_exception.php';
 set_error_handler(function($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
   throw new MunitionException($errno, $errstr, $errfile, $errline, $errcontext);
 }, E_ALL);

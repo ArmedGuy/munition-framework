@@ -242,7 +242,7 @@ class Router {
     if(is_callable($ctrlfn)) {
       $ctrlfn($this->initial_context, $params, $format, $this->app);
     } else {
-      AppController::call_controller_action($ctrlfn, $this->initial_context, $params, $format, $this->app);
+      AppController::callControllerAction($ctrlfn, $this->initial_context, $params, $format, $this->app);
     }
 
   }

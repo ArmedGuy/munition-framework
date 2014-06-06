@@ -1,12 +1,12 @@
 <?php
 class TestController extends \Munition\AppController {
   function __construct() {
-    $this->before_action([$this, "filter_all_actions"]);
+    $this->beforeAction([$this, "filter_all_actions"]);
     
     
-    $this->before_action([$this, "filter_some_actions"], "test_filters1");
+    $this->beforeAction([$this, "filter_some_actions"], "test_filters1");
     
-    $this->before_action([$this, "filter_allbutsome_actions"],
+    $this->beforeAction([$this, "filter_allbutsome_actions"],
     ["not" => [
       "test_filters2",
       "index",

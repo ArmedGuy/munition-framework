@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 
 class QueryBuilder {
 
@@ -346,7 +346,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = classname_to_filename($this->_className) . "_id";
+            $query[] = ${$this->_className}::foreign();
           }
         } elseif(is_array($j)) {
           foreach($j as $t) {
@@ -355,7 +355,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = classname_to_filename($this->_className) . "_id";
+            $query[] = ${$this->_className}::foreign();
           }
         }
       }

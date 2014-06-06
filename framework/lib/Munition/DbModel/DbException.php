@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 class DbException extends \Exception
 {
   function __construct($str) {

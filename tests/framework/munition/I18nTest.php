@@ -1,6 +1,6 @@
 <?php
-use \Lclzr\Locale as L;
-class LocalizerTest extends PHPUnit_Framework_TestCase {
+use \Munition\I18n as L;
+class I18nTest extends PHPUnit_Framework_TestCase {
   public function testLoadAndShowLocale() {
     L::loadFolder("./tests/test_app/locales/");
     L::$current = "en";

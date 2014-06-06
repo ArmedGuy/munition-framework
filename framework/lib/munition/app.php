@@ -14,7 +14,7 @@ class App {
   function __construct($appFolder = "./app/", $router = null) {
     
     spl_autoload_register(function($class) use ($appFolder) {
-        $class = classname_to_filename(str_replace('\\', '/', $class));
+        $class = str_replace('\\', '/', $class);
         if(file_exists($appFolder . "/models/" . $class . '.php')) {
           require_once($appFolder . "/models/" . $class . '.php');
           return;
