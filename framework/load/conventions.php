@@ -1,8 +1,8 @@
 <?php
 namespace NamingConventions;
 function convert_case($text, $from, $to) {
-  $from_case = "from_" . $from;
-  $to_case = "to_" . $to;
+  $from_case = "\\NamingConventions\\from_" . $from;
+  $to_case = "\\NamingConventions\\to_" . $to;
   return $to_case($from_case($text));
 }
 
