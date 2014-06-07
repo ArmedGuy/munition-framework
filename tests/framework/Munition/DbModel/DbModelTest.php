@@ -65,7 +65,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testWhereNotIn() {
-    $u = User::get()->where_not(["name" => ["ArmedGuy", "Hannzas"]])->take;
+    $u = User::get()->whereNot(["name" => ["ArmedGuy", "Hannzas"]])->take;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
