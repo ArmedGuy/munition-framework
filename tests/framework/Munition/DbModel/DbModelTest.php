@@ -1,8 +1,8 @@
 <?php
-require_once './tests/test_app/models/user.php';
-require_once './tests/test_app/models/post.php';
-require_once './tests/test_app/models/group_permission.php';
-require_once './tests/test_app/models/group.php';
+require_once './tests/test_app/models/User.php';
+require_once './tests/test_app/models/Post.php';
+require_once './tests/test_app/models/GroupPermission.php';
+require_once './tests/test_app/models/Group.php';
 
 class DbModelTest extends PHPUnit_Framework_TestCase {
 
