@@ -29,7 +29,6 @@ function singularize($name) {
 // ------------- Autoload Munition Libraries ---------------------
 spl_autoload_register(function($class){
     $class = str_replace('\\', '/', $class);
-    echo $class ."\n";
     if(file_exists('./framework/lib/' . $class . '.php')) {
       require_once('./framework/lib/' . $class . '.php');
     }

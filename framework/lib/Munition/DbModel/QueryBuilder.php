@@ -336,6 +336,7 @@ class QueryBuilder {
     
     // joins
     if(count($this->_query["joins"]) > 0) {
+      $c = $this->_className;
       foreach($this->_query["joins"] as $j) {
         if(is_string($j)) {
           if(strpos(strtolower($j), "join") !== false) {
@@ -346,7 +347,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = ${$this->_className}::foreign();
+            $query[] = $c::foreign();
           }
         } elseif(is_array($j)) {
           foreach($j as $t) {
@@ -355,7 +356,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = ${$this->_className}::foreign();
+            $query[] = $c::foreign();
           }
         }
       }

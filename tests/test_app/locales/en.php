@@ -1,5 +1,5 @@
 <?php
-\Lclzr\Locale::definition("en", [
+\Munition\I18n::definition("en", [
   "user" => [
     "new" => "Create User",
     "delete" => "Delete User",

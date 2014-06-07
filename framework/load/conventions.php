@@ -12,12 +12,15 @@ function from_pascal($text) {
   $part = "";
   foreach(str_split($text) as $c) {
     if(ctype_upper($c)) {
-      $rtn[] = $part;
+      if(strlen($part) != 0)
+        $rtn[] = $part;
       $part = strtolower($c);
     } else {
       $part .= $c;
     }
   }
+  if(strlen($part) != 0)
+    $rtn[] = $part;
   return $rtn;
 }
 function to_pascal($p) {

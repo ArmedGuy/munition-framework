@@ -136,7 +136,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -160,7 +160,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -190,7 +190,7 @@ class Base {
 
     $className = "";
     if(!isset($options["class"])) {
-      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -211,7 +211,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
