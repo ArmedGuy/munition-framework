@@ -54,7 +54,8 @@ class AppController {
       throw new \InvalidArgumentException("Invalid controller path");
     }
     list($c, $function) = explode("#", $ctrlfn);
-    $c .= "Controller";
+    $c .= "_controller";
+    $c = \NamingConventions\convert_case($c, "lower", "pascal");
     if(file_exists(self::$controller_base . $c . ".php")) {
       require_once self::$controller_base . $c . ".php";
       return [$c, $function];
