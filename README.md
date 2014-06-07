@@ -1,7 +1,7 @@
 ![Logo](install_app/public/img/munition-text-logo.png)
 
-[![Build Status](https://travis-ci.org/Re3io/munition-framework.png?branch=master)](https://travis-ci.org/Pie-Studios/munition-framework)
-[![Coverage Status](https://coveralls.io/repos/Re3io/munition-framework/badge.png)](https://coveralls.io/r/Pie-Studios/munition-framework)
+[![Build Status](https://travis-ci.org/Re3io/munition-framework.png?branch=master)](https://travis-ci.org/Re3io/munition-framework)
+[![Coverage Status](https://coveralls.io/repos/Re3io/munition-framework/badge.png)](https://coveralls.io/r/Re3io/munition-framework)
 
 The Munition Framework is an MVC framework built in PHP.
 It is designed for rapid development and deployment, easy to understand and use features, and minimal configuration.
