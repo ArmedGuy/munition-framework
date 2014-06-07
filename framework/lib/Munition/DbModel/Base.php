@@ -31,12 +31,16 @@ class Base {
   }
 
   public static function table() {
-    $t = strtolower(get_called_class());
-    if(strpos($t, "\\") !== false) {
-      $a = array_reverse(explode("\\", $t));
-      $t = $a[0];
+    if(static::$table_name == null) {
+      $t = get_called_class();
+      if(strpos($t, "\\") !== false) {
+        $a = array_reverse(explode("\\", $t));
+        $t = $a[0];
+      }
+      return \NamingConventions\convert_case($t, "pascal", "lower") . "s";
+    } else {
+      return static::$table_name;
     }
-    return static::$table_name == null ? $t . "s" : static::$table_name;
   }
   
   // Just prettifiers

@@ -1,5 +1,6 @@
 <?php
 require_once './tests/test_app/models/User.php';
+require_once './tests/test_app/models/UserProfile.php';
 require_once './tests/test_app/models/Post.php';
 require_once './tests/test_app/models/GroupPermission.php';
 require_once './tests/test_app/models/Group.php';
