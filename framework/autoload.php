@@ -1,40 +1,5 @@
 <?php
 // ------------- Generic functions use in Munition ---------------------
-// TODO: probably prefix these
-function filename_to_classname($file) {
-  $file = strtolower($file);
-  if(strpos($file, ".") !== false) {
-    $file = pathinfo($file, PATHINFO_FILENAME);
-  }
-  if(strpos($file, "_") !== false) {
-    $p = explode("_", $file);
-    foreach($p as $i=>$part) {
-      $p[$i] = ucfirst($part);
-    }
-    return implode("", $p);
-  } else {
-    return ucfirst($file);
-  }
-}
-
-function classname_to_filename($class) {
-  $filename = "";
-  $last = "";
-  foreach(str_split($class) as $c) {
-    if(ctype_upper($c)) {
-      if($filename == "" || $last == "/") {
-        $filename .= strtolower($c);
-      } else {
-        $filename .= "_" . strtolower($c);
-      }
-    } else {
-      $filename .= $c;
-    }
-    $last = $c;
-  }
-  return $filename;
-}
-
 function pluralize($name) {
   if(substr($name, strlen($name)-1) == "s")
     return $name . "es";
@@ -63,12 +28,15 @@ function singularize($name) {
 
 // ------------- Autoload Munition Libraries ---------------------
 spl_autoload_register(function($class){
-    $class = classname_to_filename(str_replace('\\', '/', $class));
+    $class = str_replace('\\', '/', $class);
     if(file_exists('./framework/lib/' . $class . '.php')) {
       require_once('./framework/lib/' . $class . '.php');
     }
 });
 
+
+// ------------- Converter between naming conventions ----------
+require 'load/conventions.php';
 
 
 // ------------- Define Environment ---------------------
@@ -79,11 +47,11 @@ define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
 
 if(MUNITION_ENV == "test" && !defined('SIMULATES_WEBSERVER')) return; // web_constants and error handling only in non-testing env
-require 'web_constants.php';
+require 'load/web_constants.php';
 
 
 // ------------- Error Handling ---------------------
-require 'munition_exception.php';
+require 'load/munition_exception.php';
 set_error_handler(function($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
   throw new MunitionException($errno, $errstr, $errfile, $errline, $errcontext);
 }, E_ALL);

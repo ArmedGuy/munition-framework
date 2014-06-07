@@ -1,6 +1,6 @@
 <?php
-namespace Lclzr;
-class Locale {
+namespace Munition;
+class I18n {
   private static $_localizations = [];
   public static $current = "common";
   

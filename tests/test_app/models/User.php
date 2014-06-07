@@ -1,5 +1,5 @@
 <?php
-class User extends \DbModel\Base {
+class User extends \Munition\DbModel\Base {
 
   function relations() {
     $this->has_many ("posts");

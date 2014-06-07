@@ -1,5 +1,5 @@
 <?php
 require 'xhr.php';
-require './framework/munition.php';
+require './framework/autoload.php';
 
-\DbModel\Base::$default_db = new PDO("mysql:dbname=munition_test;", "root", "");
+\Munition\DbModel\Base::$default_db = new PDO("mysql:dbname=munition_test;", "root", "");

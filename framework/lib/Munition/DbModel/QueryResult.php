@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 // see http://www.php.net/manual/en/class.arrayobject.php
 class QueryResult extends \ArrayObject {
   function __construct($array) {

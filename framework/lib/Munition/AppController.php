@@ -9,12 +9,12 @@ class AppController {
   private $_before_filters = [];
   
   
-  protected function before_action($filter, $functions = []) {
+  protected function beforeAction($filter, $functions = []) {
     $this->_before_filters[] = [$filter, $functions];
   }
   
   
-  protected function _handle_action($fn, $context, $params, $format) {
+  protected function _handleAction($fn, $context, $params, $format) {
     foreach($this->_before_filters as $filter) {
       list($f, $cb) = $filter;
       
@@ -39,25 +39,26 @@ class AppController {
   }
   
   
-  public static function call_controller_action($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
+  public static function call_controller_function($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
     list($className, $fn) = self::_load_controller($ctrlfn);
     $params["controller"] = $className;
     $params["action"] = $fn;
     
     $class = new $className();
     $class->app = $app;
-    $class->_handle_action($fn, $context, $params, $format);
+    $class->_handleAction($fn, $context, $params, $format);
   }
   
-  private static function _load_controller($ctrlfn) {
+  protected static function _load_controller($ctrlfn) {
     if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
       throw new \InvalidArgumentException("Invalid controller path");
     }
     list($c, $function) = explode("#", $ctrlfn);
     $c .= "_controller";
+    $c = \NamingConventions\convert_case($c, "lower", "pascal");
     if(file_exists(self::$controller_base . $c . ".php")) {
       require_once self::$controller_base . $c . ".php";
-      return [filename_to_classname($c), $function];
+      return [$c, $function];
     } else {
       throw new \InvalidArgumentException("Controller '$c' not found!");
     }

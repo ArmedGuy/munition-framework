@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 class QueryRow {
 
   public static $nullRow;

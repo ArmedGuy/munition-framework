@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 
 class QueryBuilder {
 
@@ -156,7 +156,7 @@ class QueryBuilder {
     return $this;
   }
   
-  public function where_not() {
+  public function whereNot() {
     if(func_num_args() == 0) return $this;
     
     if(is_string(func_get_arg(0))) {
@@ -336,6 +336,7 @@ class QueryBuilder {
     
     // joins
     if(count($this->_query["joins"]) > 0) {
+      $c = $this->_className;
       foreach($this->_query["joins"] as $j) {
         if(is_string($j)) {
           if(strpos(strtolower($j), "join") !== false) {
@@ -346,7 +347,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = classname_to_filename($this->_className) . "_id";
+            $query[] = $c::foreign();
           }
         } elseif(is_array($j)) {
           foreach($j as $t) {
@@ -355,7 +356,7 @@ class QueryBuilder {
             $query[] = "ON";
             $query[] = $this->_obj("id");
             $query[] = "=";
-            $query[] = classname_to_filename($this->_className) . "_id";
+            $query[] = $c::foreign();
           }
         }
       }

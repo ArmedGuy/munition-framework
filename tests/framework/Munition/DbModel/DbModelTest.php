@@ -1,8 +1,8 @@
 <?php
-require_once './tests/test_app/models/user.php';
-require_once './tests/test_app/models/post.php';
-require_once './tests/test_app/models/group_permission.php';
-require_once './tests/test_app/models/group.php';
+require_once './tests/test_app/models/User.php';
+require_once './tests/test_app/models/Post.php';
+require_once './tests/test_app/models/GroupPermission.php';
+require_once './tests/test_app/models/Group.php';
 
 class DbModelTest extends PHPUnit_Framework_TestCase {
 
@@ -55,17 +55,17 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testWhereNot() {
-    $u = User::get()->where_not(["name" => "ArmedGuy"])->first;
+    $u = User::get()->whereNot(["name" => "ArmedGuy"])->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testCustomWhereNot() {
-    $u = User::get()->where_not("id > 2")->first;
+    $u = User::get()->whereNot("id > 2")->first;
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
   public function testWhereNotIn() {
-    $u = User::get()->where_not(["name" => ["ArmedGuy", "Hannzas"]])->take;
+    $u = User::get()->whereNot(["name" => ["ArmedGuy", "Hannzas"]])->take;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
@@ -128,7 +128,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   /**
-   * @expectedException \DbModel\DbException
+   * @expectedException \Munition\DbModel\DbException
    */
   public function testInvalidFetchFunction() {
     $u = User::get()->where(["name" => "asdf"])->bake;

@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 
 class Base {
 
@@ -55,7 +55,7 @@ class Base {
   
   public static function foreign() {
     if(static::$foreign_key == null) {
-      return classname_to_filename(get_called_class()) . "_id";
+      return \NamingConventions\convert_case(get_called_class(), "pascal", "lower") . "_id";
     } else {
       return static::$foreign_key;
     }
@@ -129,14 +129,14 @@ class Base {
   }
   
   
-  public function has_many($name, $options = []) {
+  public function hasMany($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -152,15 +152,20 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
+
+  // Rails ActiveRecord compat
+  public function has_many($name, $options = []) {
+    $this->hasMany($name, $options);
+  }
   
-  public function has_and_belongs_to_many($name, $options = []) {
+  public function hasAndBelongsToMany($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -182,15 +187,20 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
+
+  // Rails ActiveRecord compat
+  public function has_and_belongs_to_many($name, $options = []) {
+    $this->hasAndBelongsToMany($name, $options);
+  }
   
-  public function has_one($name, $options = []) {
+  public function hasOne($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
 
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -203,15 +213,20 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
-  
-  public function belongs_to($name, $options = []) {
+
+  // Rails ActiveRecord compat
+  public function has_one($name, $options = []) {
+    $this->hasOne($name, $options);
+  }
+
+  public function belongsTo($name, $options = []) {
     $hasPrimary = "has" . ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "lower", "pascal");
     } else {
       $className = $options["class"];
     }
@@ -223,6 +238,11 @@ class Base {
       "class" => $className,
       "dependant" => false
     ];
+  }
+
+  // Rails ActiveRecord compat
+  public function belongs_to($name, $options = []) {
+    $this->belongsTo($name, $options);
   }
   
 }

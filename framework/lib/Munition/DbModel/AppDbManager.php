@@ -1,5 +1,5 @@
 <?php
-namespace DbModel;
+namespace Munition\DbModel;
 
 class AppDbManager {
   public function using($name, $args) {
