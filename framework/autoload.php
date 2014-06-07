@@ -51,7 +51,7 @@ require 'load/web_constants.php';
 
 
 // ------------- Error Handling ---------------------
-require 'load/munition_exception.php';
+require 'load/MunitionException.php';
 set_error_handler(function($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
   throw new MunitionException($errno, $errstr, $errfile, $errline, $errcontext);
 }, E_ALL);

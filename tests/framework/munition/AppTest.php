@@ -57,4 +57,9 @@ class AppTest extends PHPUnit_Framework_TestCase {
   public function testInvalidAppDirectory() {
     $app = new \Munition\App("./asdf_app/");
   }
+
+  public function testIncludeLib() {
+    $app = require './tests/test_app/application.php';
+    $this->assertEquals(true, \TestLib\TestClass::$test_var);
+  }
 }

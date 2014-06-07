@@ -133,4 +133,18 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   public function testInvalidFetchFunction() {
     $u = User::get()->where(["name" => "asdf"])->bake;
   }
+
+  /**
+   * @expectedException \Exception
+   */
+  public function testInvalidQueryResultGetter() {
+    $r = new \Munition\DbModel\QueryResult([]);
+    $b = $r->peanuts;
+  }
+
+  public function testNullRowQueryResult() {
+    $r = new \Munition\DbModel\QueryResult([]);
+    $this->assertEquals(null, $r->first->obj());
+    $this->assertEquals(null, $r->last->obj());
+  }
 }
