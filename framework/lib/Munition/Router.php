@@ -228,7 +228,7 @@ class Router {
       if(isset($this->_routes["404"])) {
         $this->_callAction($this->_routes["404"]["action"], ["request"=>$request, "path" => $path]);
       } else { 
-        throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->_routes, true));
+        throw new \Exception("No matching route found in Router: (".$request . ":".$path.")");
       }
     }
   }
