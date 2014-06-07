@@ -1,41 +1,5 @@
 <?php
 // ------------- Generic functions use in Munition ---------------------
-// TODO: probably prefix these
-function filename_to_classname($file) {
-  $file = strtolower($file);
-  if(strpos($file, ".") !== false) {
-    $file = pathinfo($file, PATHINFO_FILENAME);
-  }
-  if(strpos($file, "_") !== false) {
-    $p = explode("_", $file);
-    foreach($p as $i=>$part) {
-      $p[$i] = ucfirst($part);
-    }
-    return implode("", $p);
-  } else {
-    return ucfirst($file);
-  }
-}
-
-function classname_to_filename($class) {
-  $filename = "";
-  $last = "";
-  foreach(str_split($class) as $c) {
-    if(ctype_upper($c)) {
-      if($filename == "" || $last == "/") {
-        $filename .= strtolower($c);
-      } else {
-        $filename .= "_" . strtolower($c);
-      }
-    } else {
-      $filename .= $c;
-    }
-    $last = $c;
-  }
-  return $filename;
-}
-
-
 function pluralize($name) {
   if(substr($name, strlen($name)-1) == "s")
     return $name . "es";

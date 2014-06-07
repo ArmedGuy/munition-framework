@@ -136,7 +136,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
     } else {
       $className = $options["class"];
     }
@@ -160,7 +160,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
     } else {
       $className = $options["class"];
     }
@@ -190,7 +190,7 @@ class Base {
 
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
     } else {
       $className = $options["class"];
     }
@@ -211,7 +211,7 @@ class Base {
       
     $className = "";
     if(!isset($options["class"])) {
-      $className = filename_to_classname(singularize($name));
+      $className = \NamingConventions\convert_case(singularize($name), "pascal", "lower");
     } else {
       $className = $options["class"];
     }
