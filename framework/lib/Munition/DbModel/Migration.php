@@ -5,16 +5,18 @@ class Migration {
   }
   public function down() {
   }
-  public function change() {
-  }
   
   protected function createTable($name, $structure) {
   }
-  protected function deleteTable() {
+  protected function deleteTable($name) {
   }
   protected function addColumn() {
   }
   protected function removeColumn() {
+  }
+
+  protected function execute($sql) {
+
   }
   
 }
