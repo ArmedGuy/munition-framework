@@ -156,7 +156,7 @@ class QueryBuilder {
     return $this;
   }
   
-  public function where_not() {
+  public function whereNot() {
     if(func_num_args() == 0) return $this;
     
     if(is_string(func_get_arg(0))) {

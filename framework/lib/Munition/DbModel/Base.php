@@ -129,7 +129,7 @@ class Base {
   }
   
   
-  public function has_many($name, $options = []) {
+  public function hasMany($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -152,8 +152,13 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
+
+  // Rails ActiveRecord compat
+  public function has_many($name, $options = []) {
+    $this->hasMany($name, $options);
+  }
   
-  public function has_and_belongs_to_many($name, $options = []) {
+  public function hasAndBelongsToMany($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -182,8 +187,13 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
+
+  // Rails ActiveRecord compat
+  public function has_and_belongs_to_many($name, $options = []) {
+    $this->hasAndBelongsToMany($name, $options);
+  }
   
-  public function has_one($name, $options = []) {
+  public function hasOne($name, $options = []) {
     $hasPrimary = "has".ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -203,8 +213,13 @@ class Base {
       "dependant" => (isset($options["dependant"]) && $options["dependant"] == true)
     ];
   }
-  
-  public function belongs_to($name, $options = []) {
+
+  // Rails ActiveRecord compat
+  public function has_one($name, $options = []) {
+    $this->hasOne($name, $options);
+  }
+
+  public function belongsTo($name, $options = []) {
     $hasPrimary = "has" . ucfirst(static::primary());
     if(!$this->$hasPrimary())
       throw new DbException("DbModel cannot make relations before its data has been crowded. Make sure to only build relations in model::relations()");
@@ -223,6 +238,11 @@ class Base {
       "class" => $className,
       "dependant" => false
     ];
+  }
+
+  // Rails ActiveRecord compat
+  public function belongs_to($name, $options = []) {
+    $this->belongsTo($name, $options);
   }
   
 }

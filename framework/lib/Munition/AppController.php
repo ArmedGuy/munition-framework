@@ -39,8 +39,8 @@ class AppController {
   }
   
   
-  public static function callControllerAction($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
-    list($className, $fn) = self::_loadController($ctrlfn);
+  public static function call_controller_function($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
+    list($className, $fn) = self::_load_controller($ctrlfn);
     $params["controller"] = $className;
     $params["action"] = $fn;
     
@@ -49,7 +49,7 @@ class AppController {
     $class->_handleAction($fn, $context, $params, $format);
   }
   
-  protected static function _loadController($ctrlfn) {
+  protected static function _load_controller($ctrlfn) {
     if(strpos($ctrlfn, "#") === false || substr_count($ctrlfn, "#") !== 1) {
       throw new \InvalidArgumentException("Invalid controller path");
     }
@@ -96,7 +96,7 @@ class AppController {
     }
   }
   
-  public static function redirectTo($to) {
+  public static function redirect_to($to) {
     header("Location: $to");
   }
 }

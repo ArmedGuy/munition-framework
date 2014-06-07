@@ -219,14 +219,14 @@ class Router {
     foreach($this->_routes as $route) {
       if($route["method"] == $method && preg_match($route["regex"], $path, $params) === 1) {
         unset($params[0]);
-        $this->_call_action($route["action"], $params);
+        $this->_callAction($route["action"], $params);
         $f = true;
         break;
       }
     }
     if($f === false) {
       if(isset($this->_routes["404"])) {
-        $this->_call_action($this->_routes["404"]["action"], ["request"=>$request, "path" => $path]);
+        $this->_callAction($this->_routes["404"]["action"], ["request"=>$request, "path" => $path]);
       } else { 
         throw new \Exception("No matching route found in Router: (".$request . ":".$path.")\n" . print_r($this->_routes, true));
       }
@@ -237,12 +237,12 @@ class Router {
     $this->_routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/", "action" => $action, "params" => 0];
   }
   
-  private function _call_action($ctrlfn, $params) {
+  private function _callAction($ctrlfn, $params) {
     $format = isset($params["_request_format"]) ? substr($params["_request_format"], 1) : "html";
     if(is_callable($ctrlfn)) {
       $ctrlfn($this->initial_context, $params, $format, $this->app);
     } else {
-      AppController::callControllerAction($ctrlfn, $this->initial_context, $params, $format, $this->app);
+      AppController::call_controller_function($ctrlfn, $this->initial_context, $params, $format, $this->app);
     }
 
   }

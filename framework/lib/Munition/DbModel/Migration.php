@@ -8,13 +8,13 @@ class Migration {
   public function change() {
   }
   
-  protected function create_table($name, $structure) {
+  protected function createTable($name, $structure) {
   }
-  protected function delete_table() {
+  protected function deleteTable() {
   }
-  protected function add_column() {
+  protected function addColumn() {
   }
-  protected function remove_column() {
+  protected function removeColumn() {
   }
   
 }

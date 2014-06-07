@@ -55,12 +55,12 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testWhereNot() {
-    $u = User::get()->where_not(["name" => "ArmedGuy"])->first;
+    $u = User::get()->whereNot(["name" => "ArmedGuy"])->first;
     $this->assertEquals("EmiiilK", $u->name);
   }
   
   public function testCustomWhereNot() {
-    $u = User::get()->where_not("id > 2")->first;
+    $u = User::get()->whereNot("id > 2")->first;
     $this->assertEquals("ArmedGuy", $u->name);
   }
   
