@@ -1,6 +1,6 @@
 <?php
 namespace Munition\DbModel;
-class QueryRow {
+class QueryRow extends \stdClass {
 
   public static $nullRow;
 

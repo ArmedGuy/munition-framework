@@ -78,7 +78,7 @@ class QueryBuilder extends \stdClass{
         break;
     }
   }
-  public function first($num) {
+  public function first($num = 1) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
     if(count($this->_query["order"]) == 0)
@@ -88,7 +88,7 @@ class QueryBuilder extends \stdClass{
     $this->_execute();
     return $this->_result;
   }
-  public function last($num) {
+  public function last($num = 1) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
     if(count($this->_query["order"]) == 0)
@@ -98,7 +98,7 @@ class QueryBuilder extends \stdClass{
     $this->_execute();
     return $this->_result;
   }
-  public function take($num) {
+  public function take($num = 1) {
     $this->_query["command"] = "SELECT";
     $this->_query["limit"] = $num;
     $this->_execute();

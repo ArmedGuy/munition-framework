@@ -90,6 +90,30 @@ class Base {
     
     // TODO: raise exception when no match was found
   }
+
+  public static function __callStatic($method, $arguments) {
+    if(count($arguments) != 0) {
+      if($method == "find") {
+        return static::get()->where([static::primary() => $arguments[0]])->first;
+      }
+      if(strpos($method, "find_by_") === 0) {
+        $method = str_replace("find_by_", "", $method);
+        $search = \NamingConventions\from_lower($method);
+        $finds = [];
+        for($i=0; $i < count($search); $i+=2) {
+          $finds[] = "`{$search[$i]}` = ?";
+        }
+        $args = array_merge([implode(" OR ", $finds)], array_fill(0, count($finds), $arguments[0]));
+        return call_user_func_array([static::get(), "where"], $args)->first;
+      }
+    }
+    if(in_array($method, ["first","last","take","where","whereNot","select",
+      "joins","order","limit","offset","group","having"])) {
+      return call_user_func_array([static::get(), $method], $arguments);
+    }
+
+    // TODO: raise exception when no match was found
+  }
   
   public function relations() {
   }
@@ -108,7 +132,7 @@ class Base {
       }
     }
     $primary = static::primary();
-    static::_getQuery()->where([ static::primary() => $this->$primary ])->update($diff);
+    static::get()->where([ static::primary() => $this->$primary ])->update($diff);
   }
   
   public function destroy() {
@@ -129,7 +153,7 @@ class Base {
       }
     }
     $primary = static::primary();
-    static::_getQuery()->where([ static::primary() => $this->$primary ])->destroy();
+    static::get()->where([ static::primary() => $this->$primary ])->destroy();
   }
   
   
