@@ -166,7 +166,7 @@ class Router {
   }
   
   /*
-  public function model($path, $class, $options = []) {
+  public function datasource($path, $class, $options = []) {
     $this->scope($path, function($r) use ($path, $class, $options) {
       $regex = "[0-9]+";
       if(isset($options["id"])) {

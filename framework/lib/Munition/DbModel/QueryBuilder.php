@@ -1,7 +1,7 @@
 <?php
 namespace Munition\DbModel;
 
-class QueryBuilder {
+class QueryBuilder extends \stdClass{
 
   private $_db = null;
   
@@ -261,13 +261,7 @@ class QueryBuilder {
   
   public function having() {
     if(func_num_args() == 0) return $this;
-    $h = func_get_args();
-    $hv = [$h[0]];
-    unset($h[0]);
-    foreach($h as $v) {
-      $hv[] = $v;
-    }
-    $this->_query["having"] = $hv;
+    $this->_query["having"] = func_get_args();
     return $this;
   }
   
