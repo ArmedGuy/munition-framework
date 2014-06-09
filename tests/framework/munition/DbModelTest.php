@@ -42,7 +42,6 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
     $u = User::find_by_name("Spelfilip")->obj();
     $u->destroy();
 
-    print_r(User::get()->all);
     $this->assertEquals(3, count(User::get()->all) );
   }
   
@@ -106,7 +105,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    */
   public function testQueryResult() {
     $i = 0;
-    $users = User::all;
+    $users = User::all();
     $users->each(function($v) use(&$i){
       $i++;
     });

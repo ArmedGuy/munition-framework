@@ -50,8 +50,7 @@ class QueryBuilder extends \stdClass{
   public function __get($name) {
     switch($name) {
       case "all":
-        $this->_execute();
-        return $this->_result;
+        return $this->all();
       case "first":
         $r = $this->first(1);
         if(count($r) == 1) {
@@ -77,6 +76,10 @@ class QueryBuilder extends \stdClass{
         throw new DbException("Unknown value:" . $name);
         break;
     }
+  }
+  public function all() {
+    $this->_execute();
+    return $this->_result;
   }
   public function first($num = 1) {
     $this->_query["command"] = "SELECT";
