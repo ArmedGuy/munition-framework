@@ -11,6 +11,7 @@ class Router {
   
   protected $base = "";
   public $initial_context = [];
+  public $initial_params = [];
   
   public $app = null;
   
@@ -212,8 +213,7 @@ class Router {
   */
   
   public function route($request, $method = "GET") {
-    $p = [];
-    $params = [];
+    $params = $this->initial_params;
     $f = false;
     $path = str_replace($this->base, "", $request);
     foreach($this->_routes as $route) {
