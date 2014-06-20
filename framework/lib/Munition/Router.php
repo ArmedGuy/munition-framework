@@ -213,12 +213,13 @@ class Router {
   */
   
   public function route($request, $method = "GET") {
-    $params = $this->initial_params;
+    $params = [];
     $f = false;
     $path = str_replace($this->base, "", $request);
     foreach($this->_routes as $route) {
       if($route["method"] == $method && preg_match($route["regex"], $path, $params) === 1) {
         unset($params[0]);
+        $params = array_merge($params, $this->initial_params);
         $this->_callAction($route["action"], $params);
         $f = true;
         break;

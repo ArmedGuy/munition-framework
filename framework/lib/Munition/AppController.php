@@ -41,8 +41,8 @@ class AppController {
   
   public static function call_controller_function($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
     list($className, $fn) = self::_load_controller($ctrlfn);
-    $params["controller"] = $className;
-    $params["action"] = $fn;
+    $context["controller"] = $className;
+    $context["action"] = $fn;
     
     $class = new $className();
     $class->app = $app;
