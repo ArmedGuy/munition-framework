@@ -10,7 +10,7 @@ class Router {
   private $_scope = "";
   
   protected $base = "";
-  protected $initial_context = [];
+  public $initial_context = [];
   
   public $app = null;
   

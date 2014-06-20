@@ -58,6 +58,19 @@ class App {
     } else {
       $path = $uri;
     }
+
+    $input = file_get_contents("php://input");
+    if($input != "") {
+        if($input[0] == "{") {
+            $this->router->initial_context = json_decode($input);
+        } else {
+            try {
+                parse_str($this->router->initial_context, $input);
+            } catch(\Exception $e) {
+
+            }
+        }
+    }
     
     ob_start();
     
