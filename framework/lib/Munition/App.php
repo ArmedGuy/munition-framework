@@ -62,7 +62,7 @@ class App {
     $input = file_get_contents("php://input");
     if($input != "") {
         if($input[0] == "{") {
-            $this->router->initial_context = json_decode($input);
+            $this->router->initial_context = json_decode($input, true);
         } else {
             try {
                 parse_str($this->router->initial_context, $input);
