@@ -129,7 +129,7 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
   }
   
   /**
-   * @expectedException \Munition\DbModel\DbException
+   * @expectedException \DbModel\DbException
    */
   public function testInvalidFetchFunction() {
     $u = User::get()->where(["name" => "asdf"])->bake;
@@ -139,12 +139,12 @@ class DbModelTest extends PHPUnit_Framework_TestCase {
    * @expectedException \Exception
    */
   public function testInvalidQueryResultGetter() {
-    $r = new \Munition\DbModel\QueryResult([]);
+    $r = new \DbModel\QueryResult([]);
     $b = $r->peanuts;
   }
 
   public function testNullRowQueryResult() {
-    $r = new \Munition\DbModel\QueryResult([]);
+    $r = new \DbModel\QueryResult([]);
     $this->assertEquals(null, $r->first->obj());
     $this->assertEquals(null, $r->last->obj());
   }

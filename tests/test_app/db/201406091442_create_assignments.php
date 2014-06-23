@@ -1,6 +1,6 @@
 <?php
 include './tests/test_app/models/Assignment.php';
-class CreateAssignments extends \Munition\DbModel\Migration {
+class CreateAssignments extends \DbModel\Migration {
   public function up() {
     $this->createTable("assignments", function($t) {
       $t->integer("id");

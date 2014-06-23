@@ -1,5 +1,5 @@
 <?php
-namespace Munition\DbModel;
+namespace DbModel;
 class MigrationTable {
   public $name;
   private $_columns;

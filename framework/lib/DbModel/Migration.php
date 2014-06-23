@@ -1,5 +1,5 @@
 <?php
-namespace Munition\DbModel;
+namespace DbModel;
 class Migration {
   private $db;
   public function __construct($db) {

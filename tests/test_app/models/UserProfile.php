@@ -1,5 +1,5 @@
 <?php
-class UserProfile extends \Munition\DbModel\Base {
+class UserProfile extends \DbModel\Base {
   public static $primary_key = "user_id";
   public function relations() {
     echo static::table();

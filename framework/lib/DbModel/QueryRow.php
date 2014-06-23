@@ -1,5 +1,5 @@
 <?php
-namespace Munition\DbModel;
+namespace DbModel;
 class QueryRow extends \stdClass {
 
   public static $nullRow;
@@ -25,8 +25,12 @@ class QueryRow extends \stdClass {
     if($this->_attrs == null) {
       return null;
     } else {
-      return call_user_func(array($this->__className, "make"), $this->_attrs);
+      return call_user_func([$this->__className, "make"], $this->_attrs);
     }
+  }
+
+  public function toArray() {
+      return $this->_attrs;
   }
   
   public function toString() {

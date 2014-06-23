@@ -1,5 +1,5 @@
 <?php
-use \Munition\DbModel as DbModel;
+use \DbModel as DbModel;
 include './tests/test_app/db/201406091442_create_assignments.php';
 
 class MigrationTest extends PHPUnit_Framework_TestCase {

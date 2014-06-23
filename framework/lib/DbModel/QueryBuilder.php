@@ -1,5 +1,5 @@
 <?php
-namespace Munition\DbModel;
+namespace DbModel;
 
 class QueryBuilder extends \stdClass{
 
