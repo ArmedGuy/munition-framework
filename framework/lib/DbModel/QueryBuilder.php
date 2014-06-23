@@ -107,7 +107,7 @@ class QueryBuilder extends \stdClass{
     $this->_execute();
     return $this->_result;
   }
-  public function create($params) {
+  public function create(array $params) {
     $this->reset();
     $this->_query["command"] = "INSERT INTO";
     $this->_query["columns"] = implode(",", array_keys($params));
@@ -116,7 +116,7 @@ class QueryBuilder extends \stdClass{
     return $this->_result;
   }
   
-  public function update($values) {
+  public function update(array $values) {
     $this->_query["command"] = "UPDATE";
     $this->_query["values"] = $values;
     $this->_execute("update");
@@ -521,7 +521,7 @@ class QueryBuilder extends \stdClass{
     }
   }
   
-  private function _vlist($value) {
+  private function _vlist(array $value) {
     return "(". implode(",", array_fill(0, count($value), "?")) .")";
   }
   

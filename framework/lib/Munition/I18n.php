@@ -14,7 +14,7 @@ class I18n {
     }
   }
   
-  public static function definition($locale, $def) {
+  public static function definition($locale, array $def) {
     if(isset(self::$_localizations[$locale])) {
       self::$_localizations[$locale] = array_merge(self::$_localizations[$locale], $def);
     } else {

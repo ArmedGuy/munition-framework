@@ -30,7 +30,7 @@ class QueryRow extends \stdClass {
   }
 
   public function toArray() {
-      return $this->_attrs;
+      return $this->_attrs != null ? $this->_attrs : [];
   }
   
   public function toString() {

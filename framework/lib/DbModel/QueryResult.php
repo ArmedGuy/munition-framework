@@ -6,7 +6,7 @@ class QueryResult extends \ArrayObject {
     parent::__construct($array);
   }
   
-  public function each($callable) {
+  public function each(callable $callable) {
     foreach($this as $value) {
       $callable($value);
     }

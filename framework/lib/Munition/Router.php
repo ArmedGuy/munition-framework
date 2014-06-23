@@ -47,7 +47,7 @@ class Router {
     $this->_scope = $old;
   }
   
-  public function request($path, $type, $action, $params = []) {
+  public function request($path, $type, $action, array $params = []) {
     $path = $this->_scope . $path;
     $r = [
       "path" => $path,
@@ -80,29 +80,29 @@ class Router {
       $this->_routes[] = $r;
   }
   
-  public function get($path, $action, $params = []) {
+  public function get($path, $action, array $params = []) {
     $this->request($path, "GET", $action, $params);
   }
   
-  public function head($path, $action, $params = []) {
+  public function head($path, $action, array $params = []) {
     $this->request($path, "HEAD", $action, $params);
   }
   
-  public function post($path, $action, $params = []) {
+  public function post($path, $action, array $params = []) {
     $this->request($path, "POST", $action, $params);
   }
   
-  public function put($path, $action, $params = []) {
+  public function put($path, $action, array $params = []) {
     $this->request($path, "PUT", $action, $params);
   }
   
-  public function delete($path, $action, $params = []) {
+  public function delete($path, $action, array $params = []) {
     $this->request($path, "DELETE", $action, $params);
   }
   
   
   
-  public function resources($path, $options = []) {
+  public function resources($path, array $options = []) {
     $this->scope($path, function($r) use ($path, $options){
       
       $regex = "[0-9]+";
@@ -165,9 +165,9 @@ class Router {
     
     });
   }
-  
+
   /*
-  public function datasource($path, $class, $options = []) {
+  public function service($path, $class, $options = []) {
     $this->scope($path, function($r) use ($path, $class, $options) {
       $regex = "[0-9]+";
       if(isset($options["id"])) {
@@ -238,7 +238,7 @@ class Router {
     $this->_routes[$errCode] = ["method"=>"ANY", "regex"=>"/^$/", "action" => $action, "params" => 0];
   }
   
-  private function _callAction($ctrlfn, $params) {
+  private function _callAction($ctrlfn, array $params) {
     $format = isset($params["_request_format"]) ? substr($params["_request_format"], 1) : "html";
     if(is_callable($ctrlfn)) {
       $ctrlfn($this->initial_context, $params, $format, $this->app);

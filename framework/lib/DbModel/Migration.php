@@ -10,7 +10,7 @@ class Migration {
   public function down() {
   }
   
-  protected function createTable($name, $structure = null) {
+  protected function createTable($name, callable $structure = null) {
     $t = new MigrationTable($name);
     if($structure != null && is_callable($structure)) {
       $structure($t);
@@ -20,7 +20,7 @@ class Migration {
   protected function deleteTable($name) {
     $this->execute("DROP TABLE `{$name}`");
   }
-  protected function addColumn($table, $name, $type, $options = []) {
+  protected function addColumn($table, $name, $type, array $options = []) {
     switch(strtolower($type)) {
       case "varchar": case "string":
         if(!isset($options["limit"])): $options["limit"] = 255; endif;

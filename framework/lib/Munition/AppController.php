@@ -9,12 +9,12 @@ class AppController {
   private $_before_filters = [];
   
   
-  protected function beforeAction($filter, $functions = []) {
+  protected function beforeAction($filter, array $functions = []) {
     $this->_before_filters[] = [$filter, $functions];
   }
   
   
-  protected function _handleAction($fn, $context, $params, $format) {
+  protected function _handleAction($fn, array $context, array $params, $format) {
     foreach($this->_before_filters as $filter) {
       list($f, $cb) = $filter;
       
@@ -39,7 +39,7 @@ class AppController {
   }
   
   
-  public static function call_controller_function($ctrlfn, $context = [], $params = [],  $format = "html", $app = null) {
+  public static function call_controller_function($ctrlfn, array $context = [], array $params = [],  $format = "html", $app = null) {
     list($className, $fn) = self::_load_controller($ctrlfn);
     $context["controller"] = $className;
     $context["action"] = $fn;

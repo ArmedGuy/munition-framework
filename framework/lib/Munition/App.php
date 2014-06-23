@@ -11,7 +11,7 @@ class App {
   public $postprocess = null;
   public $type = "REQUEST_URI";
   
-  function __construct($appFolder = "./app/", $router = null) {
+  function __construct($appFolder = "./app/", Router $router = null) {
     
     spl_autoload_register(function($class) use ($appFolder) {
         $class = str_replace('\\', '/', $class);

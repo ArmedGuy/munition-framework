@@ -12,42 +12,42 @@ class MigrationTable {
     $this->_primary = null;
     $this->_storage = $storage;
   }
-  public function addColumn($type, $name, $options) {
+  public function addColumn($type, $name, array $options) {
     $options["type"] = $type;
     $this->_columns[$name] = $options;
   }
   // string values
-  public function string($name, $options = []) {
+  public function string($name, array $options = []) {
     if(!isset($options["limit"]))
       $options["limit"] = 255;
     $this->addColumn("varchar", $name, $options);
   }
-  public function text($name, $options = []) {
+  public function text($name, array $options = []) {
     $this->addColumn("text", $name, $options);
   }
   // numbers
-  public function integer($name, $options = []) {
+  public function integer($name, array $options = []) {
     if(!isset($options["limit"]))
       $options["limit"] = 11;
     $this->addColumn("int", $name, $options);
   }
-  public function float($name, $options = []) {
+  public function float($name, array $options = []) {
     $this->addColumn("float", $name, $options);
   }
 
-  public function datetime($name, $options = []) {
+  public function datetime($name, array $options = []) {
     $this->addColumn("datetime", $name, $options);
   }
 
-  public function date($name, $options = []) {
+  public function date($name, array $options = []) {
     $this->addColumn("date", $name, $options);
   }
 
-  public function time($name, $options = []) {
+  public function time($name, array $options = []) {
     $this->addColumn("time", $name, $options);
   }
 
-  public function timestamp($name, $options = []) {
+  public function timestamp($name, array $options = []) {
     $this->addColumn("timestamp", $name, $options);
   }
 
