@@ -2,7 +2,7 @@
 namespace DbModel;
 
 class AppDbManager {
-  public function using(String $name, array $args) {
+  public function using($name, array $args) {
     $c = isset($args["engine"]) ? $args["engine"] : "mysql";
     
     if(isset($args["unix_socket"])) {
