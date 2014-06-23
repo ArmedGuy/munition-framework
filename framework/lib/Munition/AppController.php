@@ -9,7 +9,7 @@ class AppController {
   private $_before_filters = [];
   
   
-  protected function beforeAction($filter, array $functions = []) {
+  protected function beforeAction($filter, $functions = []) {
     $this->_before_filters[] = [$filter, $functions];
   }
   
