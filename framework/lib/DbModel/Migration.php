@@ -1,6 +1,36 @@
 <?php
 namespace DbModel;
 class Migration {
+  public static function register_cli_hooks(\Munition\CLI $cli) {
+    $cli->registerHook("db:migrate", function() {
+        $dir = \Munition\App::$application->appFolder . "db" . PATH_SEPARATOR;
+        foreach(array_diff(scandir($dir), [".", ".."]) as $file) {
+            $fParts = \NamingConventions\from_lower($file);
+            $time = array_shift($fParts);
+
+            $class = \NamingConventions\to_pascal($fParts);
+            include $dir . $file;
+            $mig = new $class(\DbModel\Base::$default_db);
+
+            $mig->up();
+        }
+    });
+
+    $cli->registerHook("db:rollback", function() {
+      $dir = \Munition\App::$application->appFolder . "db". PATH_SEPARATOR;
+      foreach(array_diff(scandir($dir, SCANDIR_SORT_DESCENDING), [".", ".."]) as $file) {
+        $fParts = \NamingConventions\from_lower($file);
+        $time = array_shift($fParts);
+
+        $class = \NamingConventions\to_pascal($fParts);
+        include $dir . $file;
+        $mig = new $class(\DbModel\Base::$default_db);
+
+        $mig->down();
+      }
+    });
+  }
+
   private $db;
   public function __construct($db) {
     $this->db = $db;

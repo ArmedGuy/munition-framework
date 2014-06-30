@@ -23,7 +23,8 @@ class App extends \stdClass {
     $this->configure();
   }
   public function configure($appFolder = "./app/", Router $router = null) {
-    
+
+    $this->appFolder = $appFolder;
     spl_autoload_register(function($class) use ($appFolder) {
         $class = str_replace('\\', '/', $class);
         if(file_exists($appFolder . "/models/" . $class . '.php')) {
