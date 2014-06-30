@@ -23,7 +23,7 @@ class App extends \stdClass {
     $this->configure();
   }
   public function configure($appFolder = "./app/", Router $router = null) {
-
+    $this->config = [];
     $this->appFolder = $appFolder;
     spl_autoload_register(function($class) use ($appFolder) {
         $class = str_replace('\\', '/', $class);
@@ -36,8 +36,7 @@ class App extends \stdClass {
           return;
         }
     });
-    
-    $this->config = [];
+
     if(!file_exists($appFolder)) {
       throw new \InvalidArgumentException("Unable to access App directory");
     }
