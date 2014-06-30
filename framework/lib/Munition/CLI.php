@@ -40,9 +40,9 @@ class CLI {
         $this->write(">>> " . $data . "\n");
     }
     public function run() {
-        if($argc > 1) {
-            $cmd = $argv[1];
-            $this->callHook($cmd, array_slice($argv, 2));
+        if($_SERVER["argc"] > 1) {
+            $cmd = $_SERVER["argv"][1];
+            $this->callHook($cmd, array_slice($_SERVER["argv"], 2));
         }
 
         while(!$this->interrupt) {
