@@ -1,8 +1,8 @@
 <?php
 if(!class_exists('TestApplication')):
 class TestApplication extends \Munition\App {
-  function __construct() {
-    parent::__construct("./tests/test_app/");
+  function setup() {
+    parent::setup("./tests/test_app/");
     
     $this->db = new \DbModel\AppDbManager();
     

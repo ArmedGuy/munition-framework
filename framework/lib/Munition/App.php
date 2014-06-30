@@ -1,6 +1,6 @@
 <?php
 namespace Munition;
-class App {
+class App extends stdClass {
   public static $application = null;
 
   public $config = null;
@@ -10,8 +10,14 @@ class App {
   
   public $postprocess = null;
   public $type = "REQUEST_URI";
-  
-  function __construct($appFolder = "./app/", Router $router = null) {
+
+  function __construct() {
+      $this->setup();
+      if(php_sapi_name() == 'cli') {
+          $this->cli->run();
+      }
+  }
+  public function setup($appFolder = "./app/", Router $router = null) {
     
     spl_autoload_register(function($class) use ($appFolder) {
         $class = str_replace('\\', '/', $class);
@@ -43,6 +49,8 @@ class App {
     $this->postprocess = new \Munition\PostProcessingEngine();
 
     static::$application = $this;
+
+    $this->cli = new \Munition\CLI();
     
   }
   
