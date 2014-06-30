@@ -11,6 +11,10 @@ class CLI {
         if(isset($this->function_hooks[$hook])) {
             call_user_func($this->function_hooks[$hook], $data);
         }
+        else
+        {
+            $this->writeLine("No hook found matching $hook");
+        }
     }
 
     public function __construct() {
@@ -36,6 +40,11 @@ class CLI {
         $this->write(">>> " . $data . "\n");
     }
     public function run() {
+        if($argc > 1) {
+            $cmd = $argv[1];
+            $this->callHook($cmd, array_slice($argv, 2));
+        }
+
         while(!$this->interrupt) {
             $line = $this->readLine();
             // specific command
