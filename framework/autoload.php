@@ -46,15 +46,16 @@ define("MUNITION_ROOT", dirname($_SERVER['SCRIPT_FILENAME']));
 
 set_include_path(get_include_path() . PATH_SEPARATOR . MUNITION_ROOT . "/framework/lib");
 
-if(MUNITION_ENV == "test" && !defined('SIMULATES_WEBSERVER')) return; // web_constants and error handling only in non-testing env
+require 'load/MunitionException.php';
+set_error_handler(function($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
+    throw new MunitionException($errno, $errstr, $errfile, $errline, $errcontext);
+}, E_ALL);
+
+if(php_sapi_name() == 'cli' && !defined('SIMULATES_WEBSERVER')) return; // web_constants and error handling only in non-testing env
 require 'load/web_constants.php';
 
 
 // ------------- Error Handling ---------------------
-require 'load/MunitionException.php';
-set_error_handler(function($errno, $errstr, $errfile = null, $errline = 0, $errcontext = null) {
-  throw new MunitionException($errno, $errstr, $errfile, $errline, $errcontext);
-}, E_ALL);
 
 set_exception_handler(function($e) {
   $err = "Uncaught exception '" . get_class($e) . "'";
