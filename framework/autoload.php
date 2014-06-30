@@ -67,18 +67,21 @@ set_exception_handler(function($e) {
   $l = $l-3 >= 0 ? $l-3 : 0;
   $lines = array_splice($lines, $l, 5);
   
-  
-  foreach($lines as $i=>$line) {
-    if($i == 2) {
-      $lines[$i] = "<span style='color:red;'>>>> ".htmlentities($line)."</span>";
-    } else {
-      $lines[$i] = "    ".htmlentities($line);
-    }
+  if(php_sapi_name() != 'cli') {
+      foreach($lines as $i=>$line) {
+        if($i == 2) {
+          $lines[$i] = "<span style='color:red;'>>>> ".htmlentities($line)."</span>";
+        } else {
+          $lines[$i] = "    ".htmlentities($line);
+        }
+      }
+      $errtrace .= implode("", $lines);
+
+      $errtrace .= "\r\n\r\nStack Trace: \n\n" . $e->getTraceAsString();
+      require 'errhandler/page.php';
+  } else {
+      print_r($e);
   }
-  $errtrace .= implode("", $lines);
-  
-  $errtrace .= "\r\n\r\nStack Trace: \n\n" . $e->getTraceAsString();
-  require 'errhandler/page.php';
   die();
 });
 

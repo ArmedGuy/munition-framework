@@ -7,13 +7,18 @@ class CLI {
     public $prompt = "Munition> ";
 
     private $function_hooks = [];
+    private function callHook($hook, $data) {
+        if(isset($this->function_hooks[$hook])) {
+            call_user_func($this->function_hooks[$hook], $data);
+        }
+    }
 
     public function __construct() {
         $this->registerHook("cls", function() {
             $this->buffer = [];
         });
     }
-    public function readline() {
+    public function readLine() {
         $line = null;
         if (PHP_OS == 'WINNT') {
             echo $this->prompt;
@@ -23,9 +28,16 @@ class CLI {
         }
         return $line;
     }
+
+    public function write($data) {
+        echo $data;
+    }
+    public function writeLine($data) {
+        $this->write(">>> " . $data . "\n");
+    }
     public function run() {
         while(!$this->interrupt) {
-            $line = $this->readline();
+            $line = $this->readLine();
             // specific command
             if(strpos($line, ":") === 0) {
                 $cmd = null;
@@ -35,9 +47,7 @@ class CLI {
                 } else {
                     $cmd = $line;
                 }
-                if(isset($this->function_hooks[$cmd])) {
-                    $this->function_hooks[$cmd]($line);
-                }
+                $this->callHook($cmd, $line);
             } else {
                 try {
                     $line = trim($line);
@@ -48,10 +58,10 @@ class CLI {
                     $res = eval(implode("\n", $this->buffer));
                     array_pop($this->buffer);
 
-                    echo ">>> " . $res . "\n";
+                    $this->writeLine($res);
                 }
                 catch(\Exception $e) {
-                    echo ">>> Exception: " . $e->getMessage() . "\n";
+                    $this->writeLine("Exception: " . $e->getMessage());
                 }
             }
         }

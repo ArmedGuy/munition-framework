@@ -2,8 +2,8 @@
 if(!class_exists('TestApplication')):
 class TestApplication extends \Munition\App {
   function setup() {
-    parent::setup("./tests/test_app/");
-    
+    $this->configure("./tests/test_app/");
+
     $this->db = new \DbModel\AppDbManager();
     
     $r = $this->router;

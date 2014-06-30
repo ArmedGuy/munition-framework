@@ -55,7 +55,8 @@ class AppTest extends PHPUnit_Framework_TestCase {
    * @expectedException InvalidArgumentException
    */
   public function testInvalidAppDirectory() {
-    $app = new \Munition\App("./asdf_app/");
+    $app = new \Munition\App(true);
+    $app->configure("./asdf_app/");
   }
 
   public function testIncludeLib() {
